@@ -1,7 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft, Pin } from "lucide-react";
+
+export const revalidate = 300;
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -18,7 +20,7 @@ export default async function NoticeDetailPage({
 
   if (!UUID_RE.test(id)) notFound();
 
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data: notice } = await supabase
     .from("notices")
     .select("id, title, content, is_pinned, created_at")

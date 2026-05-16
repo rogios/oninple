@@ -1,13 +1,15 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
 import Link from "next/link";
 import { Pin } from "lucide-react";
+
+export const revalidate = 300;
 
 function fmt(d: string) {
   return new Date(d).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" });
 }
 
 export default async function NoticesPage() {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data: notices } = await supabase
     .from("notices")
     .select("id, title, is_pinned, created_at")
