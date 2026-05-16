@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? origin;
 
   if (code) {
     const supabase = await createClient();
@@ -18,12 +19,12 @@ export async function GET(request: Request) {
         .single();
 
       if (!profile?.role_selected) {
-        return NextResponse.redirect(`${origin}/role-select`);
+        return NextResponse.redirect(`${siteUrl}/role-select`);
       }
 
-      return NextResponse.redirect(`${origin}/mypage`);
+      return NextResponse.redirect(`${siteUrl}/mypage`);
     }
   }
 
-  return NextResponse.redirect(`${origin}/login?error=callback`);
+  return NextResponse.redirect(`${siteUrl}/login?error=callback`);
 }
