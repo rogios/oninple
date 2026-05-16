@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(cd D:\\\\oninple; Get-ChildItem -Recurse -Name | Where-Object { $_ -notmatch \"node_modules\" } | Sort-Object)",
+      "PowerShell(cd D:\\\\oninple; Start-Process powershell -ArgumentList \"-NoExit\", \"-Command\", \"cd D:\\\\oninple; npm run dev\" -WindowStyle Normal; Start-Sleep 4; Start-Process \"http://localhost:3000\")",
+      "PowerShell(Get-Process *)"
+    ]
+  }
+}
