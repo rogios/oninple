@@ -449,7 +449,7 @@ export default function ChannelEditForm({
       audience_age: isEditor ? [] : form.audience_age,
       audience_gender: isEditor ? "" : form.audience_gender,
       content_keywords: form.content_keywords,
-      channel_url: platform === "youtube" ? form.channel_url.trim() : "",
+      channel_url: isEditor ? "" : form.channel_url.trim(),
       video_url_1: platform === "youtube" ? form.video_url_1.trim() : "",
       video_url_2: platform === "youtube" ? form.video_url_2.trim() : "",
       feed_thumbnail_1: (platform === "instagram" || platform === "tiktok") ? (feedThumb1?.url ?? "") : "",
@@ -656,6 +656,18 @@ export default function ChannelEditForm({
           )}
 
           {(platform === "instagram" || platform === "tiktok") && (<>
+            <Field label={platform === "instagram" ? "인스타그램 채널 URL" : "틱톡 채널 URL"}>
+              <Input
+                type="url"
+                placeholder={
+                  platform === "instagram"
+                    ? "https://www.instagram.com/아이디"
+                    : "https://www.tiktok.com/@아이디"
+                }
+                value={form.channel_url}
+                onChange={(e) => set("channel_url", e.target.value)}
+              />
+            </Field>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>대표 피드 1</Label>
