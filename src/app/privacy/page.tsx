@@ -16,10 +16,6 @@ function Section({ num, title, children }: { num: string; title: string; childre
   );
 }
 
-function P({ children }: { children: React.ReactNode }) {
-  return <p>{children}</p>;
-}
-
 function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
   return (
     <div className="overflow-x-auto rounded-xl border border-gray-200">
@@ -75,7 +71,7 @@ export default function PrivacyPage() {
         </div>
 
         <Section num="1" title="수집하는 개인정보의 항목">
-          <P>온인플은 서비스 제공을 위해 다음과 같은 개인정보를 수집합니다.</P>
+          <p>온인플은 서비스 제공을 위해 다음과 같은 개인정보를 수집합니다.</p>
           <Table
             headers={["구분", "수집 항목", "수집 방법"]}
             rows={[
@@ -100,7 +96,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section num="3" title="개인정보의 보유 및 이용 기간">
-          <P>온인플은 회원 탈퇴 시 또는 수집·이용 목적이 달성된 경우 해당 개인정보를 지체 없이 파기합니다. 단, 관련 법령에 따라 일정 기간 보유해야 하는 경우는 다음과 같습니다.</P>
+          <p>온인플은 회원 탈퇴 시 또는 수집·이용 목적이 달성된 경우 해당 개인정보를 지체 없이 파기합니다. 단, 관련 법령에 따라 일정 기간 보유해야 하는 경우는 다음과 같습니다.</p>
           <Table
             headers={["보존 항목", "보존 근거", "보존 기간"]}
             rows={[
@@ -112,7 +108,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section num="4" title="개인정보의 제3자 제공">
-          <P>온인플은 원칙적으로 이용자의 개인정보를 외부에 제공하지 않습니다. 다만, 다음의 경우에는 예외로 합니다.</P>
+          <p>온인플은 원칙적으로 이용자의 개인정보를 외부에 제공하지 않습니다. 다만, 다음의 경우에는 예외로 합니다.</p>
           <List items={[
             '이용자가 사전에 동의한 경우',
             '법령의 규정에 의거하거나, 수사 목적으로 법령에 정해진 절차와 방법에 따라 수사기관의 요구가 있는 경우',
@@ -121,7 +117,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section num="5" title="개인정보 처리의 위탁">
-          <P>온인플은 서비스 제공을 위해 다음과 같이 개인정보 처리 업무를 위탁하고 있습니다.</P>
+          <p>온인플은 서비스 제공을 위해 다음과 같이 개인정보 처리 업무를 위탁하고 있습니다.</p>
           <Table
             headers={["수탁업체", "위탁 업무", "보유 기간"]}
             rows={[
@@ -142,18 +138,18 @@ export default function PrivacyPage() {
         </Section>
 
         <Section num="7" title="이용자의 권리 및 행사 방법">
-          <P>이용자는 온인플에 대해 언제든지 다음 각 호의 개인정보 보호 관련 권리를 행사할 수 있습니다.</P>
+          <p>이용자는 온인플에 대해 언제든지 다음 각 호의 개인정보 보호 관련 권리를 행사할 수 있습니다.</p>
           <List items={[
             '개인정보 열람 요구',
             '오류 등이 있을 경우 정정 요구',
             '삭제 요구',
             '처리 정지 요구',
           ]} />
-          <P>위 권리의 행사는 서비스 내 마이페이지 또는 문의하기 페이지를 통해 요청하실 수 있습니다. 온인플은 요청을 받은 날로부터 10일 이내에 처리 결과를 알려드립니다.</P>
+          <p>위 권리의 행사는 서비스 내 마이페이지 또는 문의하기 페이지를 통해 요청하실 수 있습니다. 온인플은 요청을 받은 날로부터 10일 이내에 처리 결과를 알려드립니다.</p>
         </Section>
 
         <Section num="8" title="개인정보의 파기">
-          <P>온인플은 개인정보 보유 기간의 경과, 처리 목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다.</P>
+          <p>온인플은 개인정보 보유 기간의 경과, 처리 목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체 없이 해당 개인정보를 파기합니다.</p>
           <List items={[
             '전자적 파일 형태로 저장된 개인정보: 기록을 재생할 수 없는 기술적 방법을 사용하여 삭제',
             '종이에 출력된 개인정보: 분쇄기로 분쇄하거나 소각',
@@ -161,7 +157,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section num="9" title="개인정보의 안전성 확보 조치">
-          <P>온인플은 개인정보의 안전성 확보를 위해 다음과 같은 조치를 취하고 있습니다.</P>
+          <p>온인플은 개인정보의 안전성 확보를 위해 다음과 같은 조치를 취하고 있습니다.</p>
           <List items={[
             '개인정보의 암호화: 이용자의 개인정보는 암호화되어 저장 및 관리됩니다.',
             '해킹 등에 대비한 기술적 대책: 보안 프로그램 설치, 시스템 모니터링을 통해 개인정보 유출을 방지합니다.',
@@ -178,12 +174,12 @@ export default function PrivacyPage() {
         </Section>
 
         <Section num="11" title="개인정보 보호책임자">
-          <P>온인플은 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</P>
+          <p>온인플은 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
           <div className="bg-gray-50 rounded-xl p-4 text-sm space-y-1">
             <p><span className="font-semibold text-[#111111]">서비스명:</span> 온인플 (ONINPLE)</p>
             <p><span className="font-semibold text-[#111111]">문의:</span> 서비스 내 문의하기 페이지 이용</p>
           </div>
-          <P>기타 개인정보 침해에 대한 신고 또는 상담은 아래 기관에 문의하실 수 있습니다.</P>
+          <p>기타 개인정보 침해에 대한 신고 또는 상담은 아래 기관에 문의하실 수 있습니다.</p>
           <List items={[
             '개인정보 침해신고센터: privacy.kisa.or.kr / (국번없이) 118',
             '대검찰청 사이버수사과: www.spo.go.kr / (국번없이) 1301',
@@ -192,9 +188,9 @@ export default function PrivacyPage() {
         </Section>
 
         <Section num="12" title="개인정보처리방침의 변경">
-          <P>
+          <p>
             이 개인정보처리방침은 {UPDATED}부터 적용됩니다. 내용의 추가·삭제 및 수정이 있을 경우, 변경 사항 시행 7일 전부터 서비스 내 공지사항을 통해 고지합니다.
-          </P>
+          </p>
         </Section>
       </div>
 
