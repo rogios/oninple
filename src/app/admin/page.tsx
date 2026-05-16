@@ -28,7 +28,7 @@ export default async function AdminPage() {
   todayStart.setHours(0, 0, 0, 0);
   const todayISO = todayStart.toISOString();
 
-  // ─ 병렬 쿼리
+  // ─ 병렬 쿼리 (모두 service client — RLS 우회)
   const [
     { count: totalMembers },
     { count: todayMembers },
@@ -39,23 +39,38 @@ export default async function AdminPage() {
     { data: recentMembers },
     { data: recentChannels },
     { data: allMembers },
-    { data: allChannels },
     { data: allNotices },
     { data: allPosts },
   ] = await Promise.all([
     service.from("profiles").select("*", { count: "exact", head: true }),
     service.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", todayISO),
-    supabase.from("channels").select("*", { count: "exact", head: true }),
-    supabase.from("page_views").select("*", { count: "exact", head: true }).gte("created_at", todayISO),
-    supabase.from("page_views").select("*", { count: "exact", head: true }),
-    supabase.from("channels").select("platform"),
+    service.from("channels").select("*", { count: "exact", head: true }),
+    service.from("page_views").select("*", { count: "exact", head: true }).gte("created_at", todayISO),
+    service.from("page_views").select("*", { count: "exact", head: true }),
+    service.from("channels").select("platform"),
     service.from("profiles").select("id, email, name, role, created_at").order("created_at", { ascending: false }).limit(10),
-    supabase.from("channels").select("id, channel_name, platform, follower_count, created_at").order("created_at", { ascending: false }).limit(10),
+    service.from("channels").select("id, channel_name, platform, follower_count, created_at").order("created_at", { ascending: false }).limit(10),
     service.from("profiles").select("id, email, name, role, created_at, warning_count").order("created_at", { ascending: false }),
-    service.from("channels").select("id, user_id, channel_name, platform, is_verified"),
     service.from("notices").select("id, title, content, is_pinned, created_at").order("created_at", { ascending: false }),
     service.from("posts").select("id, title, content, thumbnail, summary, category, slug, published, created_at").order("created_at", { ascending: false }),
   ]);
+
+  // allChannels: is_verified 컬럼 없을 경우 fallback
+  type RawChannel = { id: string; user_id: string; channel_name: string; platform: string; is_verified?: boolean | null };
+  let allChannels: RawChannel[] = [];
+  {
+    const { data: d1, error: e1 } = await service
+      .from("channels")
+      .select("id, user_id, channel_name, platform, is_verified");
+    if (!e1 && d1) {
+      allChannels = d1 as RawChannel[];
+    } else {
+      const { data: d2 } = await service
+        .from("channels")
+        .select("id, user_id, channel_name, platform");
+      allChannels = (d2 as RawChannel[]) ?? [];
+    }
+  }
 
   // 플랫폼별 집계
   const platformMap: Record<string, number> = { youtube: 0, instagram: 0, tiktok: 0, editor: 0 };
@@ -65,7 +80,7 @@ export default async function AdminPage() {
 
   // 유저별 채널 수 집계
   const channelCountMap: Record<string, number> = {};
-  for (const ch of allChannels ?? []) {
+  for (const ch of allChannels) {
     if (ch.user_id) channelCountMap[ch.user_id] = (channelCountMap[ch.user_id] ?? 0) + 1;
   }
 
@@ -80,7 +95,7 @@ export default async function AdminPage() {
     recentChannels: (recentChannels ?? []) as DashboardStats["recentChannels"],
   };
 
-  const channels: AdminChannelRow[] = (allChannels ?? []).map((ch) => ({
+  const channels: AdminChannelRow[] = allChannels.map((ch) => ({
     id: ch.id,
     user_id: ch.user_id,
     channel_name: ch.channel_name,

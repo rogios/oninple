@@ -144,7 +144,7 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
       <div
         className={cn(
           "md:hidden border-t border-gray-100 bg-white overflow-hidden transition-all duration-200",
-          open ? "max-h-80" : "max-h-0"
+          open ? "max-h-96" : "max-h-0"
         )}
       >
         <div className="px-4 py-3 flex flex-col gap-1">
@@ -159,22 +159,34 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
             </Link>
           ))}
           {user ? (
-            <div className="flex gap-2 pt-3">
-              <Link
-                href="/mypage"
-                onClick={() => setOpen(false)}
-                className="flex-1 text-center text-sm border border-gray-200 py-2 rounded-full"
-              >
-                마이페이지
-              </Link>
-              <form action={logoutAction} className="flex-1">
-                <button
-                  type="submit"
-                  className="w-full text-sm font-semibold text-white bg-[#E8292E] py-2 rounded-full"
+            <div className="flex flex-col gap-2 pt-3">
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  onClick={() => setOpen(false)}
+                  className="w-full text-center text-sm font-semibold text-[#E8292E] border border-[#E8292E] py-2 rounded-full hover:bg-red-50 transition-colors flex items-center justify-center gap-1.5"
                 >
-                  로그아웃
-                </button>
-              </form>
+                  <LayoutDashboard size={14} />
+                  관리자 대시보드
+                </Link>
+              )}
+              <div className="flex gap-2">
+                <Link
+                  href="/mypage"
+                  onClick={() => setOpen(false)}
+                  className="flex-1 text-center text-sm border border-gray-200 py-2 rounded-full"
+                >
+                  마이페이지
+                </Link>
+                <form action={logoutAction} className="flex-1">
+                  <button
+                    type="submit"
+                    className="w-full text-sm font-semibold text-white bg-[#E8292E] py-2 rounded-full"
+                  >
+                    로그아웃
+                  </button>
+                </form>
+              </div>
             </div>
           ) : (
             <div className="flex gap-2 pt-3">
