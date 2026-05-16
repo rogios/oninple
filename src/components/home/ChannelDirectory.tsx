@@ -26,6 +26,9 @@ export type DirectoryChannel = {
   video_url_1: string | null;
   video_url_2: string | null;
   feed_thumbnail_1: string | null;
+  feed_thumbnail_2: string | null;
+  feed_url_1: string | null;
+  feed_url_2: string | null;
   kakao_open_chat: string | null;
   ai_tools: string[] | null;
   work_fields: string[] | null;

@@ -64,7 +64,7 @@ export default function ProfileModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl w-full max-w-lg max-h-[75vh] overflow-y-auto overflow-x-hidden shadow-2xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-2xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         style={{ touchAction: "pan-y" }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -168,7 +168,7 @@ export default function ProfileModal({
             </div>
           )}
 
-          {/* Video thumbnails */}
+          {/* YouTube video thumbnails */}
           {(vid1 || vid2) && (
             <div className="mb-5">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">대표 영상</p>
@@ -188,6 +188,36 @@ export default function ProfileModal({
                     />
                   </a>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {/* Instagram / TikTok feed thumbnails */}
+          {(channel.platform === "instagram" || channel.platform === "tiktok") &&
+            (channel.feed_thumbnail_1 || channel.feed_thumbnail_2) && (
+            <div className="mb-5">
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-2">대표 피드</p>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { thumb: channel.feed_thumbnail_1, url: channel.feed_url_1 },
+                  { thumb: channel.feed_thumbnail_2, url: channel.feed_url_2 },
+                ].filter(({ thumb }) => !!thumb).map(({ thumb, url }, i) =>
+                  url ? (
+                    <a
+                      key={i}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block rounded-xl overflow-hidden aspect-square bg-gray-100 hover:opacity-90 transition-opacity"
+                    >
+                      <img src={thumb!} alt={`피드 ${i + 1}`} className="w-full h-full object-cover" />
+                    </a>
+                  ) : (
+                    <div key={i} className="rounded-xl overflow-hidden aspect-square bg-gray-100">
+                      <img src={thumb!} alt={`피드 ${i + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  )
+                )}
               </div>
             </div>
           )}
@@ -256,10 +286,20 @@ export default function ProfileModal({
                 href={channel.channel_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 border-[#FF0000] text-[#FF0000] font-semibold text-sm hover:bg-red-50 transition-colors"
+                className={`flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 font-semibold text-sm transition-colors ${
+                  channel.platform === "instagram"
+                    ? "border-pink-500 text-pink-500 hover:bg-pink-50"
+                    : channel.platform === "tiktok"
+                    ? "border-[#010101] text-[#010101] hover:bg-gray-50"
+                    : "border-[#FF0000] text-[#FF0000] hover:bg-red-50"
+                }`}
               >
                 <ExternalLink size={15} />
-                유튜브 채널 보기
+                {channel.platform === "instagram"
+                  ? "인스타그램 채널 보기"
+                  : channel.platform === "tiktok"
+                  ? "틱톡 채널 보기"
+                  : "유튜브 채널 보기"}
               </a>
             )}
             {isEditor && channel.portfolio_url && (
