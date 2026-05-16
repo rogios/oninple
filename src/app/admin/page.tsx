@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { redirect } from "next/navigation";
 import AdminDashboard from "@/components/admin/AdminDashboard";
-import type { DashboardStats, MemberRow } from "@/components/admin/AdminDashboard";
+import type { DashboardStats, MemberRow, AdminChannelRow } from "@/components/admin/AdminDashboard";
 import type { NoticeRow } from "@/components/admin/NoticesTab";
 import type { PostRow } from "@/components/admin/BlogTab";
 
@@ -52,7 +52,7 @@ export default async function AdminPage() {
     service.from("profiles").select("id, email, name, role, created_at").order("created_at", { ascending: false }).limit(10),
     supabase.from("channels").select("id, channel_name, platform, follower_count, created_at").order("created_at", { ascending: false }).limit(10),
     service.from("profiles").select("id, email, name, role, created_at, warning_count").order("created_at", { ascending: false }),
-    supabase.from("channels").select("user_id"),
+    service.from("channels").select("id, user_id, channel_name, platform, is_verified"),
     service.from("notices").select("id, title, content, is_pinned, created_at").order("created_at", { ascending: false }),
     service.from("posts").select("id, title, content, thumbnail, summary, category, slug, published, created_at").order("created_at", { ascending: false }),
   ]);
@@ -79,6 +79,14 @@ export default async function AdminPage() {
     recentMembers: (recentMembers ?? []) as DashboardStats["recentMembers"],
     recentChannels: (recentChannels ?? []) as DashboardStats["recentChannels"],
   };
+
+  const channels: AdminChannelRow[] = (allChannels ?? []).map((ch) => ({
+    id: ch.id,
+    user_id: ch.user_id,
+    channel_name: ch.channel_name,
+    platform: ch.platform,
+    is_verified: ch.is_verified ?? false,
+  }));
 
   const members: MemberRow[] = (allMembers ?? []).map((m) => ({
     id: m.id,
@@ -114,6 +122,7 @@ export default async function AdminPage() {
     <AdminDashboard
       stats={stats}
       members={members}
+      channels={channels}
       notices={notices}
       posts={posts}
       currentUserId={user.id}

@@ -30,6 +30,7 @@ export type DirectoryChannel = {
   ai_tools: string[] | null;
   work_fields: string[] | null;
   portfolio_url: string | null;
+  is_verified: boolean | null;
 };
 
 // ─── Constants (exported for ProfileModal) ────────────────────────────────────
@@ -244,6 +245,9 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
             {TIER_LABELS[tierKey]}
           </span>
           <CollabBadge can={ch.can_collaborate} />
+          {ch.is_verified && (
+            <span className="text-[10px] font-semibold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">✅ 본인확인</span>
+          )}
         </div>
         <div className="flex items-center gap-3">
           <Avatar ch={ch} size={44} />
@@ -304,7 +308,12 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
           <Avatar ch={ch} size={48} />
           <div className="flex-1 min-w-0">
             <p className="font-bold text-sm text-[#111111] truncate mb-1">{ch.channel_name}</p>
-            <CollabBadge can={ch.can_collaborate} />
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <CollabBadge can={ch.can_collaborate} />
+              {ch.is_verified && (
+                <span className="text-[10px] font-semibold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">✅ 본인확인</span>
+              )}
+            </div>
           </div>
         </div>
         {ch.bio && <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">{ch.bio}</p>}

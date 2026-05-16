@@ -128,6 +128,9 @@ export default function ProfileModal({
               ) : (
                 <span className="text-xs font-semibold text-gray-400 bg-gray-50 border border-gray-200 px-2.5 py-0.5 rounded-full">협업마감</span>
               )}
+              {channel.is_verified && (
+                <span className="text-xs font-semibold text-green-700 bg-green-50 border border-green-300 px-2.5 py-0.5 rounded-full">✅ 본인확인</span>
+              )}
             </div>
           </div>
 
@@ -271,15 +274,26 @@ export default function ProfileModal({
               </a>
             )}
             {channel.kakao_open_chat && (
-              <a
-                href={channel.kakao_open_chat}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#FEE500] text-[#3A1D1D] font-bold text-sm hover:bg-yellow-300 transition-colors"
-              >
-                <MessageCircle size={15} />
-                카카오로 문의하기
-              </a>
+              channel.is_verified ? (
+                <a
+                  href={channel.kakao_open_chat}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#FEE500] text-[#3A1D1D] font-bold text-sm hover:bg-yellow-300 transition-colors"
+                >
+                  <MessageCircle size={15} />
+                  카카오로 문의하기
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  disabled
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gray-100 text-gray-400 font-bold text-sm cursor-not-allowed"
+                >
+                  <MessageCircle size={15} />
+                  본인 채널 소유 확인 후 이용 가능
+                </button>
+              )
             )}
           </div>
 

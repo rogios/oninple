@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { AlertTriangle, Trash2, LayoutDashboard, Users, Bell, BookOpen } from "lucide-react";
-import { warnUser, forceDeleteUser } from "@/app/actions/admin";
+import React, { useState, useTransition, useMemo, Fragment } from "react";
+import { AlertTriangle, Trash2, LayoutDashboard, Users, Bell, BookOpen, ShieldCheck, ShieldOff, ChevronDown, ChevronUp } from "lucide-react";
+import { warnUser, forceDeleteUser, setChannelVerified } from "@/app/actions/admin";
 import { logoutAction } from "@/app/actions/auth";
 import NoticesTab from "@/components/admin/NoticesTab";
 import type { NoticeRow } from "@/components/admin/NoticesTab";
@@ -30,6 +30,14 @@ export type MemberRow = {
   created_at: string | null;
   warning_count: number;
   channel_count: number;
+};
+
+export type AdminChannelRow = {
+  id: string;
+  user_id: string;
+  channel_name: string;
+  platform: string;
+  is_verified: boolean;
 };
 
 type RecentMember = {
@@ -241,15 +249,29 @@ function DashboardTab({ stats }: { stats: DashboardStats }) {
 
 function MembersTab({
   initialMembers,
+  channels: initialChannels,
   currentUserId,
 }: {
   initialMembers: MemberRow[];
+  channels: AdminChannelRow[];
   currentUserId: string;
 }) {
   const [members, setMembers] = useState(initialMembers);
+  const [channels, setChannels] = useState(initialChannels);
   const [deleteTarget, setDeleteTarget] = useState<MemberRow | null>(null);
   const [warningPending, setWarningPending] = useState<string | null>(null);
+  const [verifyingId, setVerifyingId] = useState<string | null>(null);
+  const [expandedMemberId, setExpandedMemberId] = useState<string | null>(null);
   const [, startDeleteTransition] = useTransition();
+
+  const channelsByMember = useMemo(() => {
+    const map: Record<string, AdminChannelRow[]> = {};
+    for (const ch of channels) {
+      if (!map[ch.user_id]) map[ch.user_id] = [];
+      map[ch.user_id].push(ch);
+    }
+    return map;
+  }, [channels]);
 
   async function handleWarn(member: MemberRow) {
     setWarningPending(member.id);
@@ -274,6 +296,21 @@ function MembersTab({
     });
   }
 
+  async function handleVerify(channelId: string, verified: boolean) {
+    setVerifyingId(channelId);
+    const result = await setChannelVerified(channelId, verified);
+    if (!result.error) {
+      setChannels((prev) =>
+        prev.map((ch) => ch.id === channelId ? { ...ch, is_verified: verified } : ch)
+      );
+    }
+    setVerifyingId(null);
+  }
+
+  function toggleExpand(memberId: string) {
+    setExpandedMemberId((prev) => (prev === memberId ? null : memberId));
+  }
+
   return (
     <>
       <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -295,43 +332,95 @@ function MembersTab({
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {members.map((m) => (
-                <tr key={m.id} className="hover:bg-gray-50/50 transition-colors">
-                  <td className="px-5 py-3 font-semibold text-[#111111] max-w-[120px] truncate">{m.name ?? "-"}</td>
-                  <td className="px-5 py-3 text-gray-500 max-w-[180px] truncate">{m.email ?? "-"}</td>
-                  <td className="px-5 py-3">
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                      m.role === "admin" ? "bg-[#E8292E]/10 text-[#E8292E]" : "bg-gray-100 text-gray-600"
-                    }`}>
-                      {ROLE_LABELS[m.role ?? ""] ?? m.role ?? "-"}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3 text-gray-500">{fmt(m.created_at)}</td>
-                  <td className="px-5 py-3 text-gray-500 text-center">{m.channel_count}</td>
-                  <td className="px-5 py-3"><WarningBadge count={m.warning_count} /></td>
-                  <td className="px-5 py-3">
-                    {m.id !== currentUserId && m.role !== "admin" && (
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => handleWarn(m)}
-                          disabled={warningPending === m.id}
-                          title="경고"
-                          className="p-1.5 rounded-lg text-orange-500 hover:bg-orange-50 transition-colors disabled:opacity-40"
-                        >
-                          <AlertTriangle size={14} />
-                        </button>
-                        <button
-                          onClick={() => setDeleteTarget(m)}
-                          title="강제탈퇴"
-                          className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
+              {members.map((m) => {
+                const memberChannels = channelsByMember[m.id] ?? [];
+                return (
+                  <Fragment key={m.id}>
+                    <tr className="hover:bg-gray-50/50 transition-colors">
+                      <td className="px-5 py-3 font-semibold text-[#111111] max-w-[120px] truncate">{m.name ?? "-"}</td>
+                      <td className="px-5 py-3 text-gray-500 max-w-[180px] truncate">{m.email ?? "-"}</td>
+                      <td className="px-5 py-3">
+                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                          m.role === "admin" ? "bg-[#E8292E]/10 text-[#E8292E]" : "bg-gray-100 text-gray-600"
+                        }`}>
+                          {ROLE_LABELS[m.role ?? ""] ?? m.role ?? "-"}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-gray-500">{fmt(m.created_at)}</td>
+                      <td className="px-5 py-3 text-gray-500 text-center">{m.channel_count}</td>
+                      <td className="px-5 py-3"><WarningBadge count={m.warning_count} /></td>
+                      <td className="px-5 py-3">
+                        <div className="flex items-center gap-2">
+                          {m.id !== currentUserId && m.role !== "admin" && (
+                            <>
+                              <button
+                                onClick={() => handleWarn(m)}
+                                disabled={warningPending === m.id}
+                                title="경고"
+                                className="p-1.5 rounded-lg text-orange-500 hover:bg-orange-50 transition-colors disabled:opacity-40"
+                              >
+                                <AlertTriangle size={14} />
+                              </button>
+                              <button
+                                onClick={() => setDeleteTarget(m)}
+                                title="강제탈퇴"
+                                className="p-1.5 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </>
+                          )}
+                          {memberChannels.length > 0 && (
+                            <button
+                              onClick={() => toggleExpand(m.id)}
+                              title="채널 인증 관리"
+                              className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50 transition-colors"
+                            >
+                              {expandedMemberId === m.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                    {expandedMemberId === m.id && memberChannels.length > 0 && (
+                      <tr className="bg-blue-50/20">
+                        <td colSpan={7} className="px-5 py-3">
+                          <div className="space-y-2">
+                            {memberChannels.map((ch) => (
+                              <div key={ch.id} className="flex items-center justify-between gap-3 bg-white rounded-xl px-4 py-2.5 border border-gray-100">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${PLATFORM_COLORS[ch.platform] ?? "bg-gray-100 text-gray-600"}`}>
+                                    {PLATFORM_LABELS[ch.platform] ?? ch.platform}
+                                  </span>
+                                  <span className="text-xs font-semibold text-[#111111] truncate">{ch.channel_name}</span>
+                                  {ch.is_verified && (
+                                    <span className="text-[10px] font-semibold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full shrink-0">✅ 본인확인</span>
+                                  )}
+                                </div>
+                                <button
+                                  onClick={() => handleVerify(ch.id, !ch.is_verified)}
+                                  disabled={verifyingId === ch.id}
+                                  className={`flex items-center gap-1 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors disabled:opacity-40 shrink-0 ${
+                                    ch.is_verified
+                                      ? "text-red-600 hover:bg-red-50"
+                                      : "text-green-600 hover:bg-green-50"
+                                  }`}
+                                >
+                                  {ch.is_verified ? (
+                                    <><ShieldOff size={12} /> 인증 취소</>
+                                  ) : (
+                                    <><ShieldCheck size={12} /> 인증 승인</>
+                                  )}
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
                     )}
-                  </td>
-                </tr>
-              ))}
+                  </Fragment>
+                );
+              })}
               {members.length === 0 && (
                 <tr><td colSpan={7} className="px-5 py-10 text-center text-gray-400">회원 없음</td></tr>
               )}
@@ -341,41 +430,82 @@ function MembersTab({
 
         {/* 모바일 카드 */}
         <div className="md:hidden divide-y divide-gray-50">
-          {members.map((m) => (
-            <div key={m.id} className="px-4 py-4 flex items-start justify-between gap-3">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <p className="text-xs font-bold text-[#111111] truncate">{m.name ?? m.email ?? "-"}</p>
-                  <WarningBadge count={m.warning_count} />
+          {members.map((m) => {
+            const memberChannels = channelsByMember[m.id] ?? [];
+            return (
+              <div key={m.id} className="px-4 py-4 flex flex-col gap-2">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <p className="text-xs font-bold text-[#111111] truncate">{m.name ?? m.email ?? "-"}</p>
+                      <WarningBadge count={m.warning_count} />
+                    </div>
+                    <p className="text-[11px] text-gray-400 truncate">{m.email ?? "-"}</p>
+                    <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                        {ROLE_LABELS[m.role ?? ""] ?? m.role ?? "-"}
+                      </span>
+                      <span className="text-[10px] text-gray-400">채널 {m.channel_count}개</span>
+                      <span className="text-[10px] text-gray-400">{fmt(m.created_at)}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    {m.id !== currentUserId && m.role !== "admin" && (
+                      <>
+                        <button
+                          onClick={() => handleWarn(m)}
+                          disabled={warningPending === m.id}
+                          className="p-2 rounded-xl text-orange-500 hover:bg-orange-50 transition-colors disabled:opacity-40"
+                        >
+                          <AlertTriangle size={15} />
+                        </button>
+                        <button
+                          onClick={() => setDeleteTarget(m)}
+                          className="p-2 rounded-xl text-red-500 hover:bg-red-50 transition-colors"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </>
+                    )}
+                    {memberChannels.length > 0 && (
+                      <button
+                        onClick={() => toggleExpand(m.id)}
+                        className="p-2 rounded-xl text-blue-500 hover:bg-blue-50 transition-colors"
+                      >
+                        {expandedMemberId === m.id ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+                      </button>
+                    )}
+                  </div>
                 </div>
-                <p className="text-[11px] text-gray-400 truncate">{m.email ?? "-"}</p>
-                <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
-                    {ROLE_LABELS[m.role ?? ""] ?? m.role ?? "-"}
-                  </span>
-                  <span className="text-[10px] text-gray-400">채널 {m.channel_count}개</span>
-                  <span className="text-[10px] text-gray-400">{fmt(m.created_at)}</span>
-                </div>
+                {expandedMemberId === m.id && memberChannels.length > 0 && (
+                  <div className="space-y-1.5">
+                    {memberChannels.map((ch) => (
+                      <div key={ch.id} className="flex items-center justify-between gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${PLATFORM_COLORS[ch.platform] ?? "bg-gray-100 text-gray-600"}`}>
+                            {PLATFORM_LABELS[ch.platform] ?? ch.platform}
+                          </span>
+                          <span className="text-[11px] font-semibold text-[#111111] truncate">{ch.channel_name}</span>
+                          {ch.is_verified && <span className="text-[10px] shrink-0">✅</span>}
+                        </div>
+                        <button
+                          onClick={() => handleVerify(ch.id, !ch.is_verified)}
+                          disabled={verifyingId === ch.id}
+                          className={`text-[10px] font-semibold px-2 py-1 rounded-lg shrink-0 transition-colors disabled:opacity-40 ${
+                            ch.is_verified
+                              ? "text-red-600 bg-red-50 hover:bg-red-100"
+                              : "text-green-600 bg-green-50 hover:bg-green-100"
+                          }`}
+                        >
+                          {ch.is_verified ? "인증취소" : "인증승인"}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-              {m.id !== currentUserId && m.role !== "admin" && (
-                <div className="flex items-center gap-1 shrink-0">
-                  <button
-                    onClick={() => handleWarn(m)}
-                    disabled={warningPending === m.id}
-                    className="p-2 rounded-xl text-orange-500 hover:bg-orange-50 transition-colors disabled:opacity-40"
-                  >
-                    <AlertTriangle size={15} />
-                  </button>
-                  <button
-                    onClick={() => setDeleteTarget(m)}
-                    className="p-2 rounded-xl text-red-500 hover:bg-red-50 transition-colors"
-                  >
-                    <Trash2 size={15} />
-                  </button>
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          })}
           {members.length === 0 && (
             <p className="px-5 py-10 text-center text-xs text-gray-400">회원 없음</p>
           )}
@@ -401,6 +531,7 @@ type Tab = "dashboard" | "members" | "notices" | "blog";
 export default function AdminDashboard({
   stats,
   members,
+  channels,
   notices,
   posts,
   currentUserId,
@@ -408,6 +539,7 @@ export default function AdminDashboard({
 }: {
   stats: DashboardStats;
   members: MemberRow[];
+  channels: AdminChannelRow[];
   notices: NoticeRow[];
   posts: PostRow[];
   currentUserId: string;
@@ -465,7 +597,7 @@ export default function AdminDashboard({
       {/* 콘텐츠 */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {tab === "dashboard" && <DashboardTab stats={stats} />}
-        {tab === "members"   && <MembersTab initialMembers={members} currentUserId={currentUserId} />}
+        {tab === "members"   && <MembersTab initialMembers={members} channels={channels} currentUserId={currentUserId} />}
         {tab === "notices"   && <NoticesTab initialNotices={notices} />}
         {tab === "blog"      && <BlogTab initialPosts={posts} />}
       </div>

@@ -55,3 +55,18 @@ export async function forceDeleteUser(targetId: string): Promise<{ error?: strin
   revalidatePath("/admin");
   return {};
 }
+
+export async function setChannelVerified(channelId: string, verified: boolean): Promise<{ error?: string }> {
+  const { error } = await assertAdmin();
+  if (error) return { error };
+
+  const serviceClient = createServiceClient();
+  const { error: updateError } = await serviceClient
+    .from("channels")
+    .update({ is_verified: verified })
+    .eq("id", channelId);
+
+  if (updateError) return { error: updateError.message };
+  revalidatePath("/admin");
+  return {};
+}
