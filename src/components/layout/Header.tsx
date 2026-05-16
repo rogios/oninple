@@ -9,8 +9,8 @@ import { logoutAction } from "@/app/actions/auth";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const navLinks = [
-  { label: "인플루언서", href: "/influencers" },
-  { label: "편집 프로듀서", href: "/editors" },
+  { label: "소개", href: "/about" },
+  { label: "문의", href: "/contact" },
   { label: "공지사항", href: "/notices" },
 ];
 
@@ -48,8 +48,8 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
           <Image src="/logo.png" alt="온인플" width={120} height={40} priority />
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-7">
+        {/* Desktop nav + Auth area */}
+        <div className="hidden md:flex items-center gap-6">
           {navLinks.map((l) => (
             <Link
               key={l.href}
@@ -59,10 +59,7 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
               {l.label}
             </Link>
           ))}
-        </nav>
-
-        {/* Auth area */}
-        <div className="hidden md:flex items-center gap-2">
+          <div className="flex items-center gap-2">
           {user ? (
             <div className="relative" ref={dropdownRef}>
               <button
@@ -131,6 +128,7 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
               </Link>
             </>
           )}
+          </div>
         </div>
 
         {/* Mobile toggle */}
