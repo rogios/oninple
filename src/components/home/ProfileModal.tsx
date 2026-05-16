@@ -64,7 +64,7 @@ export default function ProfileModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl w-full max-w-lg max-h-[88vh] overflow-y-auto shadow-2xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="bg-white rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto overflow-x-hidden shadow-2xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Hero + Avatar wrapper */}
