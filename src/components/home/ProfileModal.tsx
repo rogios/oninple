@@ -60,11 +60,12 @@ export default function ProfileModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-hidden"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto overflow-x-hidden shadow-2xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="bg-white rounded-2xl w-full max-w-lg max-h-[75vh] overflow-y-auto overflow-x-hidden shadow-2xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{ touchAction: "pan-y" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Hero + Avatar wrapper */}
@@ -109,11 +110,11 @@ export default function ProfileModal({
         </div>
 
         {/* Content */}
-        <div className="px-6 pb-6 pt-14">
+        <div className="px-6 pb-6 pt-14 min-w-0 overflow-x-hidden">
           {/* Name + tags */}
           <div className="text-center mb-5">
             <h2 className="text-xl font-black text-[#111111] mb-2">{channel.channel_name}</h2>
-            <div className="flex items-center justify-center gap-1.5 flex-wrap">
+            <div className="flex items-center justify-center gap-1.5 flex-wrap min-w-0 w-full">
               <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${platform.style}`}>
                 {platform.label}
               </span>
