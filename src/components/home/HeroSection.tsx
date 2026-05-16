@@ -354,7 +354,7 @@ export default function HeroSection({
           </div>
 
           {/* ── 오른쪽 컬럼 (슬라이드 교체) ── */}
-          <div className="relative flex flex-col">
+          <div className="hidden sm:flex relative flex-col">
             <div className="absolute -inset-6 bg-gradient-to-br from-[#E8292E]/6 via-transparent to-[#111111]/4 rounded-3xl -z-10" />
 
             {/* 슬라이드 스택 (CSS grid overlap으로 높이 고정) */}
