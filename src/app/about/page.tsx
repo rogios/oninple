@@ -8,9 +8,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "온인플 소개 | ONINPLE",
     description: "인플루언서, 편집 프로듀서, 광고주를 수수료 없이 직접 연결하는 무료 플랫폼",
-    url: "https://www.oninple.com/about",
+    url: "https://oninple.com/about",
   },
-  alternates: { canonical: "https://www.oninple.com/about" },
+  alternates: { canonical: "https://oninple.com/about" },
 };
 
 // ─── Hero ──────────────────────────────────────────────────────────────────────

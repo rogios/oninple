@@ -6,9 +6,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "문의하기 | ONINPLE",
     description: "온인플 서비스에 대한 문의사항을 남겨주세요.",
-    url: "https://www.oninple.com/contact",
+    url: "https://oninple.com/contact",
   },
-  alternates: { canonical: "https://www.oninple.com/contact" },
+  alternates: { canonical: "https://oninple.com/contact" },
 };
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {

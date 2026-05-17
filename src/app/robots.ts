@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/mypage/", "/admin/", "/login/", "/signup/", "/role-select/"],
     },
-    sitemap: "https://www.oninple.com/sitemap.xml",
+    sitemap: "https://oninple.com/sitemap.xml",
   };
 }

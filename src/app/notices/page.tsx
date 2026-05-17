@@ -9,9 +9,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "공지사항 | ONINPLE",
     description: "온인플 서비스 공지사항",
-    url: "https://www.oninple.com/notices",
+    url: "https://oninple.com/notices",
   },
-  alternates: { canonical: "https://www.oninple.com/notices" },
+  alternates: { canonical: "https://oninple.com/notices" },
 };
 
 export const revalidate = 300;

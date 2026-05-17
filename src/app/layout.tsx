@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.oninple.com"),
+  metadataBase: new URL("https://oninple.com"),
   icons: { icon: "/favicon.png" },
   title: {
     default: "온인플 ONINPLE | 인플루언서·편집자·광고주 무료 디렉토리",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     siteName: "온인플",
-    url: "https://www.oninple.com",
+    url: "https://oninple.com",
   },
   twitter: {
     card: "summary_large_image",

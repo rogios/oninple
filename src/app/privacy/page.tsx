@@ -6,9 +6,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "개인정보처리방침 | ONINPLE",
     description: "온인플 개인정보처리방침",
-    url: "https://www.oninple.com/privacy",
+    url: "https://oninple.com/privacy",
   },
-  alternates: { canonical: "https://www.oninple.com/privacy" },
+  alternates: { canonical: "https://oninple.com/privacy" },
 };
 
 const UPDATED = "2026년 5월 16일";

@@ -6,7 +6,7 @@ import { ChevronLeft, Pin } from "lucide-react";
 
 export const revalidate = 300;
 
-const SITE_URL = "https://www.oninple.com";
+const SITE_URL = "https://oninple.com";
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 function fmt(d: string) {

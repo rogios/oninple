@@ -4,7 +4,7 @@ import HomeClient from "@/components/home/HomeClient";
 import PageViewTracker from "@/components/PageViewTracker";
 import type { DirectoryChannel } from "@/components/home/ChannelDirectory";
 
-const SITE_URL = "https://www.oninple.com";
+const SITE_URL = "https://oninple.com";
 
 export const metadata: Metadata = {
   alternates: { canonical: SITE_URL },
