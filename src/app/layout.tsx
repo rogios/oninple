@@ -20,15 +20,15 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.oninple.com"),
   icons: { icon: "/favicon.png" },
   title: {
-    default: "ONINPLE | 인플루언서·편집자·광고주 무료 디렉토리",
+    default: "온인플 ONINPLE | 인플루언서·편집자·광고주 무료 디렉토리",
     template: "%s | ONINPLE",
   },
   description:
-    "유튜브·인스타그램·틱톡 크리에이터와 AI 편집자를 광고주와 연결하는 무료 디렉토리. 수수료 없이 직접 컨택.",
+    "유튜브·인스타그램·틱톡 크리에이터와 AI 편집자를 광고주와 연결하는 무료 디렉토리. 온인플(ONINPLE)에서 수수료 없이 직접 컨택하세요.",
   keywords: ["인플루언서", "유튜버", "광고주", "AI 편집자", "온인플", "ONINPLE"],
   openGraph: {
-    title: "ONINPLE | 인플루언서 무료 디렉토리",
-    description: "수수료 없이 크리에이터·편집자·광고주를 연결하는 무료 플랫폼",
+    title: "온인플 ONINPLE | 인플루언서 무료 디렉토리",
+    description: "수수료 없이 크리에이터·편집자·광고주를 연결하는 무료 플랫폼. 온인플(ONINPLE)",
     type: "website",
     locale: "ko_KR",
     siteName: "온인플",
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ONINPLE | 인플루언서 무료 디렉토리",
-    description: "수수료 없이 크리에이터·편집자·광고주를 연결하는 무료 플랫폼",
+    title: "온인플 ONINPLE | 인플루언서 무료 디렉토리",
+    description: "수수료 없이 크리에이터·편집자·광고주를 연결하는 무료 플랫폼. 온인플(ONINPLE)",
   },
   other: {
     "naver-site-verification": [
