@@ -40,7 +40,10 @@ export const metadata: Metadata = {
     description: "수수료 없이 크리에이터·편집자·광고주를 연결하는 무료 플랫폼",
   },
   other: {
-    "naver-site-verification": "e9b9a33d8301ff1d415a9f3ab27863f94aceae39",
+    "naver-site-verification": [
+      "e9b9a33d8301ff1d415a9f3ab27863f94aceae39",
+      "fbb8314f01cd217ffc65f78faa200d46a684a978",
+    ],
   },
 };
 
