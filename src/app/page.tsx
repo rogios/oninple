@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { createServiceClient } from "@/lib/supabase/service";
 import HomeClient from "@/components/home/HomeClient";
-import PageViewTracker from "@/components/PageViewTracker";
 import type { DirectoryChannel } from "@/components/home/ChannelDirectory";
 
 const SITE_URL = "https://oninple.com";
@@ -68,7 +67,6 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <PageViewTracker page="/" />
       <HomeClient channels={channels} />
     </>
   );

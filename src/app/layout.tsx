@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Banner from "@/components/layout/Banner";
 import Footer from "@/components/layout/Footer";
+import PageViewTracker from "@/components/PageViewTracker";
 import { createClient } from "@/lib/supabase/server";
 
 const geistSans = Geist({
@@ -77,6 +78,7 @@ export default async function RootLayout({
         <Header user={user} isAdmin={isAdmin} />
         <main className="flex-1">{children}</main>
         <Footer />
+        <PageViewTracker />
       </body>
     </html>
   );
