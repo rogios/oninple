@@ -1,6 +1,14 @@
-export const metadata = {
-  title: "개인정보처리방침 | 온인플",
-  description: "온인플 개인정보처리방침",
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "개인정보처리방침",
+  description: "온인플의 개인정보처리방침을 확인하세요. Google OAuth 인증을 통한 개인정보 수집 및 이용, 보유 기간, 제3자 제공 방침을 안내합니다.",
+  openGraph: {
+    title: "개인정보처리방침 | ONINPLE",
+    description: "온인플 개인정보처리방침",
+    url: "https://www.oninple.com/privacy",
+  },
+  alternates: { canonical: "https://www.oninple.com/privacy" },
 };
 
 const UPDATED = "2026년 5월 16일";

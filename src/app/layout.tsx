@@ -17,8 +17,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.oninple.com"),
   icons: { icon: "/favicon.png" },
-  title: "ONINPLE | 인플루언서·편집자·광고주 무료 디렉토리",
+  title: {
+    default: "ONINPLE | 인플루언서·편집자·광고주 무료 디렉토리",
+    template: "%s | ONINPLE",
+  },
   description:
     "유튜브·인스타그램·틱톡 크리에이터와 AI 편집자를 광고주와 연결하는 무료 디렉토리. 수수료 없이 직접 컨택.",
   keywords: ["인플루언서", "유튜버", "광고주", "AI 편집자", "온인플", "ONINPLE"],
@@ -27,6 +31,13 @@ export const metadata: Metadata = {
     description: "수수료 없이 크리에이터·편집자·광고주를 연결하는 무료 플랫폼",
     type: "website",
     locale: "ko_KR",
+    siteName: "온인플",
+    url: "https://www.oninple.com",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ONINPLE | 인플루언서 무료 디렉토리",
+    description: "수수료 없이 크리에이터·편집자·광고주를 연결하는 무료 플랫폼",
   },
   other: {
     "naver-site-verification": "e9b9a33d8301ff1d415a9f3ab27863f94aceae39",

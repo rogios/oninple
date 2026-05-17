@@ -1,6 +1,18 @@
+import type { Metadata } from "next";
 import { createServiceClient } from "@/lib/supabase/service";
 import Link from "next/link";
 import { CalendarDays } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "블로그",
+  description: "온인플 팀의 인플루언서 마케팅 인사이트, 크리에이터 트렌드, 서비스 소식을 전달합니다.",
+  openGraph: {
+    title: "온인플 블로그 | ONINPLE",
+    description: "인플루언서 마케팅 인사이트와 크리에이터 트렌드",
+    url: "https://www.oninple.com/blog",
+  },
+  alternates: { canonical: "https://www.oninple.com/blog" },
+};
 
 function fmt(d: string) {
   return new Date(d).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" });

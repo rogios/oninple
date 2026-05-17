@@ -1,6 +1,18 @@
+import type { Metadata } from "next";
 import { createServiceClient } from "@/lib/supabase/service";
 import Link from "next/link";
 import { Pin } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "공지사항",
+  description: "온인플 서비스의 공지사항과 업데이트 소식을 확인하세요.",
+  openGraph: {
+    title: "공지사항 | ONINPLE",
+    description: "온인플 서비스 공지사항",
+    url: "https://www.oninple.com/notices",
+  },
+  alternates: { canonical: "https://www.oninple.com/notices" },
+};
 
 export const revalidate = 300;
 

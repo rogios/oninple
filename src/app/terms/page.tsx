@@ -1,6 +1,14 @@
-export const metadata = {
-  title: "이용약관 | 온인플",
-  description: "온인플 서비스 이용약관",
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "이용약관",
+  description: "온인플 서비스 이용약관을 확인하세요. 서비스 이용 조건 및 절차, 운영자와 이용자 간의 권리·의무를 규정합니다.",
+  openGraph: {
+    title: "이용약관 | ONINPLE",
+    description: "온인플 서비스 이용약관",
+    url: "https://www.oninple.com/terms",
+  },
+  alternates: { canonical: "https://www.oninple.com/terms" },
 };
 
 const UPDATED = "2026년 5월 16일";

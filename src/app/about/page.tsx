@@ -1,5 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Check, Users, Video, Megaphone, Star, Globe, MessageCircle } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "온인플 소개",
+  description: "온인플은 인플루언서, 편집 프로듀서, 광고주를 수수료 없이 직접 연결하는 무료 디렉토리 플랫폼입니다. 유튜브·인스타그램·틱톡 크리에이터와 광고주를 연결합니다.",
+  openGraph: {
+    title: "온인플 소개 | ONINPLE",
+    description: "인플루언서, 편집 프로듀서, 광고주를 수수료 없이 직접 연결하는 무료 플랫폼",
+    url: "https://www.oninple.com/about",
+  },
+  alternates: { canonical: "https://www.oninple.com/about" },
+};
 
 // ─── Hero ──────────────────────────────────────────────────────────────────────
 
