@@ -1,9 +1,24 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { signInWithGoogle } from "@/app/actions/auth";
+import InAppBrowserNotice, {
+  detectInAppPlatform,
+  type InAppPlatform,
+} from "./InAppBrowserNotice";
 
 export default function SignupForm() {
+  const [inAppPlatform, setInAppPlatform] = useState<InAppPlatform | null>(null);
+
+  useEffect(() => {
+    setInAppPlatform(detectInAppPlatform());
+  }, []);
+
+  if (inAppPlatform) {
+    return <InAppBrowserNotice platform={inAppPlatform} />;
+  }
+
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="text-center mb-8">

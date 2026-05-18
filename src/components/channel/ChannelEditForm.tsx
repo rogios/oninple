@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { X, Plus, ToggleLeft, ToggleRight, Upload } from "lucide-react";
 import { updateChannel, type ChannelInput } from "@/app/actions/channel";
 import { createClient } from "@/lib/supabase/client";
-import type { YoutubeChannelInfo } from "@/lib/youtube";
+import { formatSubscribers, type YoutubeChannelInfo } from "@/lib/youtube";
 
 // ─── 상수 ────────────────────────────────────────────────────────────────────
 
@@ -263,6 +263,13 @@ export default function ChannelEditForm({
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [fetchedProfileUrl, setFetchedProfileUrl] = useState<string | null>(null);
   const [fetchingYoutube, setFetchingYoutube] = useState(false);
+  const [ytAutoFilled, setYtAutoFilled] = useState(false);
+  const [ytError, setYtError] = useState<string | null>(null);
+  const [ytDisplayFollowers, setYtDisplayFollowers] = useState(
+    platform === "youtube" && channel.follower_count
+      ? formatSubscribers(channel.follower_count)
+      : ""
+  );
 
   type FeedThumb = { url: string; preview: string };
   const [feedThumb1, setFeedThumb1] = useState<FeedThumb | null>(
@@ -303,6 +310,7 @@ export default function ChannelEditForm({
   async function handleChannelUrlBlur() {
     if (platform !== "youtube" || !form.channel_url.trim()) return;
     setFetchingYoutube(true);
+    setYtError(null);
     try {
       const res = await fetch(`/api/youtube/channel?url=${encodeURIComponent(form.channel_url.trim())}`);
       if (res.ok) {
@@ -311,9 +319,18 @@ export default function ChannelEditForm({
           setFetchedProfileUrl(info.thumbnailUrl);
           setImagePreview(info.thumbnailUrl);
         }
+        if (info?.name) set("channel_name", info.name);
+        if (info?.subscriberCount !== undefined) {
+          set("follower_count", info.subscriberCount.toString());
+          setYtDisplayFollowers(formatSubscribers(info.subscriberCount));
+        }
+        setYtAutoFilled(true);
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        setYtError(errData.error ?? "채널 정보를 가져올 수 없습니다.");
       }
     } catch {
-      // 네트워크 오류 시 무시
+      setYtError("네트워크 오류가 발생했습니다.");
     }
     setFetchingYoutube(false);
   }
@@ -387,7 +404,11 @@ export default function ChannelEditForm({
 
     if (!form.channel_name.trim()) errors.channel_name = "필수 항목입니다.";
     if (!isEditor) {
-      if (!form.follower_count) errors.follower_count = "필수 항목입니다.";
+      if (platform === "youtube") {
+        if (!form.channel_url.trim()) errors.channel_url = "채널 링크를 입력해주세요.";
+      } else {
+        if (!form.follower_count) errors.follower_count = "필수 항목입니다.";
+      }
       if (!form.avg_views) errors.avg_views = "필수 항목입니다.";
       if (!form.upload_frequency) errors.upload_frequency = "업로드 주기를 선택해주세요.";
       if (!form.content_format) errors.content_format = "콘텐츠 형식을 선택해주세요.";
@@ -552,25 +573,78 @@ export default function ChannelEditForm({
         </>
       ) : (
         <>
+          {/* 1. 채널 링크 (모든 플랫폼 공통 — 맨 위로 이동) */}
+          <Field
+            label={
+              platform === "youtube"
+                ? "채널 링크"
+                : platform === "instagram"
+                ? "인스타그램 채널 URL"
+                : "틱톡 채널 URL"
+            }
+            error={fieldErrors.channel_url}
+          >
+            <div className="relative">
+              <Input
+                hasError={!!fieldErrors.channel_url}
+                type="url"
+                placeholder={
+                  platform === "youtube"
+                    ? "https://youtube.com/@..."
+                    : platform === "instagram"
+                    ? "https://www.instagram.com/아이디"
+                    : "https://www.tiktok.com/@아이디"
+                }
+                value={form.channel_url}
+                onChange={(e) => {
+                  set("channel_url", e.target.value);
+                  if (ytAutoFilled) { setYtAutoFilled(false); setYtDisplayFollowers(""); }
+                }}
+                onBlur={platform === "youtube" ? handleChannelUrlBlur : undefined}
+              />
+              {fetchingYoutube && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-gray-300 border-t-[#E8292E] rounded-full animate-spin" />
+              )}
+            </div>
+            {platform === "youtube" && ytAutoFilled && !fetchingYoutube && (
+              <p className="text-xs text-green-600 mt-1.5">✓ 채널명과 구독자 수를 가져왔습니다</p>
+            )}
+            {platform === "youtube" && ytError && !fetchingYoutube && (
+              <p className="text-xs text-[#E8292E] mt-1.5">{ytError}</p>
+            )}
+          </Field>
+
+          {/* 2. 채널명 */}
           <Field label={platform === "youtube" ? "채널명" : "계정명"} required error={fieldErrors.channel_name}>
             <Input
               hasError={!!fieldErrors.channel_name}
               placeholder={platform === "youtube" ? "채널 이름" : "@계정명"}
               value={form.channel_name}
               onChange={(e) => set("channel_name", e.target.value)}
+              disabled={platform === "youtube" && ytAutoFilled}
             />
           </Field>
 
+          {/* 3 & 4. 구독자 수 / 평균 조회수 */}
           <div className="grid grid-cols-2 gap-4">
-            <Field label={platform === "youtube" ? "구독자 수" : "팔로워 수"} required error={fieldErrors.follower_count}>
-              <Input
-                hasError={!!fieldErrors.follower_count}
-                type="number"
-                min={0}
-                placeholder="숫자만 입력"
-                value={form.follower_count}
-                onChange={(e) => set("follower_count", e.target.value)}
-              />
+            <Field label={platform === "youtube" ? "구독자 수" : "팔로워 수"} required={platform !== "youtube"} error={fieldErrors.follower_count}>
+              {platform === "youtube" ? (
+                <Input
+                  readOnly
+                  value={ytDisplayFollowers}
+                  placeholder="채널 URL 포커스 아웃 시 자동 조회됩니다"
+                  className="bg-gray-50 cursor-default"
+                />
+              ) : (
+                <Input
+                  hasError={!!fieldErrors.follower_count}
+                  type="number"
+                  min={0}
+                  placeholder="숫자만 입력"
+                  value={form.follower_count}
+                  onChange={(e) => set("follower_count", e.target.value)}
+                />
+              )}
             </Field>
             <Field label="평균 조회수" required error={fieldErrors.avg_views}>
               <Input
@@ -584,10 +658,12 @@ export default function ChannelEditForm({
             </Field>
           </div>
 
+          {/* 5. 콘텐츠 분야 */}
           <Field label="콘텐츠 분야" required error={fieldErrors.categories}>
             <MultiChip options={CATEGORIES} selected={form.categories} onChange={(v) => set("categories", v)} />
           </Field>
 
+          {/* 6. 업로드 주기 / 콘텐츠 형식 */}
           <div className="grid grid-cols-2 gap-4">
             <Field label="업로드 주기" required error={fieldErrors.upload_frequency}>
               <RadioGroup
@@ -605,6 +681,7 @@ export default function ChannelEditForm({
             </Field>
           </div>
 
+          {/* 7. 자기소개 */}
           <Field label={`자기소개 (${form.bio.length}/${bioMax})`} error={fieldErrors.bio}>
             <textarea
               rows={4}
@@ -621,53 +698,25 @@ export default function ChannelEditForm({
             />
           </Field>
 
+          {/* 8. 카카오 오픈채팅 링크 */}
           <Field label="카카오 오픈채팅 링크">
             <Input type="url" placeholder="https://open.kakao.com/..." value={form.kakao_open_chat} onChange={(e) => set("kakao_open_chat", e.target.value)} />
           </Field>
 
+          {/* 유튜브: 대표 영상 URLs (채널 링크는 이미 위에 있음) */}
           {platform === "youtube" && (
-            <>
-              <Field label="채널 링크">
-                <div className="relative">
-                  <Input
-                    type="url"
-                    placeholder="https://youtube.com/@..."
-                    value={form.channel_url}
-                    onChange={(e) => set("channel_url", e.target.value)}
-                    onBlur={handleChannelUrlBlur}
-                  />
-                  {fetchingYoutube && (
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-gray-300 border-t-[#E8292E] rounded-full animate-spin" />
-                  )}
-                </div>
-                {fetchedProfileUrl && !fetchingYoutube && (
-                  <p className="text-xs text-green-600 mt-1.5">✓ 채널 프로필 이미지를 가져왔습니다</p>
-                )}
+            <div className="grid grid-cols-2 gap-4">
+              <Field label="대표 영상 URL 1">
+                <Input type="url" placeholder="https://youtu.be/..." value={form.video_url_1} onChange={(e) => set("video_url_1", e.target.value)} />
               </Field>
-              <div className="grid grid-cols-2 gap-4">
-                <Field label="대표 영상 URL 1">
-                  <Input type="url" placeholder="https://youtu.be/..." value={form.video_url_1} onChange={(e) => set("video_url_1", e.target.value)} />
-                </Field>
-                <Field label="대표 영상 URL 2">
-                  <Input type="url" placeholder="https://youtu.be/..." value={form.video_url_2} onChange={(e) => set("video_url_2", e.target.value)} />
-                </Field>
-              </div>
-            </>
+              <Field label="대표 영상 URL 2">
+                <Input type="url" placeholder="https://youtu.be/..." value={form.video_url_2} onChange={(e) => set("video_url_2", e.target.value)} />
+              </Field>
+            </div>
           )}
 
+          {/* 인스타그램/틱톡: 피드 (채널 URL은 이미 위에 있음) */}
           {(platform === "instagram" || platform === "tiktok") && (<>
-            <Field label={platform === "instagram" ? "인스타그램 채널 URL" : "틱톡 채널 URL"}>
-              <Input
-                type="url"
-                placeholder={
-                  platform === "instagram"
-                    ? "https://www.instagram.com/아이디"
-                    : "https://www.tiktok.com/@아이디"
-                }
-                value={form.channel_url}
-                onChange={(e) => set("channel_url", e.target.value)}
-              />
-            </Field>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>대표 피드 1</Label>
