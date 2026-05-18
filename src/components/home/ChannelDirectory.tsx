@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
-import { Search, X, Users, Eye, Clock, Film, ChevronDown } from "lucide-react";
+import { Search, X, Clock, Film, ChevronDown } from "lucide-react";
 import CTASection from "./CTASection";
 import ProfileModal from "./ProfileModal";
 
@@ -253,25 +253,35 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
           )}
         </div>
         <div className="flex items-center gap-3">
-          <Avatar ch={ch} size={44} />
-          <div className="flex-1 min-w-0">
-            <p className="font-bold text-sm text-[#111111] truncate">{ch.channel_name}</p>
-            {ch.bio && <p className="text-xs text-gray-400 mt-0.5 line-clamp-2">{ch.bio}</p>}
+          <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0">
+            {ch.profile_image_url ? (
+              <img src={ch.profile_image_url} alt={ch.channel_name} className="w-full h-full object-cover" />
+            ) : (
+              <div
+                className="w-full h-full flex items-center justify-center text-white font-black"
+                style={{ backgroundColor: AVATAR_COLORS[ch.platform] ?? "#9ca3af", fontSize: 18 }}
+              >
+                {ch.channel_name.charAt(0).toUpperCase()}
+              </div>
+            )}
+          </div>
+          <div className="flex-1 min-w-0 space-y-0.5">
+            <p className="font-bold text-sm text-[#111111] truncate leading-snug">{ch.channel_name}</p>
+            <p className="text-xs text-gray-500">
+              {ch.platform === "youtube" ? "구독자" : "팔로워"}{" "}
+              <span className="font-semibold text-[#111111]">{formatCount(ch.follower_count)}</span>
+            </p>
+            {ch.avg_views != null && (
+              <p className="text-xs text-gray-500">
+                평균 조회수{" "}
+                <span className="font-semibold text-[#111111]">{formatCount(ch.avg_views)}</span>
+              </p>
+            )}
           </div>
         </div>
-        <div className="flex items-center gap-3 text-xs text-gray-500 flex-wrap">
-          <span className="flex items-center gap-1">
-            <Users size={11} className="text-gray-400" />
-            <span className="font-bold text-[#E8292E]">{formatCount(ch.follower_count)}</span>
-            <span>{ch.platform === "youtube" ? "구독자" : "팔로워"}</span>
-          </span>
-          {ch.avg_views != null && (
-            <span className="flex items-center gap-1">
-              <Eye size={11} className="text-gray-400" />
-              {formatCount(ch.avg_views)}회
-            </span>
-          )}
-        </div>
+        {ch.bio && (
+          <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">{ch.bio}</p>
+        )}
         {(ch.upload_frequency || ch.content_format) && (
           <div className="flex items-center gap-2 text-[11px] text-gray-400">
             {ch.upload_frequency && <span className="flex items-center gap-1"><Clock size={10} />{ch.upload_frequency}</span>}
@@ -308,7 +318,18 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
       {/* 본문 */}
       <div className="p-4 flex flex-col gap-3 flex-1">
         <div className="flex items-center gap-3">
-          <Avatar ch={ch} size={48} />
+          <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0">
+            {ch.profile_image_url ? (
+              <img src={ch.profile_image_url} alt={ch.channel_name} className="w-full h-full object-cover" />
+            ) : (
+              <div
+                className="w-full h-full flex items-center justify-center text-white font-black"
+                style={{ backgroundColor: AVATAR_COLORS[ch.platform] ?? "#9ca3af", fontSize: 18 }}
+              >
+                {ch.channel_name.charAt(0).toUpperCase()}
+              </div>
+            )}
+          </div>
           <div className="flex-1 min-w-0">
             <p className="font-bold text-sm text-[#111111] truncate mb-1">{ch.channel_name}</p>
             <div className="flex items-center gap-1.5 flex-wrap">
