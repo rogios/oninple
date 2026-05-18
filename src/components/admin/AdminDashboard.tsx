@@ -88,8 +88,10 @@ function StatCard({ label, value, sub }: { label: string; value: string | number
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
       <p className="text-xs text-gray-400 font-medium mb-1">{label}</p>
-      <p className="text-2xl font-black text-[#111111]">{value}</p>
-      {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
+      <p className="text-2xl font-black text-[#111111] whitespace-nowrap">
+        {value}
+        {sub && <span className="text-xs font-medium text-gray-400 ml-1">{sub}</span>}
+      </p>
     </div>
   );
 }
