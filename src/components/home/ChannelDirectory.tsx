@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
-import { Search, X, Clock, Film, ChevronDown } from "lucide-react";
+import { Search, X, Users, Eye, Clock, Film, ChevronDown } from "lucide-react";
 import CTASection from "./CTASection";
 import ProfileModal from "./ProfileModal";
 
@@ -267,14 +267,16 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
           </div>
           <div className="flex-1 min-w-0 space-y-0.5">
             <p className="font-bold text-sm text-[#111111] truncate leading-snug">{ch.channel_name}</p>
-            <p className="text-xs text-gray-500">
-              {ch.platform === "youtube" ? "구독자" : "팔로워"}{" "}
-              <span className="font-semibold text-[#111111]">{formatCount(ch.follower_count)}</span>
+            <p className="flex items-center gap-1 text-xs text-gray-500">
+              <Users size={11} className="text-gray-400 shrink-0" />
+              {ch.platform === "youtube" ? "구독자" : "팔로워"}
+              <span className="font-semibold text-red-500">{formatCount(ch.follower_count)}</span>
             </p>
             {ch.avg_views != null && (
-              <p className="text-xs text-gray-500">
-                평균 조회수{" "}
-                <span className="font-semibold text-[#111111]">{formatCount(ch.avg_views)}</span>
+              <p className="flex items-center gap-1 text-xs text-gray-500">
+                <Eye size={11} className="text-gray-400 shrink-0" />
+                평균 조회수
+                <span className="font-semibold text-red-500">{formatCount(ch.avg_views)}</span>
               </p>
             )}
           </div>

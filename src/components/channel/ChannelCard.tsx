@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Pencil, Trash2, Users, CheckCircle2 } from "lucide-react";
+import { Pencil, Trash2, Users, Eye, CheckCircle2 } from "lucide-react";
 import { deleteChannel } from "@/app/actions/channel";
 
 // ─── 상수 ────────────────────────────────────────────────────────────────────
@@ -129,17 +129,19 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
             {channel.channel_name}
           </h3>
           {channel.follower_count != null && followerLabel && (
-            <p className="text-xs text-gray-500">
-              {followerLabel}{" "}
-              <span className="font-semibold text-[#111111]">
+            <p className="flex items-center gap-1 text-xs text-gray-500">
+              <Users size={11} className="text-gray-400 shrink-0" />
+              {followerLabel}
+              <span className="font-semibold text-red-500">
                 {formatCount(channel.follower_count)}
               </span>
             </p>
           )}
           {channel.avg_views != null && (
-            <p className="text-xs text-gray-500">
-              평균 조회수{" "}
-              <span className="font-semibold text-[#111111]">
+            <p className="flex items-center gap-1 text-xs text-gray-500">
+              <Eye size={11} className="text-gray-400 shrink-0" />
+              평균 조회수
+              <span className="font-semibold text-red-500">
                 {formatCount(channel.avg_views)}
               </span>
             </p>
