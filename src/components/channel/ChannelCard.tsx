@@ -60,6 +60,8 @@ export type ChannelCardData = {
   platform: string;
   channel_name: string;
   follower_count: number | null;
+  avg_views: number | null;
+  bio: string | null;
   categories: string[] | null;
   can_collaborate: boolean | null;
   profile_image_url: string | null;
@@ -95,9 +97,7 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col gap-4">
       {/* 상단: 플랫폼 뱃지 + 협업가능 */}
       <div className="flex items-center justify-between">
-        <span
-          className={`text-xs font-bold px-2.5 py-1 rounded-full ${config.className}`}
-        >
+        <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${config.className}`}>
           {config.label}
         </span>
         {channel.can_collaborate && (
@@ -108,23 +108,51 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
         )}
       </div>
 
-      {/* 채널명 + 팔로워 */}
-      <div>
-        <h3 className="text-base font-bold text-[#111111] leading-snug">
-          {channel.channel_name}
-        </h3>
-        {channel.follower_count != null && followerLabel && (
-          <div className="flex items-center gap-1.5 mt-1 text-sm text-gray-500">
-            <Users size={13} className="text-gray-400" />
-            <span>
+      {/* 프로필 사진 + 채널명 / 구독자 수 / 평균 조회수 */}
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0">
+          {channel.profile_image_url ? (
+            <img
+              src={channel.profile_image_url}
+              alt={channel.channel_name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Users size={20} className="text-gray-300" />
+            </div>
+          )}
+        </div>
+
+        <div className="flex-1 min-w-0 space-y-0.5">
+          <h3 className="text-sm font-bold text-[#111111] truncate leading-snug">
+            {channel.channel_name}
+          </h3>
+          {channel.follower_count != null && followerLabel && (
+            <p className="text-xs text-gray-500">
               {followerLabel}{" "}
               <span className="font-semibold text-[#111111]">
                 {formatCount(channel.follower_count)}
               </span>
-            </span>
-          </div>
-        )}
+            </p>
+          )}
+          {channel.avg_views != null && (
+            <p className="text-xs text-gray-500">
+              평균 조회수{" "}
+              <span className="font-semibold text-[#111111]">
+                {formatCount(channel.avg_views)}
+              </span>
+            </p>
+          )}
+        </div>
       </div>
+
+      {/* 소개글 */}
+      {channel.bio && (
+        <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+          {channel.bio}
+        </p>
+      )}
 
       {/* 카테고리 태그 */}
       {channel.categories && channel.categories.length > 0 && (
