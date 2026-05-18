@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, ExternalLink, MessageCircle, Flag } from "lucide-react";
+import { X, ExternalLink, MessageCircle, Flag, BadgeCheck } from "lucide-react";
 import type { DirectoryChannel } from "./ChannelDirectory";
 import { formatCount, getTierKey, TIER_STYLES, TIER_LABELS } from "./ChannelDirectory";
 
@@ -113,7 +113,17 @@ export default function ProfileModal({
         <div className="px-6 pb-6 pt-14 min-w-0 overflow-x-hidden">
           {/* Name + tags */}
           <div className="text-center mb-5">
-            <h2 className="text-xl font-black text-[#111111] mb-2">{channel.channel_name}</h2>
+            <div className="flex items-center justify-center gap-1.5 mb-2">
+              <h2 className="text-xl font-black text-[#111111]">{channel.channel_name}</h2>
+              {channel.is_verified && (
+                <div className="group relative cursor-default shrink-0">
+                  <BadgeCheck size={20} className="text-[#1D9E75]" />
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-max hidden group-hover:block bg-white border border-gray-100 shadow-md text-xs text-gray-500 px-2.5 py-1.5 rounded-lg z-10 pointer-events-none">
+                    본인 소유가 확인된 채널입니다
+                  </div>
+                </div>
+              )}
+            </div>
             <div className="flex items-center justify-center gap-1.5 flex-wrap min-w-0 w-full">
               <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${platform.style}`}>
                 {platform.label}
@@ -127,9 +137,6 @@ export default function ProfileModal({
                 <span className="text-xs font-semibold text-green-600 bg-green-50 border border-green-200 px-2.5 py-0.5 rounded-full">협업가능</span>
               ) : (
                 <span className="text-xs font-semibold text-gray-400 bg-gray-50 border border-gray-200 px-2.5 py-0.5 rounded-full">협업마감</span>
-              )}
-              {channel.is_verified && (
-                <span className="text-xs font-semibold text-green-700 bg-green-50 border border-green-300 px-2.5 py-0.5 rounded-full">✅ 본인확인</span>
               )}
             </div>
           </div>

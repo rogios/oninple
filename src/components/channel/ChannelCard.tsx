@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Pencil, Trash2, Users, Eye, CheckCircle2 } from "lucide-react";
+import { Pencil, Trash2, Users, Eye, BadgeCheck, CheckCircle2 } from "lucide-react";
 import { deleteChannel } from "@/app/actions/channel";
 
 // ─── 상수 ────────────────────────────────────────────────────────────────────
@@ -65,6 +65,7 @@ export type ChannelCardData = {
   categories: string[] | null;
   can_collaborate: boolean | null;
   profile_image_url: string | null;
+  is_verified: boolean | null;
 };
 
 // ─── 컴포넌트 ─────────────────────────────────────────────────────────────────
@@ -94,7 +95,15 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col gap-4">
+    <div className="relative bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col gap-4">
+      {channel.is_verified && (
+        <div className="group absolute top-4 right-4 cursor-default z-10">
+          <BadgeCheck size={17} className="text-[#1D9E75]" />
+          <div className="absolute bottom-full right-0 mb-1.5 w-max hidden group-hover:block bg-white border border-gray-100 shadow-md text-xs text-gray-500 px-2.5 py-1.5 rounded-lg pointer-events-none">
+            본인 소유가 확인된 채널입니다
+          </div>
+        </div>
+      )}
       {/* 상단: 플랫폼 뱃지 + 협업가능 */}
       <div className="flex items-center justify-between">
         <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${config.className}`}>

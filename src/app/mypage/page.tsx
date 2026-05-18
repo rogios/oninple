@@ -50,7 +50,7 @@ export default async function MyPage() {
 
   const { data: channels } = await supabase
     .from("channels")
-    .select("id, platform, channel_name, follower_count, avg_views, bio, categories, can_collaborate, profile_image_url")
+    .select("id, platform, channel_name, follower_count, avg_views, bio, categories, can_collaborate, profile_image_url, is_verified")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 

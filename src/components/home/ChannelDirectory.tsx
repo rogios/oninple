@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
-import { Search, X, Users, Eye, Clock, Film, ChevronDown } from "lucide-react";
+import { Search, X, Users, Eye, BadgeCheck, Clock, Film, ChevronDown } from "lucide-react";
 import CTASection from "./CTASection";
 import ProfileModal from "./ProfileModal";
 
@@ -242,15 +242,20 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
       className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col text-left hover:shadow-md hover:border-gray-200 transition-all duration-200 w-full"
     >
       {/* 본문 */}
-      <div className="p-4 flex flex-col gap-3 flex-1">
+      <div className="relative p-4 flex flex-col gap-3 flex-1">
+        {ch.is_verified && (
+          <div className="group absolute top-3 right-3 cursor-default z-10">
+            <BadgeCheck size={16} className="text-[#1D9E75]" />
+            <div className="absolute top-full right-0 mt-1.5 w-max hidden group-hover:block bg-white border border-gray-100 shadow-md text-xs text-gray-500 px-2.5 py-1.5 rounded-lg pointer-events-none">
+              본인 소유가 확인된 채널입니다
+            </div>
+          </div>
+        )}
         <div className="flex items-center gap-1.5 flex-wrap">
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${TIER_STYLES[tierKey]}`}>
             {TIER_LABELS[tierKey]}
           </span>
           <CollabBadge can={ch.can_collaborate} />
-          {ch.is_verified && (
-            <span className="text-[10px] font-semibold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">✅ 본인확인</span>
-          )}
         </div>
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0">
@@ -318,7 +323,15 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
       className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col text-left hover:shadow-md hover:border-gray-200 transition-all duration-200 w-full"
     >
       {/* 본문 */}
-      <div className="p-4 flex flex-col gap-3 flex-1">
+      <div className="relative p-4 flex flex-col gap-3 flex-1">
+        {ch.is_verified && (
+          <div className="group absolute top-3 right-3 cursor-default z-10">
+            <BadgeCheck size={16} className="text-[#1D9E75]" />
+            <div className="absolute top-full right-0 mt-1.5 w-max hidden group-hover:block bg-white border border-gray-100 shadow-md text-xs text-gray-500 px-2.5 py-1.5 rounded-lg pointer-events-none">
+              본인 소유가 확인된 채널입니다
+            </div>
+          </div>
+        )}
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0">
             {ch.profile_image_url ? (
@@ -334,12 +347,7 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-bold text-sm text-[#111111] truncate mb-1">{ch.channel_name}</p>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <CollabBadge can={ch.can_collaborate} />
-              {ch.is_verified && (
-                <span className="text-[10px] font-semibold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">✅ 본인확인</span>
-              )}
-            </div>
+            <CollabBadge can={ch.can_collaborate} />
           </div>
         </div>
         {ch.bio && <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">{ch.bio}</p>}
