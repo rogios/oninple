@@ -269,13 +269,13 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
             <p className="font-bold text-sm text-[#111111] truncate leading-snug">{ch.channel_name}</p>
             <p className="flex items-center gap-1 text-xs text-gray-500">
               <Users size={11} className="text-gray-400 shrink-0" />
-              {ch.platform === "youtube" ? "구독자" : "팔로워"}
+              <span className="hidden sm:inline">{ch.platform === "youtube" ? "구독자" : "팔로워"}</span>
               <span className="font-semibold text-red-500">{formatCount(ch.follower_count)}</span>
             </p>
             {ch.avg_views != null && (
               <p className="flex items-center gap-1 text-xs text-gray-500">
                 <Eye size={11} className="text-gray-400 shrink-0" />
-                평균 조회수
+                <span className="hidden sm:inline">평균 조회수</span>
                 <span className="font-semibold text-red-500">{formatCount(ch.avg_views)}</span>
               </p>
             )}

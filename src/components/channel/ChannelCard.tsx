@@ -131,7 +131,7 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
           {channel.follower_count != null && followerLabel && (
             <p className="flex items-center gap-1 text-xs text-gray-500">
               <Users size={11} className="text-gray-400 shrink-0" />
-              {followerLabel}
+              <span className="hidden sm:inline">{followerLabel}</span>
               <span className="font-semibold text-red-500">
                 {formatCount(channel.follower_count)}
               </span>
@@ -140,7 +140,7 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
           {channel.avg_views != null && (
             <p className="flex items-center gap-1 text-xs text-gray-500">
               <Eye size={11} className="text-gray-400 shrink-0" />
-              평균 조회수
+              <span className="hidden sm:inline">평균 조회수</span>
               <span className="font-semibold text-red-500">
                 {formatCount(channel.avg_views)}
               </span>
