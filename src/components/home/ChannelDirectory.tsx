@@ -222,7 +222,7 @@ function CollabBadge({ can }: { can: boolean | null }) {
   return can ? (
     <span className="text-[10px] font-semibold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">협업가능</span>
   ) : (
-    <span className="text-[10px] font-semibold text-gray-400 bg-gray-50 border border-gray-200 px-2 py-0.5 rounded-full">협업마감</span>
+    <span className="text-[10px] font-semibold text-gray-400 dark:text-[#6B7280] bg-gray-50 dark:bg-[#374151] border border-gray-200 dark:border-[#4B5563] px-2 py-0.5 rounded-full">협업마감</span>
   );
 }
 
@@ -239,14 +239,14 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
     <button
       type="button"
       onClick={onClick}
-      className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col text-left hover:shadow-md hover:border-gray-200 transition-all duration-200 w-full"
+      className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm overflow-hidden flex flex-col text-left hover:shadow-md hover:border-gray-200 dark:hover:border-[#4B5563] transition-all duration-200 w-full"
     >
       {/* 본문 */}
       <div className="relative p-4 flex flex-col gap-3 flex-1">
         {ch.is_verified && (
           <div className="group absolute top-3 right-3 cursor-default z-10">
             <BadgeCheck size={16} className="text-[#1D9E75]" />
-            <div className="absolute top-full right-0 mt-1.5 w-max hidden group-hover:block bg-white border border-gray-100 shadow-md text-xs text-gray-500 px-2.5 py-1.5 rounded-lg pointer-events-none">
+            <div className="absolute top-full right-0 mt-1.5 w-max hidden group-hover:block bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] shadow-md text-xs text-gray-500 dark:text-[#9CA3AF] px-2.5 py-1.5 rounded-lg pointer-events-none">
               본인 소유가 확인된 채널입니다
             </div>
           </div>
@@ -258,7 +258,7 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
           <CollabBadge can={ch.can_collaborate} />
         </div>
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0">
+          <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 dark:bg-[#374151] shrink-0">
             {ch.profile_image_url ? (
               <img src={ch.profile_image_url} alt={ch.channel_name} className="w-full h-full object-cover" />
             ) : (
@@ -271,15 +271,15 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
             )}
           </div>
           <div className="flex-1 min-w-0 space-y-0.5">
-            <p className="font-bold text-sm text-[#111111] truncate leading-snug">{ch.channel_name}</p>
-            <p className="flex items-center gap-1 text-xs text-gray-500">
-              <Users size={11} className="text-gray-400 shrink-0" />
+            <p className="font-bold text-sm text-[#111111] dark:text-[#F9FAFB] truncate leading-snug">{ch.channel_name}</p>
+            <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-[#9CA3AF]">
+              <Users size={11} className="text-gray-400 dark:text-[#6B7280] shrink-0" />
               <span className="hidden sm:inline">{ch.platform === "youtube" ? "구독자" : "팔로워"}</span>
               <span className="font-semibold text-red-500">{formatCount(ch.follower_count)}</span>
             </p>
             {ch.avg_views != null && (
-              <p className="flex items-center gap-1 text-xs text-gray-500">
-                <Eye size={11} className="text-gray-400 shrink-0" />
+              <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-[#9CA3AF]">
+                <Eye size={11} className="text-gray-400 dark:text-[#6B7280] shrink-0" />
                 <span className="hidden sm:inline">평균 조회수</span>
                 <span className="font-semibold text-red-500">{formatCount(ch.avg_views)}</span>
               </p>
@@ -287,10 +287,10 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
           </div>
         </div>
         {ch.bio && (
-          <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">{ch.bio}</p>
+          <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed line-clamp-2">{ch.bio}</p>
         )}
         {(ch.upload_frequency || ch.content_format) && (
-          <div className="flex items-center gap-2 text-[11px] text-gray-400">
+          <div className="flex items-center gap-2 text-[11px] text-gray-400 dark:text-[#6B7280]">
             {ch.upload_frequency && <span className="flex items-center gap-1"><Clock size={10} />{ch.upload_frequency}</span>}
             {ch.content_format && <span className="flex items-center gap-1"><Film size={10} />{ch.content_format}</span>}
           </div>
@@ -298,7 +298,7 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
         {ch.categories && ch.categories.length > 0 && (
           <div className="flex gap-1 flex-wrap">
             {ch.categories.slice(0, 2).map((cat) => (
-              <span key={cat} className="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+              <span key={cat} className="text-[10px] text-gray-500 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2 py-0.5 rounded-full">
                 {CATEGORY_LABELS[cat] ?? cat}
               </span>
             ))}
@@ -306,7 +306,7 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
         )}
       </div>
       {/* 대표 영상 썸네일 (16:9) */}
-      <div className="aspect-video w-full bg-gray-100 shrink-0">
+      <div className="aspect-video w-full bg-gray-100 dark:bg-[#374151] shrink-0">
         {thumbUrl && (
           <img src={thumbUrl} alt="대표 영상" className="w-full h-full object-cover" />
         )}
@@ -320,20 +320,20 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
     <button
       type="button"
       onClick={onClick}
-      className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col text-left hover:shadow-md hover:border-gray-200 transition-all duration-200 w-full"
+      className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm overflow-hidden flex flex-col text-left hover:shadow-md hover:border-gray-200 dark:hover:border-[#4B5563] transition-all duration-200 w-full"
     >
       {/* 본문 */}
       <div className="relative p-4 flex flex-col gap-3 flex-1">
         {ch.is_verified && (
           <div className="group absolute top-3 right-3 cursor-default z-10">
             <BadgeCheck size={16} className="text-[#1D9E75]" />
-            <div className="absolute top-full right-0 mt-1.5 w-max hidden group-hover:block bg-white border border-gray-100 shadow-md text-xs text-gray-500 px-2.5 py-1.5 rounded-lg pointer-events-none">
+            <div className="absolute top-full right-0 mt-1.5 w-max hidden group-hover:block bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] shadow-md text-xs text-gray-500 dark:text-[#9CA3AF] px-2.5 py-1.5 rounded-lg pointer-events-none">
               본인 소유가 확인된 채널입니다
             </div>
           </div>
         )}
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0">
+          <div className="w-12 h-12 rounded-xl overflow-hidden bg-gray-100 dark:bg-[#374151] shrink-0">
             {ch.profile_image_url ? (
               <img src={ch.profile_image_url} alt={ch.channel_name} className="w-full h-full object-cover" />
             ) : (
@@ -346,11 +346,11 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-sm text-[#111111] truncate mb-1">{ch.channel_name}</p>
+            <p className="font-bold text-sm text-[#111111] dark:text-[#F9FAFB] truncate mb-1">{ch.channel_name}</p>
             <CollabBadge can={ch.can_collaborate} />
           </div>
         </div>
-        {ch.bio && <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">{ch.bio}</p>}
+        {ch.bio && <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed line-clamp-2">{ch.bio}</p>}
         {ch.work_fields && ch.work_fields.length > 0 && (
           <div className="flex gap-1 flex-wrap">
             {ch.work_fields.slice(0, 3).map((f) => (
@@ -361,13 +361,13 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
         {ch.ai_tools && ch.ai_tools.length > 0 && (
           <div className="flex gap-1 flex-wrap">
             {ch.ai_tools.slice(0, 3).map((t) => (
-              <span key={t} className="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{t}</span>
+              <span key={t} className="text-[10px] text-gray-500 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2 py-0.5 rounded-full">{t}</span>
             ))}
           </div>
         )}
       </div>
       {/* 빈 썸네일 영역 (16:9) */}
-      <div className="aspect-video w-full bg-gray-100 shrink-0" />
+      <div className="aspect-video w-full bg-gray-100 dark:bg-[#374151] shrink-0" />
     </button>
   );
 }
@@ -430,12 +430,12 @@ function PlatformSection({
   if (search.trim() && channels.length === 0) return null;
 
   return (
-    <section id={id} className="py-12 border-t border-gray-100">
+    <section id={id} className="py-12 border-t border-gray-100 dark:border-[#374151]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3 mb-6">
           {logo}
-          <h2 className="text-xl font-black text-[#111111]">{title}</h2>
-          <span className="text-sm text-gray-400">({channels.length}명 등록)</span>
+          <h2 className="text-xl font-black text-[#111111] dark:text-[#F9FAFB]">{title}</h2>
+          <span className="text-sm text-gray-400 dark:text-[#6B7280]">({channels.length}명 등록)</span>
         </div>
 
         {/* Category tabs + Tier dropdown */}
@@ -447,8 +447,8 @@ function PlatformSection({
                 onClick={() => setF((s) => ({ ...s, category: tab.key }))}
                 className={`shrink-0 text-xs font-semibold px-3.5 py-1.5 rounded-full transition-colors ${
                   f.category === tab.key
-                    ? "bg-[#111111] text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-[#111111] dark:bg-[#F9FAFB] text-white dark:text-[#111111]"
+                    : "bg-gray-100 dark:bg-[#374151] text-gray-600 dark:text-[#9CA3AF] hover:bg-gray-200 dark:hover:bg-[#4B5563]"
                 }`}
               >
                 {tab.label}
@@ -463,14 +463,14 @@ function PlatformSection({
                 className={`flex items-center gap-1 text-xs font-semibold px-3.5 py-1.5 rounded-full border transition-colors ${
                   f.tier !== "all"
                     ? "bg-[#E8292E] text-white border-[#E8292E]"
-                    : "bg-[#111111] text-white border-[#111111] hover:bg-[#333333] hover:border-[#333333]"
+                    : "bg-[#111111] dark:bg-[#374151] text-white border-[#111111] dark:border-[#374151] hover:bg-[#333333] dark:hover:bg-[#4B5563] hover:border-[#333333] dark:hover:border-[#4B5563]"
                 }`}
               >
                 {f.tier === "all" ? "등급" : TIER_TABS.find((t) => t.key === f.tier)?.label.split("(")[0]}
                 <ChevronDown size={12} className={`transition-transform ${tierOpen ? "rotate-180" : ""}`} />
               </button>
               {tierOpen && (
-                <div className="absolute right-0 top-full mt-1.5 bg-white border border-gray-200 rounded-xl shadow-lg z-20 min-w-[160px] py-1 overflow-hidden">
+                <div className="absolute right-0 top-full mt-1.5 bg-white dark:bg-[#1F2937] border border-gray-200 dark:border-[#374151] rounded-xl shadow-lg z-20 min-w-[160px] py-1 overflow-hidden">
                   {TIER_TABS.map((tab) => (
                     <button
                       key={tab.key}
@@ -478,7 +478,7 @@ function PlatformSection({
                       className={`w-full text-left text-xs font-semibold px-4 py-2 transition-colors ${
                         f.tier === tab.key
                           ? "bg-[#E8292E]/10 text-[#E8292E]"
-                          : "text-gray-700 hover:bg-gray-50"
+                          : "text-gray-700 dark:text-[#F9FAFB] hover:bg-gray-50 dark:hover:bg-[#374151]"
                       }`}
                     >
                       {tab.label}
@@ -505,7 +505,7 @@ function PlatformSection({
                 <div className="flex justify-center mt-6">
                   <button
                     onClick={() => setVisibleCount((v) => v + perPage)}
-                    className="text-sm font-semibold text-gray-600 border border-gray-200 hover:border-gray-300 px-6 py-2.5 rounded-full transition-colors"
+                    className="text-sm font-semibold text-gray-600 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] px-6 py-2.5 rounded-full transition-colors"
                   >
                     더보기
                   </button>
@@ -513,7 +513,7 @@ function PlatformSection({
               )}
             </>
           ) : (
-            <div className="text-center py-16 text-gray-400">
+            <div className="text-center py-16 text-gray-400 dark:text-[#6B7280]">
               <p className="text-sm">{search.trim() ? "검색 결과가 없습니다" : "등록된 채널이 없습니다"}</p>
             </div>
           )}
@@ -590,22 +590,22 @@ export default function ChannelDirectory({
   }
 
   return (
-    <div className="bg-gray-50/50">
+    <div className="bg-gray-50/50 dark:bg-[#111827]">
       {/* Sticky search */}
-      <div className="bg-white border-b border-gray-100 sticky top-14 z-40 shadow-sm">
+      <div className="bg-white dark:bg-[#111827] border-b border-gray-100 dark:border-[#374151] sticky top-14 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="relative max-w-sm">
-            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-[#6B7280] pointer-events-none" />
             <input
               type="text"
               placeholder="채널명, 키워드로 검색"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={handleSearchKeyDown}
-              className="w-full pl-9 pr-9 py-2 text-sm border border-gray-200 rounded-full focus:outline-none focus:border-gray-400 bg-gray-50 focus:bg-white transition-colors"
+              className="w-full pl-9 pr-9 py-2 text-sm border border-gray-200 dark:border-[#374151] rounded-full focus:outline-none focus:border-gray-400 dark:focus:border-[#4B5563] bg-gray-50 dark:bg-[#1F2937] focus:bg-white dark:focus:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB] placeholder:text-gray-400 dark:placeholder:text-[#6B7280] transition-colors"
             />
             {search && (
-              <button onClick={() => setSearch("")} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+              <button onClick={() => setSearch("")} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-[#6B7280] hover:text-gray-600 dark:hover:text-[#9CA3AF]">
                 <X size={13} />
               </button>
             )}
@@ -614,11 +614,11 @@ export default function ChannelDirectory({
       </div>
 
       {search.trim() && filteredChannels.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-32 text-gray-400">
+        <div className="flex flex-col items-center justify-center py-32 text-gray-400 dark:text-[#6B7280]">
           <Search size={32} className="mb-4 opacity-30" />
           <p className="text-base font-semibold">검색 결과가 없습니다</p>
           <p className="text-sm mt-1">
-            <span className="text-[#111111] font-medium">"{search}"</span>에 맞는 채널이 없어요
+            <span className="text-[#111111] dark:text-[#F9FAFB] font-medium">"{search}"</span>에 맞는 채널이 없어요
           </p>
         </div>
       ) : (

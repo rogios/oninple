@@ -13,20 +13,20 @@ const categories = [
 
 export default function CategorySection() {
   return (
-    <section className="bg-gray-50 py-20">
+    <section className="bg-gray-50 dark:bg-[#111827] py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between mb-10">
           <div>
             <p className="text-xs font-semibold text-[#E8292E] uppercase tracking-wider mb-2">
               카테고리
             </p>
-            <h2 className="text-3xl sm:text-4xl font-black text-[#111111]">
+            <h2 className="text-3xl sm:text-4xl font-black text-[#111111] dark:text-[#F9FAFB]">
               원하는 분야를<br />찾아보세요
             </h2>
           </div>
           <Link
             href="/influencers"
-            className="hidden sm:block text-sm font-medium text-gray-500 hover:text-[#E8292E] transition-colors"
+            className="hidden sm:block text-sm font-medium text-gray-500 dark:text-[#9CA3AF] hover:text-[#E8292E] dark:hover:text-[#E8292E] transition-colors"
           >
             전체 보기 →
           </Link>
@@ -37,14 +37,14 @@ export default function CategorySection() {
             <Link
               key={cat.slug}
               href={`/influencers?category=${cat.slug}`}
-              className="group bg-white rounded-2xl p-5 flex items-center gap-4 border border-gray-100 hover:border-[#E8292E]/30 hover:shadow-md transition-all"
+              className="group bg-white dark:bg-[#1F2937] rounded-2xl p-5 flex items-center gap-4 border border-gray-100 dark:border-[#374151] hover:border-[#E8292E]/30 dark:hover:border-[#E8292E]/50 hover:shadow-md transition-all"
             >
               <span className="text-3xl">{cat.emoji}</span>
               <div>
-                <div className="text-sm font-semibold text-[#111111] group-hover:text-[#E8292E] transition-colors">
+                <div className="text-sm font-semibold text-[#111111] dark:text-[#F9FAFB] group-hover:text-[#E8292E] dark:group-hover:text-[#E8292E] transition-colors">
                   {cat.name}
                 </div>
-                <div className="text-xs text-gray-400 mt-0.5">{cat.count}명</div>
+                <div className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">{cat.count}명</div>
               </div>
             </Link>
           ))}

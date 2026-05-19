@@ -53,10 +53,10 @@ export default function RoleSelectForm() {
     <div className="w-full max-w-lg mx-auto">
       <div className="text-center mb-10">
         <span className="text-2xl font-black text-[#E8292E]">ONINPLE</span>
-        <h1 className="text-2xl font-bold text-[#111111] mt-4 mb-2">
+        <h1 className="text-2xl font-bold text-[#111111] dark:text-[#F9FAFB] mt-4 mb-2">
           어떤 역할로 이용하시나요?
         </h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 dark:text-[#9CA3AF]">
           이후 마이페이지에서 언제든 변경할 수 있어요
         </p>
       </div>
@@ -71,25 +71,25 @@ export default function RoleSelectForm() {
             className={[
               "relative flex items-center gap-4 p-5 rounded-2xl border-2 text-left transition-all",
               role.disabled
-                ? "border-gray-100 bg-gray-50 cursor-not-allowed opacity-60"
+                ? "border-gray-100 dark:border-[#374151] bg-gray-50 dark:bg-[#374151] cursor-not-allowed opacity-60"
                 : selected === role.value
                 ? "border-[#E8292E] bg-[#E8292E]/4 shadow-sm"
-                : "border-gray-200 hover:border-gray-300 bg-white cursor-pointer",
+                : "border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] bg-white dark:bg-[#1F2937] cursor-pointer",
             ].join(" ")}
           >
             <span className="text-3xl shrink-0">{role.icon}</span>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="text-base font-bold text-[#111111]">
+                <span className="text-base font-bold text-[#111111] dark:text-[#F9FAFB]">
                   {role.label}
                 </span>
                 {role.badge && (
-                  <span className="text-xs font-semibold bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+                  <span className="text-xs font-semibold bg-gray-100 dark:bg-[#374151] text-gray-500 dark:text-[#9CA3AF] px-2 py-0.5 rounded-full">
                     {role.badge}
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-400 mt-0.5">{role.desc}</p>
+              <p className="text-sm text-gray-400 dark:text-[#6B7280] mt-0.5">{role.desc}</p>
             </div>
             {/* 선택 표시 */}
             <div
@@ -97,7 +97,7 @@ export default function RoleSelectForm() {
                 "w-5 h-5 rounded-full border-2 shrink-0 flex items-center justify-center transition-colors",
                 selected === role.value
                   ? "border-[#E8292E] bg-[#E8292E]"
-                  : "border-gray-300",
+                  : "border-gray-300 dark:border-[#4B5563]",
               ].join(" ")}
             >
               {selected === role.value && (

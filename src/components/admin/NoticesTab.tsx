@@ -38,30 +38,30 @@ function NoticeForm({
   const [isPinned, setIsPinned] = useState(initial?.is_pinned ?? false);
 
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-4">
-      <p className="text-sm font-bold text-[#111111]">
+    <div className="bg-gray-50 dark:bg-[#374151] border border-gray-200 dark:border-[#4B5563] rounded-2xl p-5 space-y-4">
+      <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">
         {initial ? "공지사항 수정" : "새 공지사항 작성"}
       </p>
 
       <div>
-        <label className="text-xs font-semibold text-gray-500 block mb-1.5">제목</label>
+        <label className="text-xs font-semibold text-gray-500 dark:text-[#9CA3AF] block mb-1.5">제목</label>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="공지 제목을 입력하세요"
-          className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-gray-400 bg-white"
+          className="w-full text-sm border border-gray-200 dark:border-[#374151] rounded-xl px-4 py-2.5 focus:outline-none focus:border-gray-400 dark:focus:border-[#9CA3AF] bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB] placeholder:text-gray-300 dark:placeholder:text-[#6B7280]"
         />
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-gray-500 block mb-1.5">내용</label>
+        <label className="text-xs font-semibold text-gray-500 dark:text-[#9CA3AF] block mb-1.5">내용</label>
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="공지 내용을 입력하세요"
           rows={6}
-          className="w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-gray-400 bg-white resize-none leading-relaxed"
+          className="w-full text-sm border border-gray-200 dark:border-[#374151] rounded-xl px-4 py-2.5 focus:outline-none focus:border-gray-400 dark:focus:border-[#9CA3AF] bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB] placeholder:text-gray-300 dark:placeholder:text-[#6B7280] resize-none leading-relaxed"
         />
       </div>
 
@@ -69,19 +69,19 @@ function NoticeForm({
         <div
           onClick={() => setIsPinned((v) => !v)}
           className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${
-            isPinned ? "bg-[#E8292E] border-[#E8292E]" : "border-gray-300"
+            isPinned ? "bg-[#E8292E] border-[#E8292E]" : "border-gray-300 dark:border-[#4B5563]"
           }`}
         >
           {isPinned && <Check size={11} className="text-white" strokeWidth={3} />}
         </div>
-        <span className="text-xs font-semibold text-gray-600">상단 고정</span>
+        <span className="text-xs font-semibold text-gray-600 dark:text-[#9CA3AF]">상단 고정</span>
       </label>
 
       <div className="flex gap-2 pt-1">
         <button
           onClick={onCancel}
           disabled={isPending}
-          className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 border border-gray-200 px-4 py-2 rounded-xl hover:bg-gray-100 transition-colors disabled:opacity-50"
+          className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-[#1F2937] transition-colors disabled:opacity-50"
         >
           <X size={13} /> 취소
         </button>
@@ -107,22 +107,22 @@ function DeleteConfirm({ title, onConfirm, onCancel, isPending }: {
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-      <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm">
+      <div className="bg-white dark:bg-[#1F2937] rounded-2xl shadow-xl p-6 w-full max-w-sm">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center shrink-0">
             <Trash2 size={18} className="text-[#E8292E]" />
           </div>
           <div>
-            <p className="text-sm font-bold text-[#111111]">공지사항 삭제</p>
-            <p className="text-xs text-gray-400 mt-0.5">이 작업은 되돌릴 수 없습니다</p>
+            <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">공지사항 삭제</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">이 작업은 되돌릴 수 없습니다</p>
           </div>
         </div>
-        <p className="text-sm text-gray-600 mb-6">
-          <span className="font-semibold text-[#111111]">"{title}"</span> 을(를) 삭제하시겠습니까?
+        <p className="text-sm text-gray-600 dark:text-[#9CA3AF] mb-6">
+          <span className="font-semibold text-[#111111] dark:text-[#F9FAFB]">"{title}"</span> 을(를) 삭제하시겠습니까?
         </p>
         <div className="flex gap-2">
           <button onClick={onCancel} disabled={isPending}
-            className="flex-1 text-sm font-semibold text-gray-600 border border-gray-200 py-2.5 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50">
+            className="flex-1 text-sm font-semibold text-gray-600 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors disabled:opacity-50">
             취소
           </button>
           <button onClick={onConfirm} disabled={isPending}
@@ -220,8 +220,8 @@ export default function NoticesTab({ initialNotices }: { initialNotices: NoticeR
         {/* 헤더 */}
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-bold text-[#111111]">공지사항 관리</p>
-            <p className="text-xs text-gray-400 mt-0.5">{notices.length}개</p>
+            <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">공지사항 관리</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">{notices.length}개</p>
           </div>
           {formMode === "none" && (
             <button
@@ -251,27 +251,27 @@ export default function NoticesTab({ initialNotices }: { initialNotices: NoticeR
         )}
 
         {/* 테이블 */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm overflow-hidden">
           {/* 데스크탑 */}
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-xs">
-              <thead className="bg-gray-50 border-b border-gray-100">
+              <thead className="bg-gray-50 dark:bg-[#374151] border-b border-gray-100 dark:border-[#4B5563]">
                 <tr>
                   {["제목", "등록일", "상단고정", "관리"].map((h) => (
-                    <th key={h} className={`text-left px-5 py-3 font-semibold text-gray-500 ${h === "관리" ? "w-28" : ""}`}>{h}</th>
+                    <th key={h} className={`text-left px-5 py-3 font-semibold text-gray-500 dark:text-[#9CA3AF] ${h === "관리" ? "w-28" : ""}`}>{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-gray-50 dark:divide-[#374151]">
                 {sorted.map((n) => (
-                  <tr key={n.id} className="hover:bg-gray-50/50 transition-colors">
+                  <tr key={n.id} className="hover:bg-gray-50/50 dark:hover:bg-[#374151]/50 transition-colors">
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-2">
                         {n.is_pinned && <Pin size={11} className="text-[#E8292E] shrink-0" />}
-                        <span className="font-semibold text-[#111111] truncate max-w-xs">{n.title}</span>
+                        <span className="font-semibold text-[#111111] dark:text-[#F9FAFB] truncate max-w-xs">{n.title}</span>
                       </div>
                     </td>
-                    <td className="px-5 py-3 text-gray-500">{fmt(n.created_at)}</td>
+                    <td className="px-5 py-3 text-gray-500 dark:text-[#9CA3AF]">{fmt(n.created_at)}</td>
                     <td className="px-5 py-3">
                       <button
                         onClick={() => handleTogglePin(n)}
@@ -316,15 +316,15 @@ export default function NoticesTab({ initialNotices }: { initialNotices: NoticeR
           </div>
 
           {/* 모바일 */}
-          <div className="md:hidden divide-y divide-gray-50">
+          <div className="md:hidden divide-y divide-gray-50 dark:divide-[#374151]">
             {sorted.map((n) => (
               <div key={n.id} className="px-4 py-4 flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 mb-0.5">
                     {n.is_pinned && <Pin size={10} className="text-[#E8292E] shrink-0" />}
-                    <p className="text-xs font-bold text-[#111111] truncate">{n.title}</p>
+                    <p className="text-xs font-bold text-[#111111] dark:text-[#F9FAFB] truncate">{n.title}</p>
                   </div>
-                  <p className="text-[11px] text-gray-400">{fmt(n.created_at)}</p>
+                  <p className="text-[11px] text-gray-400 dark:text-[#6B7280]">{fmt(n.created_at)}</p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
                   <button onClick={() => handleTogglePin(n)}

@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Banner from "@/components/layout/Banner";
 import Footer from "@/components/layout/Footer";
 import PageViewTracker from "@/components/PageViewTracker";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { createClient } from "@/lib/supabase/server";
 
 const geistSans = Geist({
@@ -72,12 +73,21 @@ export default async function RootLayout({
       lang="ko"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white text-[#111111]">
-        <Banner />
-        <Header user={user} isAdmin={isAdmin} />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <PageViewTracker />
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-white dark:bg-[#111827] text-[#111111] dark:text-[#F9FAFB]">
+        <ThemeProvider>
+          <Banner />
+          <Header user={user} isAdmin={isAdmin} />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <PageViewTracker />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -93,14 +93,14 @@ export default async function NoticeDetailPage({
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link
           href="/notices"
-          className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-[#111111] transition-colors mb-8"
+          className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-[#9CA3AF] hover:text-[#111111] dark:hover:text-[#F9FAFB] transition-colors mb-8"
         >
           <ChevronLeft size={14} />
           공지사항 목록
         </Link>
 
-        <article className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-          <div className="mb-6 pb-6 border-b border-gray-100">
+        <article className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm p-8">
+          <div className="mb-6 pb-6 border-b border-gray-100 dark:border-[#374151]">
             {notice.is_pinned && (
               <div className="flex items-center gap-2 mb-3">
                 <Pin size={13} className="text-[#E8292E]" />
@@ -109,11 +109,11 @@ export default async function NoticeDetailPage({
                 </span>
               </div>
             )}
-            <h1 className="text-xl font-black text-[#111111] leading-snug">{notice.title}</h1>
-            <p className="text-xs text-gray-400 mt-2">{fmt(notice.created_at)}</p>
+            <h1 className="text-xl font-black text-[#111111] dark:text-[#F9FAFB] leading-snug">{notice.title}</h1>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-2">{fmt(notice.created_at)}</p>
           </div>
 
-          <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+          <div className="text-sm text-gray-700 dark:text-[#9CA3AF] leading-relaxed whitespace-pre-wrap">
             {notice.content}
           </div>
         </article>

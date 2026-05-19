@@ -16,30 +16,30 @@ const UPDATED = "2026년 5월 16일";
 function Section({ num, title, children }: { num: string; title: string; children: React.ReactNode }) {
   return (
     <section className="mb-10">
-      <h2 className="text-base font-black text-[#111111] mb-4">
+      <h2 className="text-base font-black text-[#111111] dark:text-[#F9FAFB] mb-4">
         제{num}조 ({title})
       </h2>
-      <div className="space-y-3 text-sm text-gray-600 leading-relaxed">{children}</div>
+      <div className="space-y-3 text-sm text-gray-600 dark:text-[#9CA3AF] leading-relaxed">{children}</div>
     </section>
   );
 }
 
 function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-gray-200">
+    <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-[#374151]">
       <table className="w-full text-xs">
-        <thead className="bg-gray-50 border-b border-gray-200">
+        <thead className="bg-gray-50 dark:bg-[#374151] border-b border-gray-200 dark:border-[#4B5563]">
           <tr>
             {headers.map((h) => (
-              <th key={h} className="px-4 py-3 text-left font-semibold text-gray-600 whitespace-nowrap">{h}</th>
+              <th key={h} className="px-4 py-3 text-left font-semibold text-gray-600 dark:text-[#9CA3AF] whitespace-nowrap">{h}</th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-gray-100 dark:divide-[#374151]">
           {rows.map((row, i) => (
             <tr key={i}>
               {row.map((cell, j) => (
-                <td key={j} className="px-4 py-3 text-gray-600 align-top">{cell}</td>
+                <td key={j} className="px-4 py-3 text-gray-600 dark:text-[#9CA3AF] align-top">{cell}</td>
               ))}
             </tr>
           ))}
@@ -66,15 +66,15 @@ export default function PrivacyPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* 헤더 */}
-      <div className="mb-12 pb-8 border-b border-gray-100">
+      <div className="mb-12 pb-8 border-b border-gray-100 dark:border-[#374151]">
         <p className="text-xs font-semibold text-[#E8292E] uppercase tracking-widest mb-3">Legal</p>
-        <h1 className="text-2xl font-black text-[#111111] mb-2">개인정보처리방침</h1>
-        <p className="text-xs text-gray-400">시행일: {UPDATED}</p>
+        <h1 className="text-2xl font-black text-[#111111] dark:text-[#F9FAFB] mb-2">개인정보처리방침</h1>
+        <p className="text-xs text-gray-400 dark:text-[#6B7280]">시행일: {UPDATED}</p>
       </div>
 
       <div className="prose-none">
         {/* 개요 */}
-        <div className="bg-gray-50 rounded-2xl p-5 mb-10 text-sm text-gray-600 leading-relaxed">
+        <div className="bg-gray-50 dark:bg-[#374151] rounded-2xl p-5 mb-10 text-sm text-gray-600 dark:text-[#9CA3AF] leading-relaxed">
           온인플(ONINPLE)은 개인정보보호법 등 관련 법령에 따라 이용자의 개인정보를 보호하고, 이와 관련한 고충을 신속하게 처리하기 위하여 다음과 같이 개인정보처리방침을 수립·공개합니다.
         </div>
 
@@ -183,9 +183,9 @@ export default function PrivacyPage() {
 
         <Section num="11" title="개인정보 보호책임자">
           <p>온인플은 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
-          <div className="bg-gray-50 rounded-xl p-4 text-sm space-y-1">
-            <p><span className="font-semibold text-[#111111]">서비스명:</span> 온인플 (ONINPLE)</p>
-            <p><span className="font-semibold text-[#111111]">문의:</span> 서비스 내 문의하기 페이지 이용</p>
+          <div className="bg-gray-50 dark:bg-[#374151] rounded-xl p-4 text-sm space-y-1">
+            <p><span className="font-semibold text-[#111111] dark:text-[#F9FAFB]">서비스명:</span> 온인플 (ONINPLE)</p>
+            <p><span className="font-semibold text-[#111111] dark:text-[#F9FAFB]">문의:</span> 서비스 내 문의하기 페이지 이용</p>
           </div>
           <p>기타 개인정보 침해에 대한 신고 또는 상담은 아래 기관에 문의하실 수 있습니다.</p>
           <List items={[
@@ -202,7 +202,7 @@ export default function PrivacyPage() {
         </Section>
       </div>
 
-      <div className="mt-12 pt-8 border-t border-gray-100 text-xs text-gray-400">
+      <div className="mt-12 pt-8 border-t border-gray-100 dark:border-[#374151] text-xs text-gray-400 dark:text-[#6B7280]">
         <p>본 방침은 {UPDATED}부터 적용됩니다.</p>
       </div>
     </div>

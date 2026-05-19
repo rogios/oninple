@@ -21,53 +21,53 @@ const heroTabs = [
 // ── 오른쪽 슬라이드 1: 모두 무료 ────────────────────────────────────────────
 function Slide1() {
   return (
-    <div className="bg-white rounded-3xl shadow-xl border border-gray-100 w-full h-full overflow-hidden">
+    <div className="bg-white dark:bg-[#1F2937] rounded-3xl shadow-xl border border-gray-100 dark:border-[#374151] w-full h-full overflow-hidden">
       <div className="grid grid-cols-1 sm:grid-cols-2 h-full">
         {/* 왼쪽: 텍스트 */}
         <div className="p-6 flex flex-col justify-center">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#E8292E] bg-[#E8292E]/8 px-3 py-1.5 rounded-full w-fit mb-4">
             🎁 모든 기능 무료
           </span>
-          <h3 className="text-xl font-black text-[#111111] leading-tight mb-2">
+          <h3 className="text-xl font-black text-[#111111] dark:text-[#F9FAFB] leading-tight mb-2">
             등록부터 연결까지<br />
             <span className="text-[#E8292E]">모두 무료</span>
           </h3>
-          <p className="text-xs text-gray-500 leading-relaxed mb-4">
+          <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed mb-4">
             중간 수수료 없이 카카오 DM으로 직접 연결됩니다
           </p>
           <ul className="space-y-2.5 mb-4">
             <li className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-[#E8292E] text-white text-[9px] font-black flex items-center justify-center shrink-0 leading-tight text-center">FREE</div>
-              <span className="text-xs text-gray-700">등록·이용·연결 모두 무료</span>
+              <span className="text-xs text-gray-700 dark:text-[#9CA3AF]">등록·이용·연결 모두 무료</span>
             </li>
             <li className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-full bg-[#E8292E] text-white text-sm font-black flex items-center justify-center shrink-0">%</div>
-              <span className="text-xs text-gray-700">중간 수수료 0원</span>
+              <span className="text-xs text-gray-700 dark:text-[#9CA3AF]">중간 수수료 0원</span>
             </li>
           </ul>
-          <div className="bg-yellow-50 border border-yellow-200 rounded-xl px-3 py-2.5 text-[11px] text-yellow-800 leading-relaxed">
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl px-3 py-2.5 text-[11px] text-yellow-800 dark:text-yellow-300 leading-relaxed">
             카카오 오픈채팅으로 빠르고 간편하게!<br />
             별도 수수료 없이 직접 소통하세요
           </div>
         </div>
         {/* 오른쪽: 비주얼 */}
-        <div className="bg-gray-50 sm:rounded-r-3xl p-6 flex flex-col items-center justify-center gap-4">
+        <div className="bg-gray-50 dark:bg-[#111827] sm:rounded-r-3xl p-6 flex flex-col items-center justify-center gap-4">
           <span className="text-xs font-bold text-[#E8292E] bg-[#E8292E]/10 px-3 py-1 rounded-full">ALL FREE</span>
           <div className="text-5xl font-black text-[#E8292E] leading-none tracking-tighter">FREE</div>
           {/* 플로우 */}
           <div className="flex items-center w-full gap-1">
-            <div className="bg-white border-2 border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 text-center whitespace-nowrap shrink-0">광고주</div>
+            <div className="bg-white dark:bg-[#1F2937] border-2 border-gray-200 dark:border-[#374151] rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 dark:text-[#9CA3AF] text-center whitespace-nowrap shrink-0">광고주</div>
             <div className="flex-1 border-b-2 border-dashed border-[#E8292E]/40" />
             <span className="text-[#E8292E] font-black text-xs shrink-0">›</span>
             <div className="bg-[#E8292E] rounded-lg px-2 py-1.5 text-[10px] font-bold text-white text-center whitespace-nowrap shrink-0">ON인플</div>
             <span className="text-[#E8292E] font-black text-xs shrink-0">›</span>
             <div className="flex-1 border-b-2 border-dashed border-[#E8292E]/40" />
-            <div className="bg-white border-2 border-gray-200 rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 text-center leading-tight shrink-0">크리에이터<br />편집자</div>
+            <div className="bg-white dark:bg-[#1F2937] border-2 border-gray-200 dark:border-[#374151] rounded-lg px-2 py-1.5 text-[10px] font-bold text-gray-700 dark:text-[#9CA3AF] text-center leading-tight shrink-0">크리에이터<br />편집자</div>
           </div>
           {/* 4개 특징 */}
           <div className="grid grid-cols-2 gap-1.5 w-full">
             {["안전한 직접 거래", "빠른 응답", "맞춤 매칭", "정보 보호"].map((f) => (
-              <div key={f} className="bg-white rounded-lg p-2.5 text-center text-[10px] font-semibold text-gray-600 border border-gray-100">
+              <div key={f} className="bg-white dark:bg-[#1F2937] rounded-lg p-2.5 text-center text-[10px] font-semibold text-gray-600 dark:text-[#9CA3AF] border border-gray-100 dark:border-[#374151]">
                 {f}
               </div>
             ))}
@@ -81,15 +81,15 @@ function Slide1() {
 // ── 오른쪽 슬라이드 2: 직접 연결 ────────────────────────────────────────────
 function Slide2() {
   return (
-    <div className="bg-white rounded-3xl shadow-xl border border-gray-100 w-full h-full overflow-hidden">
+    <div className="bg-white dark:bg-[#1F2937] rounded-3xl shadow-xl border border-gray-100 dark:border-[#374151] w-full h-full overflow-hidden">
       <div className="grid grid-cols-1 sm:grid-cols-2 h-full">
         {/* 왼쪽: 텍스트 */}
         <div className="p-6 flex flex-col justify-center">
-          <h3 className="text-xl font-black text-[#111111] leading-tight mb-2">
+          <h3 className="text-xl font-black text-[#111111] dark:text-[#F9FAFB] leading-tight mb-2">
             인플루언서와 광고주를<br />
             <span className="text-[#E8292E]">직접 연결</span>합니다
           </h3>
-          <p className="text-xs text-gray-500 leading-relaxed mb-4">
+          <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed mb-4">
             유튜브·인스타그램·틱톡 크리에이터를 한 곳에서 탐색하고 바로 연결하세요
           </p>
           <div className="flex gap-1.5 flex-wrap mb-4">
@@ -102,36 +102,36 @@ function Slide2() {
           </span>
         </div>
         {/* 오른쪽: 목업 */}
-        <div className="bg-gray-50 sm:rounded-r-3xl p-5 flex flex-col gap-2.5 justify-center">
-          <div className="bg-white border border-gray-200 rounded-xl px-3 py-2 flex items-center gap-2">
+        <div className="bg-gray-50 dark:bg-[#111827] sm:rounded-r-3xl p-5 flex flex-col gap-2.5 justify-center">
+          <div className="bg-white dark:bg-[#1F2937] border border-gray-200 dark:border-[#374151] rounded-xl px-3 py-2 flex items-center gap-2">
             <svg className="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
             </svg>
-            <span className="text-[10px] text-gray-400 flex-1">크리에이터 검색...</span>
-            <span className="bg-gray-100 rounded px-1.5 py-0.5 text-[10px] text-gray-500">필터 ▾</span>
+            <span className="text-[10px] text-gray-400 dark:text-[#6B7280] flex-1">크리에이터 검색...</span>
+            <span className="bg-gray-100 dark:bg-[#374151] rounded px-1.5 py-0.5 text-[10px] text-gray-500 dark:text-[#9CA3AF]">필터 ▾</span>
           </div>
           {[
             { bg: "#E1306C", label: "뷰", name: "뷰티나나", catLabel: "뷰티패션", catCls: "bg-gradient-to-r from-purple-500 to-pink-500", sub: "14.2만", avg: "4.5만" },
             { bg: "#FF0000", label: "여", name: "여행에미치다", catLabel: "여행", catCls: "bg-[#FF0000]", sub: "8.7만", avg: "3.2만" },
           ].map((c) => (
-            <div key={c.name} className="bg-white border border-gray-100 rounded-2xl p-3">
+            <div key={c.name} className="bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] rounded-2xl p-3">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-black text-xs shrink-0" style={{ backgroundColor: c.bg }}>
                   {c.label}
                 </div>
                 <div className="min-w-0">
-                  <div className="text-xs font-bold text-[#111111] truncate">{c.name}</div>
+                  <div className="text-xs font-bold text-[#111111] dark:text-[#F9FAFB] truncate">{c.name}</div>
                   <span className={`text-[9px] text-white px-1.5 py-0.5 rounded-full ${c.catCls}`}>{c.catLabel}</span>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
-                <div className="bg-gray-50 rounded p-1.5 text-center">
-                  <div className="text-xs font-black text-[#111111]">{c.sub}</div>
-                  <div className="text-[9px] text-gray-400">구독자</div>
+                <div className="bg-gray-50 dark:bg-[#111827] rounded p-1.5 text-center">
+                  <div className="text-xs font-black text-[#111111] dark:text-[#F9FAFB]">{c.sub}</div>
+                  <div className="text-[9px] text-gray-400 dark:text-[#6B7280]">구독자</div>
                 </div>
-                <div className="bg-gray-50 rounded p-1.5 text-center">
-                  <div className="text-xs font-black text-[#111111]">{c.avg}</div>
-                  <div className="text-[9px] text-gray-400">평균조회수</div>
+                <div className="bg-gray-50 dark:bg-[#111827] rounded p-1.5 text-center">
+                  <div className="text-xs font-black text-[#111111] dark:text-[#F9FAFB]">{c.avg}</div>
+                  <div className="text-[9px] text-gray-400 dark:text-[#6B7280]">평균조회수</div>
                 </div>
               </div>
             </div>
@@ -145,24 +145,24 @@ function Slide2() {
 // ── 오른쪽 슬라이드 3: AI 편집자 ────────────────────────────────────────────
 function Slide3() {
   return (
-    <div className="bg-white rounded-3xl shadow-xl border border-gray-100 w-full h-full overflow-hidden">
+    <div className="bg-white dark:bg-[#1F2937] rounded-3xl shadow-xl border border-gray-100 dark:border-[#374151] w-full h-full overflow-hidden">
       <div className="grid grid-cols-1 sm:grid-cols-2 h-full">
         {/* 왼쪽: 텍스트 */}
         <div className="p-6 flex flex-col justify-center">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#6C5CE7] bg-[#6C5CE7]/10 px-3 py-1.5 rounded-full w-fit mb-4">
             ✦ AI 편집자 특화 플랫폼
           </span>
-          <h3 className="text-xl font-black text-[#111111] leading-tight mb-2">
+          <h3 className="text-xl font-black text-[#111111] dark:text-[#F9FAFB] leading-tight mb-2">
             AI 편집 실력을<br />
             <span className="text-[#6C5CE7]">자유롭게</span><br />
             어필하세요
           </h3>
-          <p className="text-xs text-gray-500 leading-relaxed mb-4">
+          <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed mb-4">
             Runway·Sora·CapCut 등 AI 영상 편집 전문가 등록 가능
           </p>
           <div className="flex gap-1.5 flex-wrap mb-4">
             {["Runway", "Sora", "CapCut", "Premiere Pro"].map((tool) => (
-              <span key={tool} className="text-[10px] font-semibold text-gray-700 bg-gray-100 border border-gray-200 px-2.5 py-1 rounded-full">
+              <span key={tool} className="text-[10px] font-semibold text-gray-700 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] border border-gray-200 dark:border-[#374151] px-2.5 py-1 rounded-full">
                 {tool}
               </span>
             ))}
@@ -175,7 +175,7 @@ function Slide3() {
             ].map((f) => (
               <div key={f.label} className="text-center">
                 <div className="text-xl mb-1">{f.icon}</div>
-                <div className="text-[9px] text-gray-500 leading-tight">{f.label}</div>
+                <div className="text-[9px] text-gray-500 dark:text-[#9CA3AF] leading-tight">{f.label}</div>
               </div>
             ))}
           </div>
@@ -233,7 +233,7 @@ export default function HeroSection({
   return (
     <section
       className="relative overflow-hidden pt-12 pb-8 lg:pt-16 lg:pb-10"
-      style={{ background: "linear-gradient(135deg, #E8E8EA 0%, #DFE1EA 100%)" }}
+      style={{ background: "var(--hero-bg)" }}
     >
       {/* ── 배경 레이어 ── */}
       <div className="pointer-events-none absolute -top-20 -right-28 w-[560px] h-[560px] rounded-full"
@@ -301,18 +301,18 @@ export default function HeroSection({
               <span className="w-1.5 h-1.5 bg-[#E8292E] rounded-full animate-pulse" />
               한국 인플루언서 무료 디렉토리
             </div>
-            <h1 className="text-5xl sm:text-6xl lg:text-6xl font-extrabold text-[#111111] leading-[1.08] tracking-normal mb-5">
+            <h1 className="text-5xl sm:text-6xl lg:text-6xl font-extrabold text-[#111111] dark:text-[#F9FAFB] leading-[1.08] tracking-normal mb-5">
               내 채널을<br />
               <span className="text-[#E8292E]">광고주</span>에게 알리세요
             </h1>
-            <p className="text-base text-gray-500 leading-relaxed mb-7 max-w-md">
+            <p className="text-base text-gray-500 dark:text-[#9CA3AF] leading-relaxed mb-7 max-w-md">
               유튜브·인스타그램·틱톡 크리에이터와 AI 편집자를 광고주와 연결하는
-              <strong className="text-[#111111]"> 무료 디렉토리</strong> 플랫폼.
+              <strong className="text-[#111111] dark:text-[#F9FAFB]"> 무료 디렉토리</strong> 플랫폼.
               수수료 없이 직접 컨택하세요.
             </p>
             <ul className="space-y-2.5 mb-7">
               {checklist.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-sm text-gray-600">
+                <li key={item} className="flex items-start gap-2.5 text-sm text-gray-600 dark:text-[#9CA3AF]">
                   <CheckCircle2 size={16} className="text-[#E8292E] mt-0.5 shrink-0" />
                   {item}
                 </li>
@@ -328,8 +328,8 @@ export default function HeroSection({
                     onClick={() => onTogglePlatform(t.platform)}
                     className={`text-sm font-semibold px-4 py-2 rounded-full transition-colors ${
                       isOn
-                        ? "bg-[#111111] text-white hover:bg-[#333]"
-                        : "bg-gray-100 text-[#111111] hover:bg-gray-200"
+                        ? "bg-[#111111] dark:bg-[#F9FAFB] text-white dark:text-[#111111] hover:bg-[#333] dark:hover:bg-gray-200"
+                        : "bg-gray-100 dark:bg-[#374151] text-[#111111] dark:text-[#F9FAFB] hover:bg-gray-200 dark:hover:bg-[#4B5563]"
                     }`}
                   >
                     {t.label}
@@ -346,7 +346,7 @@ export default function HeroSection({
               </Link>
               <a
                 href="#youtube-section"
-                className="inline-flex items-center justify-center border border-gray-200 hover:border-gray-300 text-[#111111] font-medium px-6 py-3 rounded-full text-sm transition-colors"
+                className="inline-flex items-center justify-center border border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] text-[#111111] dark:text-[#F9FAFB] font-medium px-6 py-3 rounded-full text-sm transition-colors"
               >
                 인플루언서 탐색 →
               </a>

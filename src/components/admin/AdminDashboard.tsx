@@ -86,11 +86,11 @@ function fmtNum(n: number | null) {
 
 function StatCard({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-      <p className="text-xs text-gray-400 font-medium mb-1">{label}</p>
-      <p className="text-2xl font-black text-[#111111] whitespace-nowrap">
+    <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm p-5">
+      <p className="text-xs text-gray-400 dark:text-[#6B7280] font-medium mb-1">{label}</p>
+      <p className="text-2xl font-black text-[#111111] dark:text-[#F9FAFB] whitespace-nowrap">
         {value}
-        {sub && <span className="text-xs font-medium text-gray-400 ml-1">{sub}</span>}
+        {sub && <span className="text-xs font-medium text-gray-400 dark:text-[#6B7280] ml-1">{sub}</span>}
       </p>
     </div>
   );
@@ -123,26 +123,26 @@ function DeleteModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-      <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm">
+      <div className="bg-white dark:bg-[#1F2937] rounded-2xl shadow-xl p-6 w-full max-w-sm">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center shrink-0">
             <Trash2 size={18} className="text-[#E8292E]" />
           </div>
           <div>
-            <p className="text-sm font-bold text-[#111111]">강제탈퇴 확인</p>
-            <p className="text-xs text-gray-400 mt-0.5">이 작업은 되돌릴 수 없습니다</p>
+            <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">강제탈퇴 확인</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">이 작업은 되돌릴 수 없습니다</p>
           </div>
         </div>
-        <p className="text-sm text-gray-600 mb-1">
-          <span className="font-semibold text-[#111111]">{target.name ?? target.email ?? "회원"}</span>
+        <p className="text-sm text-gray-600 dark:text-[#9CA3AF] mb-1">
+          <span className="font-semibold text-[#111111] dark:text-[#F9FAFB]">{target.name ?? target.email ?? "회원"}</span>
           ({target.email}) 계정을 삭제하시겠습니까?
         </p>
-        <p className="text-xs text-gray-400 mb-6">등록된 채널, 프로필 등 모든 데이터가 삭제됩니다.</p>
+        <p className="text-xs text-gray-400 dark:text-[#6B7280] mb-6">등록된 채널, 프로필 등 모든 데이터가 삭제됩니다.</p>
         <div className="flex gap-2">
           <button
             onClick={onCancel}
             disabled={isPending}
-            className="flex-1 text-sm font-semibold text-gray-600 border border-gray-200 py-2.5 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50"
+            className="flex-1 text-sm font-semibold text-gray-600 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors disabled:opacity-50"
           >
             취소
           </button>
@@ -179,54 +179,54 @@ function DashboardTab({ stats }: { stats: DashboardStats }) {
         <h2 className="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wide">플랫폼별 채널</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {Object.entries(stats.platformMap).map(([platform, count]) => (
-            <div key={platform} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div key={platform} className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm p-5">
               <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${PLATFORM_COLORS[platform] ?? "bg-gray-100 text-gray-600"}`}>
                 {PLATFORM_LABELS[platform] ?? platform}
               </span>
-              <p className="text-2xl font-black text-[#111111] mt-3">{count}</p>
-              <p className="text-xs text-gray-400">개</p>
+              <p className="text-2xl font-black text-[#111111] dark:text-[#F9FAFB] mt-3">{count}</p>
+              <p className="text-xs text-gray-400 dark:text-[#6B7280]">개</p>
             </div>
           ))}
         </div>
       </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100">
-            <p className="text-sm font-bold text-[#111111]">최근 가입 회원</p>
-            <p className="text-xs text-gray-400 mt-0.5">최신 10명</p>
+        <section className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100 dark:border-[#374151]">
+            <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">최근 가입 회원</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">최신 10명</p>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-gray-50 dark:divide-[#374151]">
             {stats.recentMembers.length ? stats.recentMembers.map((m) => (
               <div key={m.id} className="px-5 py-3 flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-[#111111] truncate">{m.name ?? m.email ?? "-"}</p>
-                  <p className="text-[11px] text-gray-400 truncate">{m.email ?? "-"}</p>
+                  <p className="text-xs font-semibold text-[#111111] dark:text-[#F9FAFB] truncate">{m.name ?? m.email ?? "-"}</p>
+                  <p className="text-[11px] text-gray-400 dark:text-[#6B7280] truncate">{m.email ?? "-"}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-[10px] font-semibold bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-semibold bg-gray-100 dark:bg-[#374151] text-gray-600 dark:text-[#9CA3AF] px-2 py-0.5 rounded-full">
                     {ROLE_LABELS[m.role ?? ""] ?? m.role ?? "-"}
                   </span>
-                  <span className="text-[11px] text-gray-400">{fmt(m.created_at)}</span>
+                  <span className="text-[11px] text-gray-400 dark:text-[#6B7280]">{fmt(m.created_at)}</span>
                 </div>
               </div>
             )) : (
-              <p className="px-5 py-6 text-xs text-gray-400 text-center">데이터 없음</p>
+              <p className="px-5 py-6 text-xs text-gray-400 dark:text-[#6B7280] text-center">데이터 없음</p>
             )}
           </div>
         </section>
 
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-100">
-            <p className="text-sm font-bold text-[#111111]">최근 등록 채널</p>
-            <p className="text-xs text-gray-400 mt-0.5">최신 10개</p>
+        <section className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-gray-100 dark:border-[#374151]">
+            <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">최근 등록 채널</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">최신 10개</p>
           </div>
-          <div className="divide-y divide-gray-50">
+          <div className="divide-y divide-gray-50 dark:divide-[#374151]">
             {stats.recentChannels.length ? stats.recentChannels.map((ch) => (
               <div key={ch.id} className="px-5 py-3 flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-[#111111] truncate">{ch.channel_name}</p>
-                  <p className="text-[11px] text-gray-400">
+                  <p className="text-xs font-semibold text-[#111111] dark:text-[#F9FAFB] truncate">{ch.channel_name}</p>
+                  <p className="text-[11px] text-gray-400 dark:text-[#6B7280]">
                     {ch.follower_count != null ? `${fmtNum(ch.follower_count)} 팔로워` : "-"}
                   </p>
                 </div>
@@ -234,11 +234,11 @@ function DashboardTab({ stats }: { stats: DashboardStats }) {
                   <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${PLATFORM_COLORS[ch.platform] ?? "bg-gray-100 text-gray-600"}`}>
                     {PLATFORM_LABELS[ch.platform] ?? ch.platform}
                   </span>
-                  <span className="text-[11px] text-gray-400">{fmt(ch.created_at)}</span>
+                  <span className="text-[11px] text-gray-400 dark:text-[#6B7280]">{fmt(ch.created_at)}</span>
                 </div>
               </div>
             )) : (
-              <p className="px-5 py-6 text-xs text-gray-400 text-center">데이터 없음</p>
+              <p className="px-5 py-6 text-xs text-gray-400 dark:text-[#6B7280] text-center">데이터 없음</p>
             )}
           </div>
         </section>
@@ -315,32 +315,32 @@ function MembersTab({
 
   return (
     <>
-      <section className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+      <section className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-gray-100 dark:border-[#374151] flex items-center justify-between">
           <div>
-            <p className="text-sm font-bold text-[#111111]">전체 회원</p>
-            <p className="text-xs text-gray-400 mt-0.5">{members.length}명</p>
+            <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">전체 회원</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">{members.length}명</p>
           </div>
         </div>
 
         {/* 데스크탑 테이블 */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-xs">
-            <thead className="bg-gray-50 border-b border-gray-100">
+            <thead className="bg-gray-50 dark:bg-[#374151] border-b border-gray-100 dark:border-[#4B5563]">
               <tr>
                 {["이름", "이메일", "역할", "가입일", "채널등록수", "상태", "관리"].map((h) => (
-                  <th key={h} className="text-left px-5 py-3 font-semibold text-gray-500">{h}</th>
+                  <th key={h} className="text-left px-5 py-3 font-semibold text-gray-500 dark:text-[#9CA3AF]">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-gray-50 dark:divide-[#374151]">
               {members.map((m) => {
                 const memberChannels = channelsByMember[m.id] ?? [];
                 return (
                   <Fragment key={m.id}>
-                    <tr className="hover:bg-gray-50/50 transition-colors">
-                      <td className="px-5 py-3 font-semibold text-[#111111] max-w-[120px] truncate">{m.name ?? "-"}</td>
-                      <td className="px-5 py-3 text-gray-500 max-w-[180px] truncate">{m.email ?? "-"}</td>
+                    <tr className="hover:bg-gray-50/50 dark:hover:bg-[#374151]/50 transition-colors">
+                      <td className="px-5 py-3 font-semibold text-[#111111] dark:text-[#F9FAFB] max-w-[120px] truncate">{m.name ?? "-"}</td>
+                      <td className="px-5 py-3 text-gray-500 dark:text-[#9CA3AF] max-w-[180px] truncate">{m.email ?? "-"}</td>
                       <td className="px-5 py-3">
                         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                           m.role === "admin" ? "bg-[#E8292E]/10 text-[#E8292E]" : "bg-gray-100 text-gray-600"
@@ -348,8 +348,8 @@ function MembersTab({
                           {ROLE_LABELS[m.role ?? ""] ?? m.role ?? "-"}
                         </span>
                       </td>
-                      <td className="px-5 py-3 text-gray-500">{fmt(m.created_at)}</td>
-                      <td className="px-5 py-3 text-gray-500 text-center">{m.channel_count}</td>
+                      <td className="px-5 py-3 text-gray-500 dark:text-[#9CA3AF]">{fmt(m.created_at)}</td>
+                      <td className="px-5 py-3 text-gray-500 dark:text-[#9CA3AF] text-center">{m.channel_count}</td>
                       <td className="px-5 py-3"><WarningBadge count={m.warning_count} /></td>
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-2">
@@ -385,16 +385,16 @@ function MembersTab({
                       </td>
                     </tr>
                     {expandedMemberId === m.id && memberChannels.length > 0 && (
-                      <tr className="bg-blue-50/20">
+                      <tr className="bg-blue-50/20 dark:bg-blue-900/10">
                         <td colSpan={7} className="px-5 py-3">
                           <div className="space-y-2">
                             {memberChannels.map((ch) => (
-                              <div key={ch.id} className="flex items-center justify-between gap-3 bg-white rounded-xl px-4 py-2.5 border border-gray-100">
+                              <div key={ch.id} className="flex items-center justify-between gap-3 bg-white dark:bg-[#1F2937] rounded-xl px-4 py-2.5 border border-gray-100 dark:border-[#374151]">
                                 <div className="flex items-center gap-2 min-w-0">
                                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${PLATFORM_COLORS[ch.platform] ?? "bg-gray-100 text-gray-600"}`}>
                                     {PLATFORM_LABELS[ch.platform] ?? ch.platform}
                                   </span>
-                                  <span className="text-xs font-semibold text-[#111111] truncate">{ch.channel_name}</span>
+                                  <span className="text-xs font-semibold text-[#111111] dark:text-[#F9FAFB] truncate">{ch.channel_name}</span>
                                   {ch.is_verified && (
                                     <span className="text-[10px] font-semibold text-green-600 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full shrink-0">✅ 본인확인</span>
                                   )}
@@ -431,7 +431,7 @@ function MembersTab({
         </div>
 
         {/* 모바일 카드 */}
-        <div className="md:hidden divide-y divide-gray-50">
+        <div className="md:hidden divide-y divide-gray-50 dark:divide-[#374151]">
           {members.map((m) => {
             const memberChannels = channelsByMember[m.id] ?? [];
             return (
@@ -439,16 +439,16 @@ function MembersTab({
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <p className="text-xs font-bold text-[#111111] truncate">{m.name ?? m.email ?? "-"}</p>
+                      <p className="text-xs font-bold text-[#111111] dark:text-[#F9FAFB] truncate">{m.name ?? m.email ?? "-"}</p>
                       <WarningBadge count={m.warning_count} />
                     </div>
-                    <p className="text-[11px] text-gray-400 truncate">{m.email ?? "-"}</p>
+                    <p className="text-[11px] text-gray-400 dark:text-[#6B7280] truncate">{m.email ?? "-"}</p>
                     <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#374151] text-gray-600 dark:text-[#9CA3AF]">
                         {ROLE_LABELS[m.role ?? ""] ?? m.role ?? "-"}
                       </span>
-                      <span className="text-[10px] text-gray-400">채널 {m.channel_count}개</span>
-                      <span className="text-[10px] text-gray-400">{fmt(m.created_at)}</span>
+                      <span className="text-[10px] text-gray-400 dark:text-[#6B7280]">채널 {m.channel_count}개</span>
+                      <span className="text-[10px] text-gray-400 dark:text-[#6B7280]">{fmt(m.created_at)}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
@@ -482,12 +482,12 @@ function MembersTab({
                 {expandedMemberId === m.id && memberChannels.length > 0 && (
                   <div className="space-y-1.5">
                     {memberChannels.map((ch) => (
-                      <div key={ch.id} className="flex items-center justify-between gap-2 bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                      <div key={ch.id} className="flex items-center justify-between gap-2 bg-gray-50 dark:bg-[#374151] rounded-xl px-3 py-2 border border-gray-100 dark:border-[#4B5563]">
                         <div className="flex items-center gap-1.5 min-w-0">
                           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${PLATFORM_COLORS[ch.platform] ?? "bg-gray-100 text-gray-600"}`}>
                             {PLATFORM_LABELS[ch.platform] ?? ch.platform}
                           </span>
-                          <span className="text-[11px] font-semibold text-[#111111] truncate">{ch.channel_name}</span>
+                          <span className="text-[11px] font-semibold text-[#111111] dark:text-[#F9FAFB] truncate">{ch.channel_name}</span>
                           {ch.is_verified && <span className="text-[10px] shrink-0">✅</span>}
                         </div>
                         <button
@@ -557,19 +557,19 @@ export default function AdminDashboard({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50/50">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-[#111827]">
       {/* 헤더 */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-40 shadow-sm">
+      <div className="bg-white dark:bg-[#1F2937] border-b border-gray-100 dark:border-[#374151] sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             <div>
-              <h1 className="text-base font-black text-[#111111]">관리자 대시보드</h1>
-              <p className="text-[11px] text-gray-400">{currentUserEmail}</p>
+              <h1 className="text-base font-black text-[#111111] dark:text-[#F9FAFB]">관리자 대시보드</h1>
+              <p className="text-[11px] text-gray-400 dark:text-[#6B7280]">{currentUserEmail}</p>
             </div>
             <form action={logoutAction}>
               <button
                 type="submit"
-                className="text-xs font-semibold text-gray-500 border border-gray-200 hover:border-gray-300 px-4 py-2 rounded-full transition-colors"
+                className="text-xs font-semibold text-gray-500 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] px-4 py-2 rounded-full transition-colors"
               >
                 로그아웃
               </button>
@@ -585,7 +585,7 @@ export default function AdminDashboard({
                 className={`flex items-center gap-1.5 text-xs font-semibold px-4 py-3 border-b-2 transition-colors ${
                   tab === t.key
                     ? "border-[#E8292E] text-[#E8292E]"
-                    : "border-transparent text-gray-500 hover:text-gray-700"
+                    : "border-transparent text-gray-500 dark:text-[#9CA3AF] hover:text-gray-700 dark:hover:text-[#F9FAFB]"
                 }`}
               >
                 {t.icon}

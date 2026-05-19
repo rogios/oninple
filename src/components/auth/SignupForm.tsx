@@ -25,15 +25,15 @@ export default function SignupForm() {
         <Link href="/" className="inline-block mb-6">
           <span className="text-2xl font-black text-[#E8292E]">ONINPLE</span>
         </Link>
-        <h1 className="text-2xl font-bold text-[#111111]">회원가입</h1>
-        <p className="text-sm text-gray-500 mt-1">구글 계정으로 무료로 시작하세요</p>
+        <h1 className="text-2xl font-bold text-[#111111] dark:text-[#F9FAFB]">회원가입</h1>
+        <p className="text-sm text-gray-500 dark:text-[#9CA3AF] mt-1">구글 계정으로 무료로 시작하세요</p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+      <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm p-8">
         <form action={signInWithGoogle}>
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-3 border border-gray-200 rounded-full py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center justify-center gap-3 border border-gray-200 dark:border-[#374151] rounded-full py-3 text-sm font-medium text-gray-700 dark:text-[#F9FAFB] hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors"
           >
             <svg width="18" height="18" viewBox="0 0 18 18">
               <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z" />
@@ -45,7 +45,7 @@ export default function SignupForm() {
           </button>
         </form>
 
-        <p className="text-xs text-gray-400 text-center mt-5 leading-relaxed">
+        <p className="text-xs text-gray-400 dark:text-[#6B7280] text-center mt-5 leading-relaxed">
           가입 시{" "}
           <Link href="/terms" className="underline hover:text-gray-600">이용약관</Link>
           {" "}및{" "}
@@ -54,7 +54,7 @@ export default function SignupForm() {
         </p>
       </div>
 
-      <p className="text-center text-sm text-gray-500 mt-6">
+      <p className="text-center text-sm text-gray-500 dark:text-[#9CA3AF] mt-6">
         이미 계정이 있으신가요?{" "}
         <Link href="/login" className="text-[#E8292E] font-semibold hover:underline">
           로그인

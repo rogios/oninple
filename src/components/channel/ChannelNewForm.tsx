@@ -109,7 +109,7 @@ const INITIAL: FormState = {
 
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
-    <label className="block text-sm font-semibold text-[#111111] mb-1.5">
+    <label className="block text-sm font-semibold text-[#111111] dark:text-[#F9FAFB] mb-1.5">
       {children}
       {required && <span className="text-[#E8292E] ml-0.5">*</span>}
     </label>
@@ -126,11 +126,12 @@ function Input({
       {...props}
       className={twMerge(
         "w-full px-4 py-2.5 rounded-xl border text-sm",
-        "focus:outline-none focus:ring-2 transition-colors placeholder:text-gray-300",
+        "bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB]",
+        "focus:outline-none focus:ring-2 transition-colors placeholder:text-gray-300 dark:placeholder:text-[#6B7280]",
         hasError
           ? "border-red-400 focus:border-red-400 focus:ring-red-100"
-          : "border-gray-200 focus:border-[#E8292E] focus:ring-[#E8292E]/20",
-        props.disabled && "opacity-50 cursor-not-allowed bg-gray-50",
+          : "border-gray-200 dark:border-[#374151] focus:border-[#E8292E] focus:ring-[#E8292E]/20",
+        props.disabled && "opacity-50 cursor-not-allowed bg-gray-50 dark:bg-[#374151]",
         className
       )}
     />
@@ -160,7 +161,7 @@ function MultiChip({
             "px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors",
             selected.includes(o.value)
               ? "border-[#E8292E] bg-[#E8292E] text-white"
-              : "border-gray-200 text-gray-600 hover:border-gray-300",
+              : "border-gray-200 dark:border-[#374151] text-gray-600 dark:text-[#9CA3AF] hover:border-gray-300 dark:hover:border-[#4B5563]",
           ].join(" ")}
         >
           {o.label}
@@ -190,7 +191,7 @@ function RadioGroup({
             "px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors",
             value === o.value
               ? "border-[#E8292E] bg-[#E8292E] text-white"
-              : "border-gray-200 text-gray-600 hover:border-gray-300",
+              : "border-gray-200 dark:border-[#374151] text-gray-600 dark:text-[#9CA3AF] hover:border-gray-300 dark:hover:border-[#4B5563]",
           ].join(" ")}
         >
           {o.label}
@@ -467,7 +468,7 @@ export default function ChannelNewForm({
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* 플랫폼 탭 — editor 역할은 탭 없이 바로 폼 표시 */}
       {userRole !== "editor" && (
-        <div className="flex gap-1 bg-gray-100 p-1 rounded-xl">
+        <div className="flex gap-1 bg-gray-100 dark:bg-[#374151] p-1 rounded-xl">
           {PLATFORMS.filter((p) => p.value !== "editor").map((p) => (
             <button
               key={p.value}
@@ -476,8 +477,8 @@ export default function ChannelNewForm({
               className={[
                 "flex-1 py-2 text-sm font-semibold rounded-lg transition-colors",
                 platform === p.value
-                  ? "bg-white text-[#111111] shadow-sm"
-                  : "text-gray-500 hover:text-gray-700",
+                  ? "bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB] shadow-sm"
+                  : "text-gray-500 dark:text-[#9CA3AF] hover:text-gray-700 dark:hover:text-[#F9FAFB]",
               ].join(" ")}
             >
               {p.label}
@@ -492,7 +493,7 @@ export default function ChannelNewForm({
         <div className="flex items-center gap-4">
           <div
             onClick={() => fileRef.current?.click()}
-            className="w-20 h-20 rounded-2xl border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#E8292E]/40 transition-colors bg-gray-50"
+            className="w-20 h-20 rounded-2xl border-2 border-dashed border-gray-200 dark:border-[#374151] flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#E8292E]/40 transition-colors bg-gray-50 dark:bg-[#374151]"
           >
             {imagePreview ? (
               <img src={imagePreview} alt="preview" className="w-full h-full object-cover" />
@@ -508,7 +509,7 @@ export default function ChannelNewForm({
             >
               이미지 업로드
             </button>
-            <p className="text-xs text-gray-400 mt-1">JPG, PNG 권장 · 선택사항</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-1">JPG, PNG 권장 · 선택사항</p>
           </div>
           <input
             ref={fileRef}
@@ -556,10 +557,10 @@ export default function ChannelNewForm({
               value={form.bio}
               onChange={(e) => set("bio", e.target.value)}
               className={twMerge(
-                "w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 transition-colors resize-none placeholder:text-gray-300",
+                "w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 transition-colors resize-none placeholder:text-gray-300 dark:placeholder:text-[#6B7280] bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB]",
                 fieldErrors.bio
                   ? "border-red-400 focus:border-red-400 focus:ring-red-100"
-                  : "border-gray-200 focus:border-[#E8292E] focus:ring-[#E8292E]/20"
+                  : "border-gray-200 dark:border-[#374151] focus:border-[#E8292E] focus:ring-[#E8292E]/20"
               )}
             />
           </Field>
@@ -719,10 +720,10 @@ export default function ChannelNewForm({
               value={form.bio}
               onChange={(e) => set("bio", e.target.value)}
               className={twMerge(
-                "w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 transition-colors resize-none placeholder:text-gray-300",
+                "w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 transition-colors resize-none placeholder:text-gray-300 dark:placeholder:text-[#6B7280] bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB]",
                 fieldErrors.bio
                   ? "border-red-400 focus:border-red-400 focus:ring-red-100"
-                  : "border-gray-200 focus:border-[#E8292E] focus:ring-[#E8292E]/20"
+                  : "border-gray-200 dark:border-[#374151] focus:border-[#E8292E] focus:ring-[#E8292E]/20"
               )}
             />
           </Field>
@@ -766,7 +767,7 @@ export default function ChannelNewForm({
                 <Label>대표 피드 1</Label>
                 <div
                   onClick={() => feedThumb1Ref.current?.click()}
-                  className="aspect-video rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#E8292E]/40 transition-colors bg-gray-50"
+                  className="aspect-video rounded-xl border-2 border-dashed border-gray-200 dark:border-[#374151] flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#E8292E]/40 transition-colors bg-gray-50 dark:bg-[#374151]"
                 >
                   {feedThumb1Uploading ? (
                     <div className="w-5 h-5 border-2 border-gray-300 border-t-[#E8292E] rounded-full animate-spin" />
@@ -798,7 +799,7 @@ export default function ChannelNewForm({
                 <Label>대표 피드 2</Label>
                 <div
                   onClick={() => feedThumb2Ref.current?.click()}
-                  className="aspect-video rounded-xl border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#E8292E]/40 transition-colors bg-gray-50"
+                  className="aspect-video rounded-xl border-2 border-dashed border-gray-200 dark:border-[#374151] flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#E8292E]/40 transition-colors bg-gray-50 dark:bg-[#374151]"
                 >
                   {feedThumb2Uploading ? (
                     <div className="w-5 h-5 border-2 border-gray-300 border-t-[#E8292E] rounded-full animate-spin" />
@@ -833,8 +834,8 @@ export default function ChannelNewForm({
           </>)}
 
           {/* 시청자 정보 */}
-          <div className="bg-gray-50 rounded-2xl p-5 space-y-4">
-            <p className="text-sm font-semibold text-[#111111]">주요 시청자 정보</p>
+          <div className="bg-gray-50 dark:bg-[#374151] rounded-2xl p-5 space-y-4">
+            <p className="text-sm font-semibold text-[#111111] dark:text-[#F9FAFB]">주요 시청자 정보</p>
             <Field label="연령대 (복수 선택)">
               <MultiChip
                 options={AUDIENCE_AGES.map((a) => ({ value: a, label: a }))}
@@ -886,10 +887,10 @@ export default function ChannelNewForm({
       </Field>
 
       {/* 협업 가능 여부 */}
-      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+      <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-[#374151] rounded-xl">
         <div>
-          <p className="text-sm font-semibold text-[#111111]">협업 가능</p>
-          <p className="text-xs text-gray-400 mt-0.5">
+          <p className="text-sm font-semibold text-[#111111] dark:text-[#F9FAFB]">협업 가능</p>
+          <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">
             광고주에게 협업 가능 상태를 표시합니다
           </p>
         </div>
@@ -918,7 +919,7 @@ export default function ChannelNewForm({
         <button
           type="button"
           onClick={() => router.push("/mypage")}
-          className="flex-1 py-3 rounded-full border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+          className="flex-1 py-3 rounded-full border border-gray-200 dark:border-[#374151] text-sm font-medium text-gray-600 dark:text-[#9CA3AF] hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors"
         >
           취소
         </button>

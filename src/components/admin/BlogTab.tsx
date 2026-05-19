@@ -70,12 +70,12 @@ function PostForm({
     setF((prev) => ({ ...prev, [key]: value }));
   }
 
-  const inputCls = "w-full text-sm border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:border-gray-400 bg-white";
-  const labelCls = "text-xs font-semibold text-gray-500 block mb-1.5";
+  const inputCls = "w-full text-sm border border-gray-200 dark:border-[#374151] rounded-xl px-4 py-2.5 focus:outline-none focus:border-gray-400 dark:focus:border-[#9CA3AF] bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB] placeholder:text-gray-300 dark:placeholder:text-[#6B7280]";
+  const labelCls = "text-xs font-semibold text-gray-500 dark:text-[#9CA3AF] block mb-1.5";
 
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 space-y-4">
-      <p className="text-sm font-bold text-[#111111]">{initial ? "글 수정" : "새 글 작성"}</p>
+    <div className="bg-gray-50 dark:bg-[#374151] border border-gray-200 dark:border-[#4B5563] rounded-2xl p-5 space-y-4">
+      <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">{initial ? "글 수정" : "새 글 작성"}</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
@@ -155,19 +155,19 @@ function PostForm({
         <div
           onClick={() => set("published", !f.published)}
           className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-colors ${
-            f.published ? "bg-[#E8292E] border-[#E8292E]" : "border-gray-300"
+            f.published ? "bg-[#E8292E] border-[#E8292E]" : "border-gray-300 dark:border-[#4B5563]"
           }`}
         >
           {f.published && <Check size={11} className="text-white" strokeWidth={3} />}
         </div>
-        <span className="text-xs font-semibold text-gray-600">바로 공개</span>
+        <span className="text-xs font-semibold text-gray-600 dark:text-[#9CA3AF]">바로 공개</span>
       </label>
 
       <div className="flex gap-2 pt-1">
         <button
           onClick={onCancel}
           disabled={isPending}
-          className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 border border-gray-200 px-4 py-2 rounded-xl hover:bg-gray-100 transition-colors disabled:opacity-50"
+          className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-[#1F2937] transition-colors disabled:opacity-50"
         >
           <X size={13} /> 취소
         </button>
@@ -193,22 +193,22 @@ function DeleteConfirm({ title, onConfirm, onCancel, isPending }: {
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-      <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm">
+      <div className="bg-white dark:bg-[#1F2937] rounded-2xl shadow-xl p-6 w-full max-w-sm">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center shrink-0">
             <Trash2 size={18} className="text-[#E8292E]" />
           </div>
           <div>
-            <p className="text-sm font-bold text-[#111111]">글 삭제</p>
-            <p className="text-xs text-gray-400 mt-0.5">이 작업은 되돌릴 수 없습니다</p>
+            <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">글 삭제</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">이 작업은 되돌릴 수 없습니다</p>
           </div>
         </div>
-        <p className="text-sm text-gray-600 mb-6">
-          <span className="font-semibold text-[#111111]">"{title}"</span>을(를) 삭제하시겠습니까?
+        <p className="text-sm text-gray-600 dark:text-[#9CA3AF] mb-6">
+          <span className="font-semibold text-[#111111] dark:text-[#F9FAFB]">"{title}"</span>을(를) 삭제하시겠습니까?
         </p>
         <div className="flex gap-2">
           <button onClick={onCancel} disabled={isPending}
-            className="flex-1 text-sm font-semibold text-gray-600 border border-gray-200 py-2.5 rounded-xl hover:bg-gray-50 transition-colors disabled:opacity-50">
+            className="flex-1 text-sm font-semibold text-gray-600 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors disabled:opacity-50">
             취소
           </button>
           <button onClick={onConfirm} disabled={isPending}
@@ -294,8 +294,8 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-bold text-[#111111]">블로그 관리</p>
-            <p className="text-xs text-gray-400 mt-0.5">{posts.length}개</p>
+            <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">블로그 관리</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">{posts.length}개</p>
           </div>
           {formMode === "none" && (
             <button
@@ -314,30 +314,30 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
           <PostForm initial={editTarget} onSubmit={handleUpdate} onCancel={closeForm} isPending={isPending} />
         )}
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm overflow-hidden">
           {/* 데스크탑 */}
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-xs">
-              <thead className="bg-gray-50 border-b border-gray-100">
+              <thead className="bg-gray-50 dark:bg-[#374151] border-b border-gray-100 dark:border-[#4B5563]">
                 <tr>
                   {["제목", "카테고리", "공개여부", "등록일", "관리"].map((h) => (
-                    <th key={h} className="text-left px-5 py-3 font-semibold text-gray-500">{h}</th>
+                    <th key={h} className="text-left px-5 py-3 font-semibold text-gray-500 dark:text-[#9CA3AF]">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50">
+              <tbody className="divide-y divide-gray-50 dark:divide-[#374151]">
                 {posts.map((p) => (
-                  <tr key={p.id} className="hover:bg-gray-50/50 transition-colors">
+                  <tr key={p.id} className="hover:bg-gray-50/50 dark:hover:bg-[#374151]/50 transition-colors">
                     <td className="px-5 py-3">
-                      <p className="font-semibold text-[#111111] truncate max-w-xs">{p.title}</p>
-                      <p className="text-gray-400 text-[10px] mt-0.5">/blog/{p.slug}</p>
+                      <p className="font-semibold text-[#111111] dark:text-[#F9FAFB] truncate max-w-xs">{p.title}</p>
+                      <p className="text-gray-400 dark:text-[#6B7280] text-[10px] mt-0.5">/blog/{p.slug}</p>
                     </td>
                     <td className="px-5 py-3">
                       {p.category ? (
-                        <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">
+                        <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-gray-100 dark:bg-[#374151] text-gray-600 dark:text-[#9CA3AF]">
                           {p.category}
                         </span>
-                      ) : <span className="text-gray-300">-</span>}
+                      ) : <span className="text-gray-300 dark:text-[#4B5563]">-</span>}
                     </td>
                     <td className="px-5 py-3">
                       <button
@@ -351,7 +351,7 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
                         {p.published ? <><Eye size={9} /> 공개</> : <><EyeOff size={9} /> 비공개</>}
                       </button>
                     </td>
-                    <td className="px-5 py-3 text-gray-500">{fmt(p.created_at)}</td>
+                    <td className="px-5 py-3 text-gray-500 dark:text-[#9CA3AF]">{fmt(p.created_at)}</td>
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-1">
                         <button
@@ -384,20 +384,20 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
           </div>
 
           {/* 모바일 */}
-          <div className="md:hidden divide-y divide-gray-50">
+          <div className="md:hidden divide-y divide-gray-50 dark:divide-[#374151]">
             {posts.map((p) => (
               <div key={p.id} className="px-4 py-4 flex items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs font-bold text-[#111111] truncate mb-0.5">{p.title}</p>
-                  <p className="text-[11px] text-gray-400 truncate">/blog/{p.slug}</p>
+                  <p className="text-xs font-bold text-[#111111] dark:text-[#F9FAFB] truncate mb-0.5">{p.title}</p>
+                  <p className="text-[11px] text-gray-400 dark:text-[#6B7280] truncate">/blog/{p.slug}</p>
                   <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                     {p.category && (
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">{p.category}</span>
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#374151] text-gray-600 dark:text-[#9CA3AF]">{p.category}</span>
                     )}
-                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${p.published ? "bg-green-50 text-green-600" : "bg-gray-100 text-gray-500"}`}>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${p.published ? "bg-green-50 text-green-600" : "bg-gray-100 dark:bg-[#374151] text-gray-500 dark:text-[#9CA3AF]"}`}>
                       {p.published ? "공개" : "비공개"}
                     </span>
-                    <span className="text-[10px] text-gray-400">{fmt(p.created_at)}</span>
+                    <span className="text-[10px] text-gray-400 dark:text-[#6B7280]">{fmt(p.created_at)}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">

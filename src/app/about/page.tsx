@@ -84,29 +84,29 @@ const CONNECTION_CARDS = [
 
 function ConnectionSection() {
   return (
-    <section className="py-20 sm:py-28 bg-white">
+    <section className="py-20 sm:py-28 bg-white dark:bg-[#111827]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <p className="text-xs font-semibold tracking-widest text-[#E8292E] uppercase mb-3">For Everyone</p>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#111111]">온인플이 만드는 연결</h2>
+          <h2 className="text-2xl sm:text-3xl font-black text-[#111111] dark:text-[#F9FAFB]">온인플이 만드는 연결</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {CONNECTION_CARDS.map((card) => (
             <div
               key={card.title}
-              className="border border-gray-100 rounded-2xl p-7 shadow-sm hover:shadow-md transition-shadow"
+              className="border border-gray-100 dark:border-[#374151] dark:bg-[#1F2937] rounded-2xl p-7 shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="w-11 h-11 rounded-xl bg-[#E8292E]/8 flex items-center justify-center mb-5">
                 {card.icon}
               </div>
-              <h3 className="text-base font-black text-[#111111] mb-5">{card.title}</h3>
+              <h3 className="text-base font-black text-[#111111] dark:text-[#F9FAFB] mb-5">{card.title}</h3>
               <ul className="space-y-3">
                 {card.benefits.map((b) => (
                   <li key={b} className="flex items-start gap-2.5">
                     <span className="mt-0.5 w-4 h-4 rounded-full bg-[#E8292E]/10 flex items-center justify-center shrink-0">
                       <Check size={9} className="text-[#E8292E]" strokeWidth={3} />
                     </span>
-                    <span className="text-sm text-gray-600 leading-snug">{b}</span>
+                    <span className="text-sm text-gray-600 dark:text-[#9CA3AF] leading-snug">{b}</span>
                   </li>
                 ))}
               </ul>
@@ -140,20 +140,20 @@ const FEATURES = [
 
 function FeaturesSection() {
   return (
-    <section className="py-20 sm:py-28 bg-gray-50">
+    <section className="py-20 sm:py-28 bg-gray-50 dark:bg-[#1F2937]">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <p className="text-xs font-semibold tracking-widest text-[#E8292E] uppercase mb-3">Why Oninple</p>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#111111]">온인플의 특별한 특징</h2>
+          <h2 className="text-2xl sm:text-3xl font-black text-[#111111] dark:text-[#F9FAFB]">온인플의 특별한 특징</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {FEATURES.map((f) => (
-            <div key={f.title} className="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm">
+            <div key={f.title} className="bg-white dark:bg-[#111827] rounded-2xl p-7 border border-gray-100 dark:border-[#374151] shadow-sm">
               <div className="w-10 h-10 rounded-xl bg-[#E8292E]/8 flex items-center justify-center mb-5">
                 {f.icon}
               </div>
-              <h3 className="text-base font-black text-[#111111] mb-2">{f.title}</h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+              <h3 className="text-base font-black text-[#111111] dark:text-[#F9FAFB] mb-2">{f.title}</h3>
+              <p className="text-sm text-gray-500 dark:text-[#9CA3AF] leading-relaxed">{f.desc}</p>
             </div>
           ))}
         </div>

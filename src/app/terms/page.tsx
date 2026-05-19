@@ -16,10 +16,10 @@ const UPDATED = "2026년 5월 16일";
 function Section({ num, title, children }: { num: string; title: string; children: React.ReactNode }) {
   return (
     <section className="mb-10">
-      <h2 className="text-base font-black text-[#111111] mb-4">
+      <h2 className="text-base font-black text-[#111111] dark:text-[#F9FAFB] mb-4">
         제{num}조 ({title})
       </h2>
-      <div className="space-y-2 text-sm text-gray-600 leading-relaxed">{children}</div>
+      <div className="space-y-2 text-sm text-gray-600 dark:text-[#9CA3AF] leading-relaxed">{children}</div>
     </section>
   );
 }
@@ -45,10 +45,10 @@ export default function TermsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* 헤더 */}
-      <div className="mb-12 pb-8 border-b border-gray-100">
+      <div className="mb-12 pb-8 border-b border-gray-100 dark:border-[#374151]">
         <p className="text-xs font-semibold text-[#E8292E] uppercase tracking-widest mb-3">Legal</p>
-        <h1 className="text-2xl font-black text-[#111111] mb-2">이용약관</h1>
-        <p className="text-xs text-gray-400">시행일: {UPDATED}</p>
+        <h1 className="text-2xl font-black text-[#111111] dark:text-[#F9FAFB] mb-2">이용약관</h1>
+        <p className="text-xs text-gray-400 dark:text-[#6B7280]">시행일: {UPDATED}</p>
       </div>
 
       <div className="prose-none">
@@ -158,7 +158,7 @@ export default function TermsPage() {
         </Section>
       </div>
 
-      <div className="mt-12 pt-8 border-t border-gray-100 text-xs text-gray-400">
+      <div className="mt-12 pt-8 border-t border-gray-100 dark:border-[#374151] text-xs text-gray-400 dark:text-[#6B7280]">
         <p>본 약관은 {UPDATED}부터 적용됩니다.</p>
       </div>
     </div>
