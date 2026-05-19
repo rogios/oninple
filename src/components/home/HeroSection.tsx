@@ -301,7 +301,7 @@ export default function HeroSection({
               <span className="w-1.5 h-1.5 bg-[#E8292E] rounded-full animate-pulse" />
               한국 인플루언서 무료 디렉토리
             </div>
-            <h1 className="text-3xl sm:text-6xl lg:text-6xl font-extrabold text-[#111111] dark:text-[#F9FAFB] leading-[1.08] tracking-normal mb-5">
+            <h1 className="text-4xl sm:text-6xl lg:text-6xl font-extrabold text-[#111111] dark:text-[#F9FAFB] leading-[1.08] tracking-normal mb-5">
               내 채널을<br />
               <span className="text-[#E8292E]">광고주</span>에게 알리세요
             </h1>
