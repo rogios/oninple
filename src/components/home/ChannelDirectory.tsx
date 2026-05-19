@@ -305,12 +305,11 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
           </div>
         )}
       </div>
-      {/* 대표 영상 썸네일 (16:9) */}
-      <div className="aspect-video w-full bg-gray-100 dark:bg-[#374151] shrink-0">
-        {thumbUrl && (
+      {thumbUrl && (
+        <div className="aspect-video w-full shrink-0">
           <img src={thumbUrl} alt="대표 영상" className="w-full h-full object-cover" />
-        )}
-      </div>
+        </div>
+      )}
     </button>
   );
 }
@@ -366,8 +365,6 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
           </div>
         )}
       </div>
-      {/* 빈 썸네일 영역 (16:9) */}
-      <div className="aspect-video w-full bg-gray-100 dark:bg-[#374151] shrink-0" />
     </button>
   );
 }
