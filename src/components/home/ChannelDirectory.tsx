@@ -246,7 +246,7 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
         {ch.is_verified && (
           <div className="group absolute top-3 right-3 cursor-default z-10">
             <BadgeCheck size={16} className="text-[#1D9E75]" />
-            <div className="absolute top-full right-0 mt-1.5 w-max hidden group-hover:block bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] shadow-md text-xs text-gray-500 dark:text-[#9CA3AF] px-2.5 py-1.5 rounded-lg pointer-events-none">
+            <div className="absolute top-full right-0 mt-1.5 w-max hidden group-hover:block bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] shadow-md text-xs text-gray-700 dark:text-[#9CA3AF] px-2.5 py-1.5 rounded-lg pointer-events-none">
               본인 소유가 확인된 채널입니다
             </div>
           </div>
@@ -272,13 +272,13 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
           </div>
           <div className="flex-1 min-w-0 space-y-0.5">
             <p className="font-bold text-sm text-[#111111] dark:text-[#F9FAFB] truncate leading-snug">{ch.channel_name}</p>
-            <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-[#9CA3AF]">
+            <p className="flex items-center gap-1 text-xs text-gray-700 dark:text-[#9CA3AF]">
               <Users size={11} className="text-gray-400 dark:text-[#6B7280] shrink-0" />
               <span className="hidden sm:inline">{ch.platform === "youtube" ? "구독자" : "팔로워"}</span>
               <span className="font-semibold text-red-500">{formatCount(ch.follower_count)}</span>
             </p>
             {ch.avg_views != null && (
-              <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-[#9CA3AF]">
+              <p className="flex items-center gap-1 text-xs text-gray-700 dark:text-[#9CA3AF]">
                 <Eye size={11} className="text-gray-400 dark:text-[#6B7280] shrink-0" />
                 <span className="hidden sm:inline">평균 조회수</span>
                 <span className="font-semibold text-red-500">{formatCount(ch.avg_views)}</span>
@@ -287,7 +287,7 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
           </div>
         </div>
         {ch.bio && (
-          <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed line-clamp-2">{ch.bio}</p>
+          <p className="text-xs text-gray-700 dark:text-[#9CA3AF] leading-relaxed line-clamp-2">{ch.bio}</p>
         )}
         {(ch.upload_frequency || ch.content_format) && (
           <div className="flex items-center gap-2 text-[11px] text-gray-400 dark:text-[#6B7280]">
@@ -298,7 +298,7 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
         {ch.categories && ch.categories.length > 0 && (
           <div className="flex gap-1 flex-wrap">
             {ch.categories.slice(0, 2).map((cat) => (
-              <span key={cat} className="text-[10px] text-gray-500 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2 py-0.5 rounded-full">
+              <span key={cat} className="text-[10px] text-gray-700 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2 py-0.5 rounded-full">
                 {CATEGORY_LABELS[cat] ?? cat}
               </span>
             ))}
@@ -327,7 +327,7 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
         {ch.is_verified && (
           <div className="group absolute top-3 right-3 cursor-default z-10">
             <BadgeCheck size={16} className="text-[#1D9E75]" />
-            <div className="absolute top-full right-0 mt-1.5 w-max hidden group-hover:block bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] shadow-md text-xs text-gray-500 dark:text-[#9CA3AF] px-2.5 py-1.5 rounded-lg pointer-events-none">
+            <div className="absolute top-full right-0 mt-1.5 w-max hidden group-hover:block bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] shadow-md text-xs text-gray-700 dark:text-[#9CA3AF] px-2.5 py-1.5 rounded-lg pointer-events-none">
               본인 소유가 확인된 채널입니다
             </div>
           </div>
@@ -350,7 +350,7 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
             <CollabBadge can={ch.can_collaborate} />
           </div>
         </div>
-        {ch.bio && <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed line-clamp-2">{ch.bio}</p>}
+        {ch.bio && <p className="text-xs text-gray-700 dark:text-[#9CA3AF] leading-relaxed line-clamp-2">{ch.bio}</p>}
         {ch.work_fields && ch.work_fields.length > 0 && (
           <div className="flex gap-1 flex-wrap">
             {ch.work_fields.slice(0, 3).map((f) => (
@@ -361,7 +361,7 @@ function EditorCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => void
         {ch.ai_tools && ch.ai_tools.length > 0 && (
           <div className="flex gap-1 flex-wrap">
             {ch.ai_tools.slice(0, 3).map((t) => (
-              <span key={t} className="text-[10px] text-gray-500 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2 py-0.5 rounded-full">{t}</span>
+              <span key={t} className="text-[10px] text-gray-700 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2 py-0.5 rounded-full">{t}</span>
             ))}
           </div>
         )}
@@ -448,7 +448,7 @@ function PlatformSection({
                 className={`shrink-0 text-xs font-semibold px-3.5 py-1.5 rounded-full transition-colors ${
                   f.category === tab.key
                     ? "bg-[#111111] dark:bg-[#F9FAFB] text-white dark:text-[#111111]"
-                    : "bg-gray-100 dark:bg-[#374151] text-gray-600 dark:text-[#9CA3AF] hover:bg-gray-200 dark:hover:bg-[#4B5563]"
+                    : "bg-gray-100 dark:bg-[#374151] text-gray-700 dark:text-[#9CA3AF] hover:bg-gray-200 dark:hover:bg-[#4B5563]"
                 }`}
               >
                 {tab.label}
@@ -505,7 +505,7 @@ function PlatformSection({
                 <div className="flex justify-center mt-6">
                   <button
                     onClick={() => setVisibleCount((v) => v + perPage)}
-                    className="text-sm font-semibold text-gray-600 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] px-6 py-2.5 rounded-full transition-colors"
+                    className="text-sm font-semibold text-gray-700 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] px-6 py-2.5 rounded-full transition-colors"
                   >
                     더보기
                   </button>
@@ -590,7 +590,7 @@ export default function ChannelDirectory({
   }
 
   return (
-    <div className="bg-gray-50/50 dark:bg-[#111827]">
+    <div className="bg-[#F3F4F6] dark:bg-[#111827]">
       {/* Sticky search */}
       <div className="bg-white dark:bg-[#111827] border-b border-gray-100 dark:border-[#374151] sticky top-14 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">

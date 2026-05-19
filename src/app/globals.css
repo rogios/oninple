@@ -6,9 +6,9 @@
   --brand-red: #E8292E;
   --brand-dark: #111111;
   --brand-white: #FFFFFF;
-  --background: #ffffff;
-  --foreground: #111111;
-  --hero-bg: linear-gradient(135deg, #E8E8EA 0%, #DFE1EA 100%);
+  --background: #F3F4F6;
+  --foreground: #111827;
+  --hero-bg: #D1D5DB;
 }
 
 .dark {

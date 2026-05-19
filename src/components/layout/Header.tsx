@@ -57,7 +57,7 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
             <Link
               key={l.href}
               href={l.href}
-              className="text-sm font-medium text-gray-600 dark:text-[#9CA3AF] hover:text-[#E8292E] dark:hover:text-[#E8292E] transition-colors"
+              className="text-sm font-medium text-gray-700 dark:text-[#9CA3AF] hover:text-[#E8292E] dark:hover:text-[#E8292E] transition-colors"
             >
               {l.label}
             </Link>
@@ -67,7 +67,7 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
             <button
               onClick={toggle}
               aria-label={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
-              className="p-1.5 rounded-lg text-gray-500 dark:text-[#9CA3AF] hover:bg-gray-100 dark:hover:bg-[#1F2937] transition-colors"
+              className="p-1.5 rounded-lg text-gray-700 dark:text-[#9CA3AF] hover:bg-gray-100 dark:hover:bg-[#1F2937] transition-colors"
             >
               {isDark ? <Sun size={17} /> : <Moon size={17} />}
             </button>
@@ -115,7 +115,7 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
                     <form action={logoutAction}>
                       <button
                         type="submit"
-                        className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-500 dark:text-[#9CA3AF] hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors"
+                        className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 dark:text-[#9CA3AF] hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors"
                       >
                         <LogOut size={14} className="text-gray-400 dark:text-[#6B7280]" />
                         로그아웃
@@ -128,7 +128,7 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
               <>
                 <Link
                   href="/login"
-                  className="text-sm font-medium text-gray-600 dark:text-[#9CA3AF] hover:text-[#111111] dark:hover:text-white px-3 py-1.5 transition-colors"
+                  className="text-sm font-medium text-gray-700 dark:text-[#9CA3AF] hover:text-[#111111] dark:hover:text-white px-3 py-1.5 transition-colors"
                 >
                   로그인
                 </Link>
@@ -148,12 +148,12 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
           <button
             onClick={toggle}
             aria-label={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
-            className="p-1.5 text-gray-500 dark:text-[#9CA3AF]"
+            className="p-1.5 text-gray-700 dark:text-[#9CA3AF]"
           >
             {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           <button
-            className="p-1.5 text-gray-600 dark:text-[#9CA3AF]"
+            className="p-1.5 text-gray-700 dark:text-[#9CA3AF]"
             onClick={() => setOpen(!open)}
           >
             {open ? <X size={20} /> : <Menu size={20} />}

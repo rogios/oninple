@@ -19,7 +19,7 @@ function Section({ num, title, children }: { num: string; title: string; childre
       <h2 className="text-base font-black text-[#111111] dark:text-[#F9FAFB] mb-4">
         제{num}조 ({title})
       </h2>
-      <div className="space-y-2 text-sm text-gray-600 dark:text-[#9CA3AF] leading-relaxed">{children}</div>
+      <div className="space-y-2 text-sm text-gray-700 dark:text-[#9CA3AF] leading-relaxed">{children}</div>
     </section>
   );
 }

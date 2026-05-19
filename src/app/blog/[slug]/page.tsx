@@ -98,7 +98,7 @@ export default async function BlogPostPage({
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-[#9CA3AF] hover:text-[#111111] dark:hover:text-[#F9FAFB] transition-colors mb-8"
+          className="inline-flex items-center gap-1 text-xs text-gray-700 dark:text-[#9CA3AF] hover:text-[#111111] dark:hover:text-[#F9FAFB] transition-colors mb-8"
         >
           <ChevronLeft size={14} />
           블로그 목록
@@ -123,7 +123,7 @@ export default async function BlogPostPage({
               {post.title}
             </h1>
             {post.summary && (
-              <p className="text-sm text-gray-500 dark:text-[#9CA3AF] mt-3 leading-relaxed">{post.summary}</p>
+              <p className="text-sm text-gray-700 dark:text-[#9CA3AF] mt-3 leading-relaxed">{post.summary}</p>
             )}
             <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-[#6B7280] mt-4">
               <CalendarDays size={13} />

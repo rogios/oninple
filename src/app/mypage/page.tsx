@@ -144,7 +144,7 @@ export default async function MyPage() {
       <form action={logoutAction}>
         <button
           type="submit"
-          className="flex items-center gap-2 text-sm text-gray-500 dark:text-[#9CA3AF] hover:text-[#111111] dark:hover:text-[#F9FAFB] transition-colors"
+          className="flex items-center gap-2 text-sm text-gray-700 dark:text-[#9CA3AF] hover:text-[#111111] dark:hover:text-[#F9FAFB] transition-colors"
         >
           <LogOut size={15} />
           로그아웃

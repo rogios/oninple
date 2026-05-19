@@ -133,7 +133,7 @@ function DeleteModal({
             <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">이 작업은 되돌릴 수 없습니다</p>
           </div>
         </div>
-        <p className="text-sm text-gray-600 dark:text-[#9CA3AF] mb-1">
+        <p className="text-sm text-gray-700 dark:text-[#9CA3AF] mb-1">
           <span className="font-semibold text-[#111111] dark:text-[#F9FAFB]">{target.name ?? target.email ?? "회원"}</span>
           ({target.email}) 계정을 삭제하시겠습니까?
         </p>
@@ -142,7 +142,7 @@ function DeleteModal({
           <button
             onClick={onCancel}
             disabled={isPending}
-            className="flex-1 text-sm font-semibold text-gray-600 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors disabled:opacity-50"
+            className="flex-1 text-sm font-semibold text-gray-700 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors disabled:opacity-50"
           >
             취소
           </button>
@@ -204,7 +204,7 @@ function DashboardTab({ stats }: { stats: DashboardStats }) {
                   <p className="text-[11px] text-gray-400 dark:text-[#6B7280] truncate">{m.email ?? "-"}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-[10px] font-semibold bg-gray-100 dark:bg-[#374151] text-gray-600 dark:text-[#9CA3AF] px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-semibold bg-gray-100 dark:bg-[#374151] text-gray-700 dark:text-[#9CA3AF] px-2 py-0.5 rounded-full">
                     {ROLE_LABELS[m.role ?? ""] ?? m.role ?? "-"}
                   </span>
                   <span className="text-[11px] text-gray-400 dark:text-[#6B7280]">{fmt(m.created_at)}</span>
@@ -329,7 +329,7 @@ function MembersTab({
             <thead className="bg-gray-50 dark:bg-[#374151] border-b border-gray-100 dark:border-[#4B5563]">
               <tr>
                 {["이름", "이메일", "역할", "가입일", "채널등록수", "상태", "관리"].map((h) => (
-                  <th key={h} className="text-left px-5 py-3 font-semibold text-gray-500 dark:text-[#9CA3AF]">{h}</th>
+                  <th key={h} className="text-left px-5 py-3 font-semibold text-gray-700 dark:text-[#9CA3AF]">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -340,7 +340,7 @@ function MembersTab({
                   <Fragment key={m.id}>
                     <tr className="hover:bg-gray-50/50 dark:hover:bg-[#374151]/50 transition-colors">
                       <td className="px-5 py-3 font-semibold text-[#111111] dark:text-[#F9FAFB] max-w-[120px] truncate">{m.name ?? "-"}</td>
-                      <td className="px-5 py-3 text-gray-500 dark:text-[#9CA3AF] max-w-[180px] truncate">{m.email ?? "-"}</td>
+                      <td className="px-5 py-3 text-gray-700 dark:text-[#9CA3AF] max-w-[180px] truncate">{m.email ?? "-"}</td>
                       <td className="px-5 py-3">
                         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                           m.role === "admin" ? "bg-[#E8292E]/10 text-[#E8292E]" : "bg-gray-100 text-gray-600"
@@ -348,8 +348,8 @@ function MembersTab({
                           {ROLE_LABELS[m.role ?? ""] ?? m.role ?? "-"}
                         </span>
                       </td>
-                      <td className="px-5 py-3 text-gray-500 dark:text-[#9CA3AF]">{fmt(m.created_at)}</td>
-                      <td className="px-5 py-3 text-gray-500 dark:text-[#9CA3AF] text-center">{m.channel_count}</td>
+                      <td className="px-5 py-3 text-gray-700 dark:text-[#9CA3AF]">{fmt(m.created_at)}</td>
+                      <td className="px-5 py-3 text-gray-700 dark:text-[#9CA3AF] text-center">{m.channel_count}</td>
                       <td className="px-5 py-3"><WarningBadge count={m.warning_count} /></td>
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-2">
@@ -444,7 +444,7 @@ function MembersTab({
                     </div>
                     <p className="text-[11px] text-gray-400 dark:text-[#6B7280] truncate">{m.email ?? "-"}</p>
                     <div className="flex items-center gap-2 mt-1.5 flex-wrap">
-                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#374151] text-gray-600 dark:text-[#9CA3AF]">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 dark:bg-[#374151] text-gray-700 dark:text-[#9CA3AF]">
                         {ROLE_LABELS[m.role ?? ""] ?? m.role ?? "-"}
                       </span>
                       <span className="text-[10px] text-gray-400 dark:text-[#6B7280]">채널 {m.channel_count}개</span>
@@ -569,7 +569,7 @@ export default function AdminDashboard({
             <form action={logoutAction}>
               <button
                 type="submit"
-                className="text-xs font-semibold text-gray-500 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] px-4 py-2 rounded-full transition-colors"
+                className="text-xs font-semibold text-gray-700 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] px-4 py-2 rounded-full transition-colors"
               >
                 로그아웃
               </button>
@@ -585,7 +585,7 @@ export default function AdminDashboard({
                 className={`flex items-center gap-1.5 text-xs font-semibold px-4 py-3 border-b-2 transition-colors ${
                   tab === t.key
                     ? "border-[#E8292E] text-[#E8292E]"
-                    : "border-transparent text-gray-500 dark:text-[#9CA3AF] hover:text-gray-700 dark:hover:text-[#F9FAFB]"
+                    : "border-transparent text-gray-700 dark:text-[#9CA3AF] hover:text-gray-700 dark:hover:text-[#F9FAFB]"
                 }`}
               >
                 {t.icon}

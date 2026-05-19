@@ -19,7 +19,7 @@ function Section({ num, title, children }: { num: string; title: string; childre
       <h2 className="text-base font-black text-[#111111] dark:text-[#F9FAFB] mb-4">
         제{num}조 ({title})
       </h2>
-      <div className="space-y-3 text-sm text-gray-600 dark:text-[#9CA3AF] leading-relaxed">{children}</div>
+      <div className="space-y-3 text-sm text-gray-700 dark:text-[#9CA3AF] leading-relaxed">{children}</div>
     </section>
   );
 }
@@ -31,7 +31,7 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
         <thead className="bg-gray-50 dark:bg-[#374151] border-b border-gray-200 dark:border-[#4B5563]">
           <tr>
             {headers.map((h) => (
-              <th key={h} className="px-4 py-3 text-left font-semibold text-gray-600 dark:text-[#9CA3AF] whitespace-nowrap">{h}</th>
+              <th key={h} className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-[#9CA3AF] whitespace-nowrap">{h}</th>
             ))}
           </tr>
         </thead>
@@ -39,7 +39,7 @@ function Table({ headers, rows }: { headers: string[]; rows: string[][] }) {
           {rows.map((row, i) => (
             <tr key={i}>
               {row.map((cell, j) => (
-                <td key={j} className="px-4 py-3 text-gray-600 dark:text-[#9CA3AF] align-top">{cell}</td>
+                <td key={j} className="px-4 py-3 text-gray-700 dark:text-[#9CA3AF] align-top">{cell}</td>
               ))}
             </tr>
           ))}
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
 
       <div className="prose-none">
         {/* 개요 */}
-        <div className="bg-gray-50 dark:bg-[#374151] rounded-2xl p-5 mb-10 text-sm text-gray-600 dark:text-[#9CA3AF] leading-relaxed">
+        <div className="bg-gray-50 dark:bg-[#374151] rounded-2xl p-5 mb-10 text-sm text-gray-700 dark:text-[#9CA3AF] leading-relaxed">
           온인플(ONINPLE)은 개인정보보호법 등 관련 법령에 따라 이용자의 개인정보를 보호하고, 이와 관련한 고충을 신속하게 처리하기 위하여 다음과 같이 개인정보처리방침을 수립·공개합니다.
         </div>
 

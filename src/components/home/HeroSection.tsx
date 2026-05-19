@@ -32,7 +32,7 @@ function Slide1() {
             등록부터 연결까지<br />
             <span className="text-[#E8292E]">모두 무료</span>
           </h3>
-          <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed mb-4">
+          <p className="text-xs text-gray-700 dark:text-[#9CA3AF] leading-relaxed mb-4">
             중간 수수료 없이 카카오 DM으로 직접 연결됩니다
           </p>
           <ul className="space-y-2.5 mb-4">
@@ -67,7 +67,7 @@ function Slide1() {
           {/* 4개 특징 */}
           <div className="grid grid-cols-2 gap-1.5 w-full">
             {["안전한 직접 거래", "빠른 응답", "맞춤 매칭", "정보 보호"].map((f) => (
-              <div key={f} className="bg-white dark:bg-[#1F2937] rounded-lg p-2.5 text-center text-[10px] font-semibold text-gray-600 dark:text-[#9CA3AF] border border-gray-100 dark:border-[#374151]">
+              <div key={f} className="bg-white dark:bg-[#1F2937] rounded-lg p-2.5 text-center text-[10px] font-semibold text-gray-700 dark:text-[#9CA3AF] border border-gray-100 dark:border-[#374151]">
                 {f}
               </div>
             ))}
@@ -89,7 +89,7 @@ function Slide2() {
             인플루언서와 광고주를<br />
             <span className="text-[#E8292E]">직접 연결</span>합니다
           </h3>
-          <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed mb-4">
+          <p className="text-xs text-gray-700 dark:text-[#9CA3AF] leading-relaxed mb-4">
             유튜브·인스타그램·틱톡 크리에이터를 한 곳에서 탐색하고 바로 연결하세요
           </p>
           <div className="flex gap-1.5 flex-wrap mb-4">
@@ -108,7 +108,7 @@ function Slide2() {
               <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
             </svg>
             <span className="text-[10px] text-gray-400 dark:text-[#6B7280] flex-1">크리에이터 검색...</span>
-            <span className="bg-gray-100 dark:bg-[#374151] rounded px-1.5 py-0.5 text-[10px] text-gray-500 dark:text-[#9CA3AF]">필터 ▾</span>
+            <span className="bg-gray-100 dark:bg-[#374151] rounded px-1.5 py-0.5 text-[10px] text-gray-700 dark:text-[#9CA3AF]">필터 ▾</span>
           </div>
           {[
             { bg: "#E1306C", label: "뷰", name: "뷰티나나", catLabel: "뷰티패션", catCls: "bg-gradient-to-r from-purple-500 to-pink-500", sub: "14.2만", avg: "4.5만" },
@@ -157,7 +157,7 @@ function Slide3() {
             <span className="text-[#6C5CE7]">자유롭게</span><br />
             어필하세요
           </h3>
-          <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed mb-4">
+          <p className="text-xs text-gray-700 dark:text-[#9CA3AF] leading-relaxed mb-4">
             Runway·Sora·CapCut 등 AI 영상 편집 전문가 등록 가능
           </p>
           <div className="flex gap-1.5 flex-wrap mb-4">
@@ -175,7 +175,7 @@ function Slide3() {
             ].map((f) => (
               <div key={f.label} className="text-center">
                 <div className="text-xl mb-1">{f.icon}</div>
-                <div className="text-[9px] text-gray-500 dark:text-[#9CA3AF] leading-tight">{f.label}</div>
+                <div className="text-[9px] text-gray-700 dark:text-[#9CA3AF] leading-tight">{f.label}</div>
               </div>
             ))}
           </div>
@@ -305,14 +305,14 @@ export default function HeroSection({
               내 채널을<br />
               <span className="text-[#E8292E]">광고주</span>에게 알리세요
             </h1>
-            <p className="text-base text-gray-500 dark:text-[#9CA3AF] leading-relaxed mb-7 max-w-md">
+            <p className="text-base text-gray-700 dark:text-[#9CA3AF] leading-relaxed mb-7 max-w-md">
               유튜브·인스타그램·틱톡 크리에이터와 AI 편집자를 광고주와 연결하는
               <strong className="text-[#111111] dark:text-[#F9FAFB]"> 무료 디렉토리</strong> 플랫폼.
               수수료 없이 직접 컨택하세요.
             </p>
             <ul className="space-y-2.5 mb-7">
               {checklist.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-sm text-gray-600 dark:text-[#9CA3AF]">
+                <li key={item} className="flex items-start gap-2.5 text-sm text-gray-700 dark:text-[#9CA3AF]">
                   <CheckCircle2 size={16} className="text-[#E8292E] mt-0.5 shrink-0" />
                   {item}
                 </li>

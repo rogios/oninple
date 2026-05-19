@@ -118,7 +118,7 @@ export default function ProfileModal({
               {channel.is_verified && (
                 <div className="group relative cursor-default shrink-0">
                   <BadgeCheck size={20} className="text-[#1D9E75]" />
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-max hidden group-hover:block bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] shadow-md text-xs text-gray-500 dark:text-[#9CA3AF] px-2.5 py-1.5 rounded-lg z-10 pointer-events-none">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 w-max hidden group-hover:block bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] shadow-md text-xs text-gray-700 dark:text-[#9CA3AF] px-2.5 py-1.5 rounded-lg z-10 pointer-events-none">
                     본인 소유가 확인된 채널입니다
                   </div>
                 </div>
@@ -129,7 +129,7 @@ export default function ProfileModal({
                 {platform.label}
               </span>
               {channel.categories?.map((cat) => (
-                <span key={cat} className="text-xs text-gray-500 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2.5 py-0.5 rounded-full">
+                <span key={cat} className="text-xs text-gray-700 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2.5 py-0.5 rounded-full">
                   {CATEGORY_LABELS[cat] ?? cat}
                 </span>
               ))}
@@ -162,7 +162,7 @@ export default function ProfileModal({
           {/* Bio */}
           {channel.bio && (
             <div className="mb-5">
-              <p className={`text-sm text-gray-600 dark:text-[#9CA3AF] leading-relaxed ${bioExpanded ? "" : "line-clamp-3"}`}>
+              <p className={`text-sm text-gray-700 dark:text-[#9CA3AF] leading-relaxed ${bioExpanded ? "" : "line-clamp-3"}`}>
                 {channel.bio}
               </p>
               <button
@@ -278,7 +278,7 @@ export default function ProfileModal({
                   <span className="text-gray-400 dark:text-[#6B7280] w-20 shrink-0">키워드</span>
                   <div className="flex flex-wrap gap-1">
                     {channel.content_keywords.map((kw) => (
-                      <span key={kw} className="text-xs bg-gray-100 dark:bg-[#374151] text-gray-600 dark:text-[#9CA3AF] px-2 py-0.5 rounded-full">{kw}</span>
+                      <span key={kw} className="text-xs bg-gray-100 dark:bg-[#374151] text-gray-700 dark:text-[#9CA3AF] px-2 py-0.5 rounded-full">{kw}</span>
                     ))}
                   </div>
                 </div>

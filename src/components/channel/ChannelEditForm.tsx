@@ -156,7 +156,7 @@ function MultiChip({
             "px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors",
             selected.includes(o.value)
               ? "border-[#E8292E] bg-[#E8292E] text-white"
-              : "border-gray-200 dark:border-[#374151] text-gray-600 dark:text-[#9CA3AF] hover:border-gray-300 dark:hover:border-[#4B5563]",
+              : "border-gray-200 dark:border-[#374151] text-gray-700 dark:text-[#9CA3AF] hover:border-gray-300 dark:hover:border-[#4B5563]",
           ].join(" ")}
         >
           {o.label}
@@ -186,7 +186,7 @@ function RadioGroup({
             "px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors",
             value === o.value
               ? "border-[#E8292E] bg-[#E8292E] text-white"
-              : "border-gray-200 dark:border-[#374151] text-gray-600 dark:text-[#9CA3AF] hover:border-gray-300 dark:hover:border-[#4B5563]",
+              : "border-gray-200 dark:border-[#374151] text-gray-700 dark:text-[#9CA3AF] hover:border-gray-300 dark:hover:border-[#4B5563]",
           ].join(" ")}
         >
           {o.label}
@@ -851,7 +851,7 @@ export default function ChannelEditForm({
         <button
           type="button"
           onClick={() => router.push("/mypage")}
-          className="flex-1 py-3 rounded-full border border-gray-200 dark:border-[#374151] text-sm font-medium text-gray-600 dark:text-[#9CA3AF] hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors"
+          className="flex-1 py-3 rounded-full border border-gray-200 dark:border-[#374151] text-sm font-medium text-gray-700 dark:text-[#9CA3AF] hover:bg-gray-50 dark:hover:bg-[#374151] transition-colors"
         >
           취소
         </button>

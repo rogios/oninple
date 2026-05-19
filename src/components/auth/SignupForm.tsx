@@ -26,7 +26,7 @@ export default function SignupForm() {
           <span className="text-2xl font-black text-[#E8292E]">ONINPLE</span>
         </Link>
         <h1 className="text-2xl font-bold text-[#111111] dark:text-[#F9FAFB]">회원가입</h1>
-        <p className="text-sm text-gray-500 dark:text-[#9CA3AF] mt-1">구글 계정으로 무료로 시작하세요</p>
+        <p className="text-sm text-gray-700 dark:text-[#9CA3AF] mt-1">구글 계정으로 무료로 시작하세요</p>
       </div>
 
       <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm p-8">
@@ -54,7 +54,7 @@ export default function SignupForm() {
         </p>
       </div>
 
-      <p className="text-center text-sm text-gray-500 dark:text-[#9CA3AF] mt-6">
+      <p className="text-center text-sm text-gray-700 dark:text-[#9CA3AF] mt-6">
         이미 계정이 있으신가요?{" "}
         <Link href="/login" className="text-[#E8292E] font-semibold hover:underline">
           로그인

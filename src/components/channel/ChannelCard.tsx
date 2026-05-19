@@ -99,7 +99,7 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
       {channel.is_verified && (
         <div className="group absolute top-4 right-4 cursor-default z-10">
           <BadgeCheck size={17} className="text-[#1D9E75]" />
-          <div className="absolute bottom-full right-0 mb-1.5 w-max hidden group-hover:block bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] shadow-md text-xs text-gray-500 dark:text-[#9CA3AF] px-2.5 py-1.5 rounded-lg pointer-events-none">
+          <div className="absolute bottom-full right-0 mb-1.5 w-max hidden group-hover:block bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] shadow-md text-xs text-gray-700 dark:text-[#9CA3AF] px-2.5 py-1.5 rounded-lg pointer-events-none">
             본인 소유가 확인된 채널입니다
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
             {channel.channel_name}
           </h3>
           {channel.follower_count != null && followerLabel && (
-            <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-[#9CA3AF]">
+            <p className="flex items-center gap-1 text-xs text-gray-700 dark:text-[#9CA3AF]">
               <Users size={11} className="text-gray-400 shrink-0" />
               <span className="hidden sm:inline">{followerLabel}</span>
               <span className="font-semibold text-red-500">
@@ -147,7 +147,7 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
             </p>
           )}
           {channel.avg_views != null && (
-            <p className="flex items-center gap-1 text-xs text-gray-500 dark:text-[#9CA3AF]">
+            <p className="flex items-center gap-1 text-xs text-gray-700 dark:text-[#9CA3AF]">
               <Eye size={11} className="text-gray-400 shrink-0" />
               <span className="hidden sm:inline">평균 조회수</span>
               <span className="font-semibold text-red-500">
@@ -160,7 +160,7 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
 
       {/* 소개글 */}
       {channel.bio && (
-        <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed line-clamp-2">
+        <p className="text-xs text-gray-700 dark:text-[#9CA3AF] leading-relaxed line-clamp-2">
           {channel.bio}
         </p>
       )}
@@ -171,7 +171,7 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
           {channel.categories.slice(0, 4).map((cat) => (
             <span
               key={cat}
-              className="text-xs text-gray-500 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2.5 py-1 rounded-full"
+              className="text-xs text-gray-700 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2.5 py-1 rounded-full"
             >
               {CATEGORY_LABELS[cat] ?? cat}
             </span>
@@ -188,7 +188,7 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
       <div className="flex gap-2 pt-1">
         <Link
           href={`/mypage/channel/${channel.id}/edit`}
-          className="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold border border-gray-200 dark:border-[#374151] text-gray-600 dark:text-[#9CA3AF] hover:bg-gray-50 dark:hover:bg-[#374151] py-2 rounded-xl transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold border border-gray-200 dark:border-[#374151] text-gray-700 dark:text-[#9CA3AF] hover:bg-gray-50 dark:hover:bg-[#374151] py-2 rounded-xl transition-colors"
         >
           <Pencil size={13} />
           수정

@@ -67,7 +67,7 @@ export default async function BlogPage() {
                   {post.title}
                 </h2>
                 {post.summary && (
-                  <p className="text-xs text-gray-500 dark:text-[#9CA3AF] leading-relaxed line-clamp-2 flex-1">
+                  <p className="text-xs text-gray-700 dark:text-[#9CA3AF] leading-relaxed line-clamp-2 flex-1">
                     {post.summary}
                   </p>
                 )}

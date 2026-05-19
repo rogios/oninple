@@ -26,7 +26,7 @@ export default function CategorySection() {
           </div>
           <Link
             href="/influencers"
-            className="hidden sm:block text-sm font-medium text-gray-500 dark:text-[#9CA3AF] hover:text-[#E8292E] dark:hover:text-[#E8292E] transition-colors"
+            className="hidden sm:block text-sm font-medium text-gray-700 dark:text-[#9CA3AF] hover:text-[#E8292E] dark:hover:text-[#E8292E] transition-colors"
           >
             전체 보기 →
           </Link>

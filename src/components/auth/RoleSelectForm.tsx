@@ -56,7 +56,7 @@ export default function RoleSelectForm() {
         <h1 className="text-2xl font-bold text-[#111111] dark:text-[#F9FAFB] mt-4 mb-2">
           어떤 역할로 이용하시나요?
         </h1>
-        <p className="text-sm text-gray-500 dark:text-[#9CA3AF]">
+        <p className="text-sm text-gray-700 dark:text-[#9CA3AF]">
           이후 마이페이지에서 언제든 변경할 수 있어요
         </p>
       </div>
@@ -84,7 +84,7 @@ export default function RoleSelectForm() {
                   {role.label}
                 </span>
                 {role.badge && (
-                  <span className="text-xs font-semibold bg-gray-100 dark:bg-[#374151] text-gray-500 dark:text-[#9CA3AF] px-2 py-0.5 rounded-full">
+                  <span className="text-xs font-semibold bg-gray-100 dark:bg-[#374151] text-gray-700 dark:text-[#9CA3AF] px-2 py-0.5 rounded-full">
                     {role.badge}
                   </span>
                 )}

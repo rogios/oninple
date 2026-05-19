@@ -93,7 +93,7 @@ export default async function NoticeDetailPage({
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Link
           href="/notices"
-          className="inline-flex items-center gap-1 text-xs text-gray-500 dark:text-[#9CA3AF] hover:text-[#111111] dark:hover:text-[#F9FAFB] transition-colors mb-8"
+          className="inline-flex items-center gap-1 text-xs text-gray-700 dark:text-[#9CA3AF] hover:text-[#111111] dark:hover:text-[#F9FAFB] transition-colors mb-8"
         >
           <ChevronLeft size={14} />
           공지사항 목록
