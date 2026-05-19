@@ -3,10 +3,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 type ThemeCtx = { isDark: boolean; toggle: () => void };
-const ThemeContext = createContext<ThemeCtx>({ isDark: false, toggle: () => {} });
+const ThemeContext = createContext<ThemeCtx>({ isDark: true, toggle: () => {} });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains("dark"));

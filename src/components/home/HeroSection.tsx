@@ -236,6 +236,7 @@ export default function HeroSection({
       style={{ background: "var(--hero-bg)" }}
     >
       {/* ── 배경 레이어 ── */}
+      <div className="dark:opacity-40 sm:dark:opacity-100">
       <div className="pointer-events-none absolute -top-20 -right-28 w-[560px] h-[560px] rounded-full"
         style={{ background: "radial-gradient(circle, rgba(255,255,255,0.55) 0%, transparent 68%)", filter: "blur(36px)" }} />
       <div className="pointer-events-none absolute -bottom-16 -left-16 w-[380px] h-[380px] rounded-full"
@@ -289,6 +290,7 @@ export default function HeroSection({
       <div className="pointer-events-none absolute top-[22%] left-[30%] w-6 h-6">
         <div className="absolute top-1/2 left-0 right-0 h-[1.5px] -translate-y-1/2" style={{ background: "rgba(255,255,255,0.42)" }} />
         <div className="absolute left-1/2 top-0 bottom-0 w-[1.5px] -translate-x-1/2" style={{ background: "rgba(255,255,255,0.42)" }} />
+      </div>
       </div>
 
       {/* ── 콘텐츠 ── */}
