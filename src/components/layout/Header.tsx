@@ -48,7 +48,7 @@ export default function Header({ user, isAdmin = false }: HeaderProps) {
         {/* Logo */}
         <Link href="/" className="shrink-0">
           <Image src="/logo.png" alt="온인플" width={120} height={40} priority className="dark:hidden" />
-          <Image src="/logo-dark.png" alt="온인플" width={120} height={40} priority className="hidden dark:block" />
+          <Image src="/logo-dark.png" alt="온인플" width={120} height={40} priority className="hidden dark:!block" />
         </Link>
 
         {/* Desktop nav + Auth area */}
