@@ -12,7 +12,6 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createClient } from "@supabase/supabase-js";
 
 interface TopicsFile {
@@ -54,9 +53,6 @@ async function generatePost(
   category: string,
   topic: string
 ): Promise<GeneratedPost> {
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
   const prompt = `당신은 크리에이터 이코노미·인플루언서 마케팅 전문 블로그 에디터입니다.
 온인플(Oninple) 플랫폼 블로그에 게재할 글을 작성해주세요.
 
@@ -79,9 +75,27 @@ async function generatePost(
   "content": "마크다운 형식의 블로그 본문 전체"
 }`;
 
-  const result = await model.generateContent(prompt);
-  const raw = result.response.text();
+  const endpoint =
+    `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Gemini API 오류 (${res.status}): ${err}`);
+  }
+
+  const json = await res.json() as {
+    candidates: { content: { parts: { text: string }[] } }[];
+  };
+
+  const raw = json.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
   const match = raw.match(/\{[\s\S]*\}/);
   if (!match) throw new Error("Gemini 응답에서 JSON을 파싱할 수 없습니다");
 
