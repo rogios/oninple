@@ -4,12 +4,18 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 
-async function assertAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return false;
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-  return profile?.role === "admin";
+async function assertAdmin(): Promise<boolean> {
+  try {
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) return false;
+    // profiles 조회는 service 클라이언트로 RLS 우회 (anon key로는 RLS에 막힐 수 있음)
+    const service = createServiceClient();
+    const { data: profile } = await service.from("profiles").select("role").eq("id", user.id).single();
+    return profile?.role === "admin";
+  } catch {
+    return false;
+  }
 }
 
 function revalidateBlog(slug?: string) {

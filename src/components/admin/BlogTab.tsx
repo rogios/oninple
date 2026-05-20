@@ -257,6 +257,7 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
     try {
       const result = await createPost(data);
       if (result.error) {
+        console.error("[BlogTab] createPost 실패:", result.error);
         setFormError(result.error);
       } else {
         const newPost: PostRow = {
@@ -268,7 +269,8 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
         setPosts((prev) => [newPost, ...prev]);
         closeForm();
       }
-    } catch {
+    } catch (err) {
+      console.error("[BlogTab] createPost 예외:", err);
       setFormError("저장 중 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {
       setIsPending(false);
@@ -282,6 +284,7 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
     try {
       const result = await updatePost(editTarget.id, data);
       if (result.error) {
+        console.error("[BlogTab] updatePost 실패:", result.error);
         setFormError(result.error);
       } else {
         setPosts((prev) =>
@@ -292,7 +295,8 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
         );
         closeForm();
       }
-    } catch {
+    } catch (err) {
+      console.error("[BlogTab] updatePost 예외:", err);
       setFormError("저장 중 오류가 발생했습니다. 다시 시도해주세요.");
     } finally {
       setIsPending(false);
