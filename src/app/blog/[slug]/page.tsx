@@ -158,16 +158,21 @@ export default async function BlogPostPage({
                 em: ({ children }) => (
                   <em className="italic">{children}</em>
                 ),
-                a: ({ href, children }) => (
-                  <a
-                    href={href}
-                    className="text-[#E8292E] hover:underline underline-offset-2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {children}
-                  </a>
-                ),
+                a: ({ href, children }) => {
+                  const isInternal = href?.includes("oninple.com") || href?.startsWith("/");
+                  return (
+                    <a
+                      href={href}
+                      className="text-[#E8292E] hover:underline underline-offset-2"
+                      {...(isInternal
+                        ? { target: "_self" }
+                        : { target: "_blank", rel: "noopener noreferrer" }
+                      )}
+                    >
+                      {children}
+                    </a>
+                  );
+                },
                 ul: ({ children }) => (
                   <ul className="list-disc pl-6 mb-5 space-y-1.5">{children}</ul>
                 ),
