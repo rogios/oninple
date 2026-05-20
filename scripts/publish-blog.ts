@@ -1,14 +1,18 @@
 /**
  * 블로그 글 자동 발행 스크립트
  *
- * 실행:
+ * 실행 (본문을 파일로 전달 — 권장):
  *   npx ts-node --project scripts/tsconfig.json scripts/publish-blog.ts \
  *     --title "제목" \
  *     --slug "my-slug" \
- *     --content "본문 내용" \
+ *     --content-file scripts/content.md \
  *     --summary "요약" \
  *     --category "AI" \
  *     --thumbnail "https://..." (선택)
+ *
+ * 실행 (본문을 인라인으로 전달 — 멀티라인 주의):
+ *   npx ts-node --project scripts/tsconfig.json scripts/publish-blog.ts \
+ *     --title "제목" --slug "my-slug" --content "짧은 본문" ...
  *
  * 카테고리 선택지: 크리에이터 / 인플루언서 마케팅 / AI / 플랫폼 소식
  */
@@ -69,13 +73,23 @@ async function main() {
   const env = loadEnvLocal();
   const args = parseArgs(process.argv.slice(2));
 
+  // --content-file 로 파일 경로를 받으면 파일에서 본문 읽기
+  if (args["content-file"]) {
+    const filePath = path.resolve(args["content-file"]);
+    if (!fs.existsSync(filePath)) {
+      console.error("❌ content-file을 찾을 수 없습니다:", filePath);
+      process.exit(1);
+    }
+    args.content = fs.readFileSync(filePath, "utf-8");
+  }
+
   const required = ["title", "content", "summary", "category", "slug"] as const;
   const missing = required.filter((k) => !args[k]);
   if (missing.length > 0) {
     console.error("❌ 필수 인수 누락:", missing.map((k) => `--${k}`).join(", "));
     console.error(
       "\n사용법:\n  npx ts-node --project scripts/tsconfig.json scripts/publish-blog.ts \\\n" +
-      "    --title \"제목\" --slug \"my-slug\" --content \"본문\" \\\n" +
+      "    --title \"제목\" --slug \"my-slug\" --content-file scripts/content.md \\\n" +
       "    --summary \"요약\" --category \"AI\" [--thumbnail \"https://...\"]"
     );
     process.exit(1);
