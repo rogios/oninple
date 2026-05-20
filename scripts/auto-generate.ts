@@ -12,7 +12,6 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import { createClient } from "@supabase/supabase-js";
 
 interface TopicsFile {
   categories: { name: string; topics: string[] }[];
@@ -148,11 +147,15 @@ async function main() {
   console.log(`🔗 슬러그: ${slug}`);
   console.log(`\n💾 Supabase에 저장 중...`);
 
-  const supabase = createClient(supabaseUrl, supabaseKey);
-
-  const { data, error } = await supabase
-    .from("posts")
-    .insert({
+  const res = await fetch(`${supabaseUrl}/rest/v1/posts`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": supabaseKey,
+      "Authorization": `Bearer ${supabaseKey}`,
+      "Prefer": "return=representation",
+    },
+    body: JSON.stringify({
       title,
       content,
       summary,
@@ -160,14 +163,16 @@ async function main() {
       slug,
       thumbnail: null,
       published: true,
-    })
-    .select()
-    .single();
+    }),
+  });
 
-  if (error) {
-    console.error("❌ Supabase 저장 실패:", error.message);
+  if (!res.ok) {
+    const err = await res.text();
+    console.error(`❌ Supabase 저장 실패 (${res.status}): ${err}`);
     process.exit(1);
   }
+
+  const [data] = await res.json() as { id: string }[];
 
   console.log(`\n✅ 발행 완료!`);
   console.log(`   ID  : ${data.id}`);
