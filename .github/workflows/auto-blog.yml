@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Install script-only dependencies
-        run: npm install --no-save @google/generative-ai ts-node
+        run: npm install --no-save ts-node
 
       - name: Generate and publish blog post
         env:
