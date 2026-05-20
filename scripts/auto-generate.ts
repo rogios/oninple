@@ -28,23 +28,14 @@ interface GeneratedPost {
   content: string;
 }
 
-function buildSlug(title: string): string {
+function buildSlug(postNumber: number): string {
   const now = new Date();
   const dateStr = [
     now.getFullYear(),
     String(now.getMonth() + 1).padStart(2, "0"),
     String(now.getDate()).padStart(2, "0"),
   ].join("");
-
-  // 한글·영문·숫자·하이픈만 남기고 슬러그 생성
-  const cleaned = title
-    .toLowerCase()
-    .replace(/[^\w\s가-힣]/g, "")
-    .trim()
-    .replace(/\s+/g, "-")
-    .slice(0, 40);
-
-  return `${dateStr}-${cleaned}`;
+  return `${dateStr}-post-${postNumber}`;
 }
 
 async function generatePost(
@@ -140,7 +131,9 @@ async function main() {
     topic
   );
 
-  const slug = buildSlug(title);
+  // 카테고리별 순환 구조 기준 전역 순번: 1, 2, 3, ...
+  const postNumber = topicIndices[categoryIndex] * topics.categories.length + categoryIndex + 1;
+  const slug = buildSlug(postNumber);
 
   console.log(`\n📝 제목: ${title}`);
   console.log(`📄 요약: ${summary}`);
