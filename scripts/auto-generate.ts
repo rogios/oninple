@@ -13,8 +13,13 @@
 import * as fs from "fs";
 import * as path from "path";
 
+interface Topic {
+  title: string;
+  thumbnail: string;
+}
+
 interface TopicsFile {
-  categories: { name: string; topics: string[] }[];
+  categories: { name: string; topics: Topic[] }[];
 }
 
 interface State {
@@ -129,7 +134,8 @@ async function main() {
   const { categoryIndex, topicIndices } = state;
   const category = topics.categories[categoryIndex];
   const topicIndex = topicIndices[categoryIndex];
-  const topic = category.topics[topicIndex];
+  const topicItem = category.topics[topicIndex];
+  const topic = topicItem.title;
 
   console.log(`\n📅 실행 시각: ${new Date().toISOString()}`);
   console.log(`🎯 카테고리: ${category.name} (index ${categoryIndex})`);
@@ -165,7 +171,7 @@ async function main() {
       summary,
       category: category.name,
       slug,
-      thumbnail: null,
+      thumbnail: topicItem.thumbnail || null,
       published: true,
     }),
   });
