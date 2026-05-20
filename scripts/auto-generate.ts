@@ -55,7 +55,7 @@ async function generatePost(
   topic: string
 ): Promise<GeneratedPost> {
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
   const prompt = `당신은 크리에이터 이코노미·인플루언서 마케팅 전문 블로그 에디터입니다.
 온인플(Oninple) 플랫폼 블로그에 게재할 글을 작성해주세요.
