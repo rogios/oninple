@@ -71,7 +71,14 @@ function PostForm({
   });
 
   function set(key: keyof FormData, value: string | boolean) {
-    setF((prev) => ({ ...prev, [key]: value }));
+    setF((prev) => {
+      const next = { ...prev, [key]: value };
+      // 제목 변경 시 슬러그가 아직 비어 있으면 자동 생성
+      if (key === "title" && !prev.slug.trim()) {
+        next.slug = toSlug(value as string);
+      }
+      return next;
+    });
   }
 
   const inputCls = "w-full text-sm border border-gray-200 dark:border-[#374151] rounded-xl px-4 py-2.5 focus:outline-none focus:border-gray-400 dark:focus:border-[#9CA3AF] bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB] placeholder:text-gray-300 dark:placeholder:text-[#6B7280]";
