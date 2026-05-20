@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { ChevronLeft, CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 function fmt(d: string) {
   return new Date(d).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" });
 }

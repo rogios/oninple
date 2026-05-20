@@ -3,6 +3,8 @@ import { createServiceClient } from "@/lib/supabase/service";
 import Link from "next/link";
 import { CalendarDays } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "블로그",
   description: "온인플 팀의 인플루언서 마케팅 인사이트, 크리에이터 트렌드, 서비스 소식을 전달합니다.",
