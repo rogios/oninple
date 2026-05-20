@@ -54,7 +54,7 @@ async function generatePost(
   category: string,
   topic: string
 ): Promise<GeneratedPost> {
-  const genAI = new GoogleGenerativeAI(apiKey, { apiVersion: "v1" });
+  const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
   const prompt = `당신은 크리에이터 이코노미·인플루언서 마케팅 전문 블로그 에디터입니다.
