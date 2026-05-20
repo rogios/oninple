@@ -1,4 +1,9 @@
 {
-  "categoryIndex": 0,
-  "topicIndices": [0, 0, 0, 0]
+  "categoryIndex": 1,
+  "topicIndices": [
+    1,
+    0,
+    0,
+    0
+  ]
 }
