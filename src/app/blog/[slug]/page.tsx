@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronLeft, CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export const dynamic = "force-dynamic";
 
@@ -134,8 +136,69 @@ export default async function BlogPostPage({
           </header>
 
           {/* 본문 */}
-          <div className="text-sm text-gray-700 dark:text-[#9CA3AF] leading-relaxed whitespace-pre-wrap">
-            {post.content}
+          <div className="text-sm text-gray-700 dark:text-[#9CA3AF] leading-relaxed">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({ children }) => (
+                  <h1 className="text-2xl font-black text-[#111111] dark:text-[#F9FAFB] mt-10 mb-4">{children}</h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="text-lg font-bold text-[#111111] dark:text-[#F9FAFB] mt-8 mb-3">{children}</h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-base font-bold text-[#111111] dark:text-[#F9FAFB] mt-6 mb-2">{children}</h3>
+                ),
+                p: ({ children }) => (
+                  <p className="mb-5 leading-relaxed">{children}</p>
+                ),
+                strong: ({ children }) => (
+                  <strong className="font-bold text-[#111111] dark:text-[#F9FAFB]">{children}</strong>
+                ),
+                em: ({ children }) => (
+                  <em className="italic">{children}</em>
+                ),
+                a: ({ href, children }) => (
+                  <a
+                    href={href}
+                    className="text-[#E8292E] hover:underline underline-offset-2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {children}
+                  </a>
+                ),
+                ul: ({ children }) => (
+                  <ul className="list-disc pl-6 mb-5 space-y-1.5">{children}</ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className="list-decimal pl-6 mb-5 space-y-1.5">{children}</ol>
+                ),
+                li: ({ children }) => (
+                  <li className="leading-relaxed">{children}</li>
+                ),
+                blockquote: ({ children }) => (
+                  <blockquote className="border-l-4 border-[#E8292E] pl-5 my-5 text-gray-500 dark:text-[#6B7280] italic">
+                    {children}
+                  </blockquote>
+                ),
+                pre: ({ children }) => (
+                  <pre className="bg-gray-100 dark:bg-[#1F2937] border border-gray-200 dark:border-[#374151] rounded-xl p-4 my-5 overflow-x-auto text-xs leading-relaxed">
+                    {children}
+                  </pre>
+                ),
+                code: ({ children, className }) => (
+                  className
+                    ? <code className="font-mono">{children}</code>
+                    : <code className="bg-gray-100 dark:bg-[#374151] rounded px-1.5 py-0.5 text-xs font-mono">{children}</code>
+                ),
+                hr: () => (
+                  <hr className="border-gray-200 dark:border-[#374151] my-8" />
+                ),
+              }}
+            >
+              {post.content}
+            </ReactMarkdown>
           </div>
         </article>
       </div>
