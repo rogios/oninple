@@ -4,6 +4,8 @@ import { useState, useTransition } from "react";
 import { Pencil, Trash2, Plus, X, Check, Eye, EyeOff } from "lucide-react";
 import { createPost, updatePost, deletePost, togglePublish } from "@/app/actions/blog";
 
+const CATEGORIES = ["크리에이터", "인플루언서 마케팅", "AI", "플랫폼 소식"] as const;
+
 // ─── Type ─────────────────────────────────────────────────────────────────────
 
 export type PostRow = {
@@ -50,11 +52,13 @@ function PostForm({
   onSubmit,
   onCancel,
   isPending,
+  error,
 }: {
   initial?: PostRow;
   onSubmit: (d: FormData) => void;
   onCancel: () => void;
   isPending: boolean;
+  error?: string;
 }) {
   const [f, setF] = useState<FormData>({
     title: initial?.title ?? "",
@@ -109,13 +113,16 @@ function PostForm({
         </div>
         <div>
           <label className={labelCls}>카테고리</label>
-          <input
-            type="text"
+          <select
             value={f.category}
             onChange={(e) => set("category", e.target.value)}
-            placeholder="예: 마케팅, 트렌드"
             className={inputCls}
-          />
+          >
+            <option value="">카테고리 선택</option>
+            {CATEGORIES.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
         </div>
         <div>
           <label className={labelCls}>썸네일 이미지 URL (선택)</label>
@@ -163,8 +170,13 @@ function PostForm({
         <span className="text-xs font-semibold text-gray-700 dark:text-[#9CA3AF]">바로 공개</span>
       </label>
 
+      {error && (
+        <p className="text-xs font-medium text-[#E8292E] bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg">{error}</p>
+      )}
+
       <div className="flex gap-2 pt-1">
         <button
+          type="button"
           onClick={onCancel}
           disabled={isPending}
           className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 dark:text-[#9CA3AF] border border-gray-200 dark:border-[#374151] px-4 py-2 rounded-xl hover:bg-gray-100 dark:hover:bg-[#1F2937] transition-colors disabled:opacity-50"
@@ -172,6 +184,7 @@ function PostForm({
           <X size={13} /> 취소
         </button>
         <button
+          type="button"
           onClick={() => onSubmit(f)}
           disabled={isPending || !f.title.trim() || !f.slug.trim()}
           className="flex items-center gap-1.5 text-xs font-semibold text-white bg-[#111111] px-4 py-2 rounded-xl hover:bg-[#333] transition-colors disabled:opacity-40"
@@ -229,43 +242,61 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
   const [editTarget, setEditTarget] = useState<PostRow | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<PostRow | null>(null);
   const [isPending, setIsPending] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 
   function closeForm() {
     setFormMode("none");
     setEditTarget(null);
+    setFormError(null);
   }
 
   async function handleCreate(data: FormData) {
     setIsPending(true);
-    const result = await createPost(data);
-    if (!result.error) {
-      const newPost: PostRow = {
-        id: `temp-${Date.now()}`,
-        ...data,
-        thumbnail: data.thumbnail || null,
-        created_at: new Date().toISOString(),
-      };
-      setPosts((prev) => [newPost, ...prev]);
-      closeForm();
+    setFormError(null);
+    try {
+      const result = await createPost(data);
+      if (result.error) {
+        setFormError(result.error);
+      } else {
+        const newPost: PostRow = {
+          id: `temp-${Date.now()}`,
+          ...data,
+          thumbnail: data.thumbnail || null,
+          created_at: new Date().toISOString(),
+        };
+        setPosts((prev) => [newPost, ...prev]);
+        closeForm();
+      }
+    } catch {
+      setFormError("저장 중 오류가 발생했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsPending(false);
     }
-    setIsPending(false);
   }
 
   async function handleUpdate(data: FormData) {
     if (!editTarget) return;
     setIsPending(true);
-    const result = await updatePost(editTarget.id, data);
-    if (!result.error) {
-      setPosts((prev) =>
-        prev.map((p) => p.id === editTarget.id
-          ? { ...p, ...data, thumbnail: data.thumbnail || null }
-          : p
-        )
-      );
-      closeForm();
+    setFormError(null);
+    try {
+      const result = await updatePost(editTarget.id, data);
+      if (result.error) {
+        setFormError(result.error);
+      } else {
+        setPosts((prev) =>
+          prev.map((p) => p.id === editTarget.id
+            ? { ...p, ...data, thumbnail: data.thumbnail || null }
+            : p
+          )
+        );
+        closeForm();
+      }
+    } catch {
+      setFormError("저장 중 오류가 발생했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsPending(false);
     }
-    setIsPending(false);
   }
 
   async function handleDelete(post: PostRow) {
@@ -308,10 +339,10 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
         </div>
 
         {formMode === "create" && (
-          <PostForm onSubmit={handleCreate} onCancel={closeForm} isPending={isPending} />
+          <PostForm onSubmit={handleCreate} onCancel={closeForm} isPending={isPending} error={formError ?? undefined} />
         )}
         {formMode === "edit" && editTarget && (
-          <PostForm initial={editTarget} onSubmit={handleUpdate} onCancel={closeForm} isPending={isPending} />
+          <PostForm initial={editTarget} onSubmit={handleUpdate} onCancel={closeForm} isPending={isPending} error={formError ?? undefined} />
         )}
 
         <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm overflow-hidden">
