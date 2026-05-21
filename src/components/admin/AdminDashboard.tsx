@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState, useTransition, useMemo, Fragment } from "react";
-import { AlertTriangle, Trash2, LayoutDashboard, Users, Bell, BookOpen, ShieldCheck, ShieldOff, ChevronDown, ChevronUp } from "lucide-react";
+import { AlertTriangle, Trash2, LayoutDashboard, Users, Bell, BookOpen, ShieldCheck, ShieldOff, ChevronDown, ChevronUp, BarChart2 } from "lucide-react";
 import { warnUser, forceDeleteUser, setChannelVerified } from "@/app/actions/admin";
 import { logoutAction } from "@/app/actions/auth";
 import NoticesTab from "@/components/admin/NoticesTab";
 import type { NoticeRow } from "@/components/admin/NoticesTab";
 import BlogTab from "@/components/admin/BlogTab";
 import type { PostRow } from "@/components/admin/BlogTab";
+import AnalyticsTab from "@/components/admin/AnalyticsTab";
+import type { AnalyticsData } from "@/components/admin/AnalyticsTab";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -528,7 +530,7 @@ function MembersTab({
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
-type Tab = "dashboard" | "members" | "notices" | "blog";
+type Tab = "dashboard" | "members" | "notices" | "blog" | "analytics";
 
 export default function AdminDashboard({
   stats,
@@ -536,6 +538,7 @@ export default function AdminDashboard({
   channels,
   notices,
   posts,
+  analytics,
   currentUserId,
   currentUserEmail,
 }: {
@@ -544,6 +547,7 @@ export default function AdminDashboard({
   channels: AdminChannelRow[];
   notices: NoticeRow[];
   posts: PostRow[];
+  analytics: AnalyticsData;
   currentUserId: string;
   currentUserEmail: string;
 }) {
@@ -554,6 +558,7 @@ export default function AdminDashboard({
     { key: "members",   label: "회원관리",     icon: <Users size={14} /> },
     { key: "notices",   label: "공지사항 관리", icon: <Bell size={14} /> },
     { key: "blog",      label: "블로그 관리",   icon: <BookOpen size={14} /> },
+    { key: "analytics", label: "방문자 분석",   icon: <BarChart2 size={14} /> },
   ];
 
   return (
@@ -602,6 +607,7 @@ export default function AdminDashboard({
         {tab === "members"   && <MembersTab initialMembers={members} channels={channels} currentUserId={currentUserId} />}
         {tab === "notices"   && <NoticesTab initialNotices={notices} />}
         {tab === "blog"      && <BlogTab initialPosts={posts} />}
+        {tab === "analytics" && <AnalyticsTab data={analytics} />}
       </div>
     </div>
   );

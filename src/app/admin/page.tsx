@@ -5,6 +5,7 @@ import AdminDashboard from "@/components/admin/AdminDashboard";
 import type { DashboardStats, MemberRow, AdminChannelRow } from "@/components/admin/AdminDashboard";
 import type { NoticeRow } from "@/components/admin/NoticesTab";
 import type { PostRow } from "@/components/admin/BlogTab";
+import type { AnalyticsData } from "@/components/admin/AnalyticsTab";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -30,6 +31,7 @@ export default async function AdminPage() {
     Date.UTC(nowKST.getUTCFullYear(), nowKST.getUTCMonth(), nowKST.getUTCDate()) - KST_OFFSET
   );
   const todayISO = todayStart.toISOString();
+  const twelveMonthsAgo = new Date(Date.now() - 366 * 24 * 60 * 60 * 1000);
 
   // ─ 병렬 쿼리 (모두 service client — RLS 우회)
   const [
@@ -44,6 +46,7 @@ export default async function AdminPage() {
     { data: allMembers },
     { data: allNotices },
     { data: allPosts },
+    { data: analyticsRaw },
   ] = await Promise.all([
     service.from("profiles").select("*", { count: "exact", head: true }),
     service.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", todayISO),
@@ -56,6 +59,7 @@ export default async function AdminPage() {
     service.from("profiles").select("id, email, name, role, created_at, warning_count").order("created_at", { ascending: false }),
     service.from("notices").select("id, title, content, is_pinned, created_at").order("created_at", { ascending: false }),
     service.from("posts").select("id, title, content, thumbnail, summary, category, slug, published, created_at").order("created_at", { ascending: false }),
+    service.from("page_views").select("*").gte("created_at", twelveMonthsAgo.toISOString()),
   ]);
 
   // allChannels: is_verified 컬럼 없을 경우 fallback
@@ -86,6 +90,47 @@ export default async function AdminPage() {
   for (const ch of allChannels) {
     if (ch.user_id) channelCountMap[ch.user_id] = (channelCountMap[ch.user_id] ?? 0) + 1;
   }
+
+  // ─ 방문자 분석 집계 (KST 기준)
+  const dailyMap = new Map<string, number>();
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(Date.now() + KST_OFFSET - i * 24 * 60 * 60 * 1000);
+    dailyMap.set(
+      `${String(d.getUTCMonth() + 1).padStart(2, "0")}/${String(d.getUTCDate()).padStart(2, "0")}`,
+      0
+    );
+  }
+  const monthlyMap = new Map<string, number>();
+  for (let i = 11; i >= 0; i--) {
+    const d = new Date(Date.UTC(nowKST.getUTCFullYear(), nowKST.getUTCMonth() - i, 1));
+    monthlyMap.set(`${d.getUTCMonth() + 1}월`, 0);
+  }
+  const referrerMap = new Map<string, number>();
+  const pageMap    = new Map<string, number>();
+  const deviceMap  = new Map<string, number>();
+
+  type RawPageView = { created_at: string; referrer?: string | null; page_path?: string | null; page?: string | null; device_type?: string | null };
+  for (const row of (analyticsRaw ?? []) as RawPageView[]) {
+    const kst = new Date(new Date(row.created_at).getTime() + KST_OFFSET);
+    const dayKey   = `${String(kst.getUTCMonth() + 1).padStart(2, "0")}/${String(kst.getUTCDate()).padStart(2, "0")}`;
+    const monthKey = `${kst.getUTCMonth() + 1}월`;
+    if (dailyMap.has(dayKey))   dailyMap.set(dayKey,   (dailyMap.get(dayKey)   ?? 0) + 1);
+    if (monthlyMap.has(monthKey)) monthlyMap.set(monthKey, (monthlyMap.get(monthKey) ?? 0) + 1);
+    const ref = row.referrer ?? "";
+    referrerMap.set(ref, (referrerMap.get(ref) ?? 0) + 1);
+    const pg = (row.page_path && row.page_path !== "") ? row.page_path : (row.page ?? "/");
+    pageMap.set(pg, (pageMap.get(pg) ?? 0) + 1);
+    const dev = row.device_type ?? "desktop";
+    deviceMap.set(dev, (deviceMap.get(dev) ?? 0) + 1);
+  }
+
+  const analytics: AnalyticsData = {
+    dailyViews:      Array.from(dailyMap.entries()).map(([date, count]) => ({ date, count })),
+    monthlyViews:    Array.from(monthlyMap.entries()).map(([month, count]) => ({ month, count })),
+    topReferrers:    Array.from(referrerMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([referrer, count]) => ({ referrer, count })),
+    topPages:        Array.from(pageMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([page, count]) => ({ page, count })),
+    deviceBreakdown: Array.from(deviceMap.entries()).map(([device, count]) => ({ device, count })).sort((a, b) => b.count - a.count),
+  };
 
   const stats: DashboardStats = {
     todayMembers: todayMembers ?? 0,
@@ -143,6 +188,7 @@ export default async function AdminPage() {
       channels={channels}
       notices={notices}
       posts={posts}
+      analytics={analytics}
       currentUserId={user.id}
       currentUserEmail={user.email ?? ""}
     />
