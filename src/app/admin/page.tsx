@@ -23,9 +23,12 @@ export default async function AdminPage() {
   // RLS를 우회해 전체 데이터를 읽기 위해 service client 사용
   const service = createServiceClient();
 
-  // ─ 날짜
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  // ─ 날짜 (KST 00:00 기준 — KST = UTC+9, KST 자정 = UTC 전날 15:00:00)
+  const KST_OFFSET = 9 * 60 * 60 * 1000;
+  const nowKST = new Date(Date.now() + KST_OFFSET);
+  const todayStart = new Date(
+    Date.UTC(nowKST.getUTCFullYear(), nowKST.getUTCMonth(), nowKST.getUTCDate()) - KST_OFFSET
+  );
   const todayISO = todayStart.toISOString();
 
   // ─ 병렬 쿼리 (모두 service client — RLS 우회)
