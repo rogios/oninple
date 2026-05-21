@@ -109,7 +109,7 @@ const INITIAL: FormState = {
 
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
-    <label className="block text-sm font-semibold text-[#111111] dark:text-gray-200 mb-1.5">
+    <label className="block text-sm font-semibold text-gray-800 dark:text-gray-200 mb-1.5">
       {children}
       {required && <span className="text-[#E8292E] ml-0.5">*</span>}
     </label>
@@ -127,7 +127,7 @@ function Input({
       className={twMerge(
         "w-full px-4 py-2.5 rounded-xl border text-sm",
         "bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB]",
-        "focus:outline-none focus:ring-2 transition-colors placeholder:text-gray-300 dark:placeholder:text-[#6B7280]",
+        "focus:outline-none focus:ring-2 transition-colors placeholder:text-gray-500 dark:placeholder:text-gray-400",
         hasError
           ? "border-red-400 focus:border-red-400 focus:ring-red-100"
           : "border-gray-200 dark:border-[#374151] focus:border-[#E8292E] focus:ring-[#E8292E]/20",
@@ -557,7 +557,7 @@ export default function ChannelNewForm({
               value={form.bio}
               onChange={(e) => set("bio", e.target.value)}
               className={twMerge(
-                "w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 transition-colors resize-none placeholder:text-gray-300 dark:placeholder:text-[#6B7280] bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB]",
+                "w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 transition-colors resize-none placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB]",
                 fieldErrors.bio
                   ? "border-red-400 focus:border-red-400 focus:ring-red-100"
                   : "border-gray-200 dark:border-[#374151] focus:border-[#E8292E] focus:ring-[#E8292E]/20"
@@ -720,7 +720,7 @@ export default function ChannelNewForm({
               value={form.bio}
               onChange={(e) => set("bio", e.target.value)}
               className={twMerge(
-                "w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 transition-colors resize-none placeholder:text-gray-300 dark:placeholder:text-[#6B7280] bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB]",
+                "w-full px-4 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 transition-colors resize-none placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB]",
                 fieldErrors.bio
                   ? "border-red-400 focus:border-red-400 focus:ring-red-100"
                   : "border-gray-200 dark:border-[#374151] focus:border-[#E8292E] focus:ring-[#E8292E]/20"
