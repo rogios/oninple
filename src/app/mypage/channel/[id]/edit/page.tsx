@@ -58,7 +58,7 @@ export default async function ChannelEditPage({
         <p className="text-sm text-gray-500 mt-1">등록된 정보를 수정합니다</p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+      <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
         <ChannelEditForm channel={channel as ChannelData} userId={user.id} />
       </div>
     </div>
