@@ -105,7 +105,7 @@ interface FormState {
 
 function Label({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
-    <label className="block text-sm font-semibold text-[#111111] dark:text-[#F9FAFB] mb-1.5">
+    <label className="block text-sm font-semibold text-[#111111] dark:text-gray-200 mb-1.5">
       {children}
       {required && <span className="text-[#E8292E] ml-0.5">*</span>}
     </label>

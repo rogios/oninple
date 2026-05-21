@@ -29,27 +29,27 @@ export default async function ChannelNewPage() {
       <div className="flex items-center gap-3 mb-8">
         <Link
           href="/mypage"
-          className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 hover:text-[#111111] dark:hover:text-gray-200 transition-colors"
+          className="flex items-center gap-1 text-sm text-gray-500 hover:text-[#111111] transition-colors"
         >
           <ChevronLeft size={16} />
           마이페이지
         </Link>
-        <span className="text-gray-300 dark:text-gray-600">/</span>
-        <span className="text-sm font-semibold text-[#111111] dark:text-gray-200">채널 등록</span>
+        <span className="text-gray-300">/</span>
+        <span className="text-sm font-semibold text-[#111111]">채널 등록</span>
       </div>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#111111] dark:text-gray-200">
+        <h1 className="text-2xl font-bold text-[#111111]">
           {userRole === "editor" ? "편집 프로듀서 등록" : "채널 등록"}
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-sm text-gray-500 mt-1">
           {userRole === "editor"
             ? "내 편집 서비스를 디렉토리에 등록하세요"
             : "내 채널을 디렉토리에 등록하세요"}
         </p>
       </div>
 
-      <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm p-6 sm:p-8">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
         <ChannelNewForm userId={user.id} userRole={userRole} />
       </div>
     </div>
