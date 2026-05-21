@@ -39,7 +39,7 @@ function Hero() {
             프로필 등록하기 →
           </Link>
           <Link
-            href="/influencers"
+            href="/#influencers"
             className="inline-flex items-center justify-center gap-2 border border-white/30 hover:border-white text-white text-sm font-semibold px-7 py-3 rounded-full transition-colors"
           >
             인플루언서 찾아보기 →
@@ -180,7 +180,7 @@ function CTA() {
             프로필 등록하기 →
           </Link>
           <Link
-            href="/influencers"
+            href="/#influencers"
             className="inline-flex items-center justify-center gap-2 border border-white/30 hover:border-white text-white text-sm font-semibold px-7 py-3 rounded-full transition-colors"
           >
             인플루언서 찾아보기 →

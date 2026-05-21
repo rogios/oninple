@@ -2,9 +2,9 @@ import Link from "next/link";
 
 const footerLinks = {
   서비스: [
-    { label: "인플루언서 찾기", href: "/influencers" },
-    { label: "AI 편집자", href: "/editors" },
-    { label: "광고주 등록", href: "/advertisers" },
+    { label: "인플루언서 찾기", href: "/#influencers" },
+    { label: "AI 편집자", href: "/#editors" },
+    { label: "광고주 등록", href: "/#advertisers" },
   ],
   회사: [
     { label: "소개", href: "/about" },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { Search, X, Users, Eye, BadgeCheck, Clock, Film, ChevronDown } from "lucide-react";
 import CTASection from "./CTASection";
 import ProfileModal from "./ProfileModal";
@@ -619,21 +619,26 @@ export default function ChannelDirectory({
           </p>
         </div>
       ) : (
-        SECTIONS.map((s) => (
-          <PlatformSection
-            key={s.id}
-            id={s.id}
-            platform={s.platform}
-            logo={s.logo}
-            title={s.title}
-            channels={byPlatform[s.id]}
-            search={search}
-            isActive={activePlatforms ? activePlatforms.includes(s.platform) : true}
-            isEditor={s.isEditor}
-            cols={cols}
-            onCardClick={setSelected}
-          />
-        ))
+        <>
+          <div id="influencers" />
+          {SECTIONS.map((s) => (
+            <React.Fragment key={s.id}>
+              {s.id === "editor-section" && <div id="editors" />}
+              <PlatformSection
+                id={s.id}
+                platform={s.platform}
+                logo={s.logo}
+                title={s.title}
+                channels={byPlatform[s.id]}
+                search={search}
+                isActive={activePlatforms ? activePlatforms.includes(s.platform) : true}
+                isEditor={s.isEditor}
+                cols={cols}
+                onCardClick={setSelected}
+              />
+            </React.Fragment>
+          ))}
+        </>
       )}
 
       <CTASection />
