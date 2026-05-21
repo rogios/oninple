@@ -776,7 +776,7 @@ export default function ChannelNewForm({
                   ) : (
                     <div className="flex flex-col items-center gap-1 px-2 text-center">
                       <Upload size={16} className="text-gray-300" />
-                      <span className="text-[10px] text-gray-300 leading-tight">권장 가로 500px 이하 / 최대 2MB</span>
+                      <span className="text-[10px] text-gray-600 dark:text-gray-400 leading-tight">권장 가로 500px 이하 / 최대 2MB</span>
                     </div>
                   )}
                 </div>
@@ -808,7 +808,7 @@ export default function ChannelNewForm({
                   ) : (
                     <div className="flex flex-col items-center gap-1 px-2 text-center">
                       <Upload size={16} className="text-gray-300" />
-                      <span className="text-[10px] text-gray-300 leading-tight">권장 가로 500px 이하 / 최대 2MB</span>
+                      <span className="text-[10px] text-gray-600 dark:text-gray-400 leading-tight">권장 가로 500px 이하 / 최대 2MB</span>
                     </div>
                   )}
                 </div>
