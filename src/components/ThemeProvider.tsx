@@ -9,7 +9,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    setIsDark(document.documentElement.classList.contains("dark"));
+    const saved = localStorage.getItem("theme");
+    const dark = saved !== "light";
+    setIsDark(dark);
+    if (dark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, []);
 
   function toggle() {
