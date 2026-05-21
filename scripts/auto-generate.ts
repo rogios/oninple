@@ -148,8 +148,7 @@ async function main() {
     topic
   );
 
-  // 카테고리별 순환 구조 기준 전역 순번: 1, 2, 3, ...
-  const postNumber = topicIndices[categoryIndex] * topics.categories.length + categoryIndex + 1;
+  const postNumber = Date.now();
   const slug = buildSlug(postNumber);
 
   console.log(`\n📝 제목: ${title}`);

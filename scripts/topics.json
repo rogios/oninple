@@ -33,31 +33,31 @@
     {
       "name": "AI",
       "topics": [
-        { "title": "크리에이터를 위한 AI 영상 편집 툴 TOP 5", "thumbnail": "" },
-        { "title": "ChatGPT로 블로그 글쓰기 속도를 10배 높이는 방법", "thumbnail": "" },
-        { "title": "AI 이미지 생성 도구 비교: Midjourney vs DALL-E vs Stable Diffusion", "thumbnail": "" },
-        { "title": "AI로 유튜브 썸네일·제목 최적화하는 법", "thumbnail": "" },
-        { "title": "생성형 AI 시대의 콘텐츠 진정성 딜레마", "thumbnail": "" },
-        { "title": "AI 아바타·버추얼 인플루언서의 현재와 미래", "thumbnail": "" },
-        { "title": "SNS 캡션 자동화: AI로 게시물 최적화하기", "thumbnail": "" },
-        { "title": "AI 기반 트렌드 예측 도구로 콘텐츠 기획하기", "thumbnail": "" },
-        { "title": "크리에이터 이코노미에서 AI의 역할: 위협인가 기회인가", "thumbnail": "" },
-        { "title": "크리에이터 채널 데이터 분석: AI 도구로 성장 전략 세우기", "thumbnail": "" }
+        { "title": "크리에이터를 위한 AI 영상 편집 툴 TOP 5", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "ChatGPT로 블로그 글쓰기 속도를 10배 높이는 방법", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "AI 이미지 생성 도구 비교: Midjourney vs DALL-E vs Stable Diffusion", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "AI로 유튜브 썸네일·제목 최적화하는 법", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "생성형 AI 시대의 콘텐츠 진정성 딜레마", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "AI 아바타·버추얼 인플루언서의 현재와 미래", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "SNS 캡션 자동화: AI로 게시물 최적화하기", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "AI 기반 트렌드 예측 도구로 콘텐츠 기획하기", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "크리에이터 이코노미에서 AI의 역할: 위협인가 기회인가", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "크리에이터 채널 데이터 분석: AI 도구로 성장 전략 세우기", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" }
       ]
     },
     {
       "name": "플랫폼 소식",
       "topics": [
-        { "title": "온인플(Oninple) 플랫폼 소개: 크리에이터와 브랜드를 연결하는 새로운 방식", "thumbnail": "" },
-        { "title": "인스타그램 2025년 알고리즘 업데이트 총정리", "thumbnail": "" },
-        { "title": "유튜브 파트너 프로그램 변경사항: 수익화 조건 최신 가이드", "thumbnail": "" },
-        { "title": "틱톡 Shop 국내 출시: 크리에이터 커머스 시대 개막", "thumbnail": "" },
-        { "title": "네이버 블로그 vs 브런치 vs 티스토리: 2025년 최적의 블로그 플랫폼은?", "thumbnail": "" },
-        { "title": "인스타그램 스레드(Threads)의 성장과 크리에이터 기회", "thumbnail": "" },
-        { "title": "카카오 채널 비즈니스 활용법: 인플루언서 마케팅 새로운 채널", "thumbnail": "" },
-        { "title": "유튜브 멤버십 vs 슈퍼챗: 크리에이터 수익 극대화 전략", "thumbnail": "" },
-        { "title": "글로벌 숏폼 플랫폼 경쟁: 틱톡·릴스·쇼츠의 2025년 판세", "thumbnail": "" },
-        { "title": "SNS 플랫폼별 광고 단가 비교: 브랜드 마케터를 위한 가이드", "thumbnail": "" }
+        { "title": "온인플(Oninple) 플랫폼 소개: 크리에이터와 브랜드를 연결하는 새로운 방식", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "인스타그램 2025년 알고리즘 업데이트 총정리", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "유튜브 파트너 프로그램 변경사항: 수익화 조건 최신 가이드", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "틱톡 Shop 국내 출시: 크리에이터 커머스 시대 개막", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "네이버 블로그 vs 브런치 vs 티스토리: 2025년 최적의 블로그 플랫폼은?", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "인스타그램 스레드(Threads)의 성장과 크리에이터 기회", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "카카오 채널 비즈니스 활용법: 인플루언서 마케팅 새로운 채널", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "유튜브 멤버십 vs 슈퍼챗: 크리에이터 수익 극대화 전략", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "글로벌 숏폼 플랫폼 경쟁: 틱톡·릴스·쇼츠의 2025년 판세", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "SNS 플랫폼별 광고 단가 비교: 브랜드 마케터를 위한 가이드", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" }
       ]
     }
   ]
