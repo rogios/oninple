@@ -44,21 +44,21 @@ export default async function ChannelEditPage({
       <div className="flex items-center gap-3 mb-8">
         <Link
           href="/mypage"
-          className="flex items-center gap-1 text-sm text-gray-500 hover:text-[#111111] transition-colors"
+          className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400 hover:text-[#111111] dark:hover:text-gray-200 transition-colors"
         >
           <ChevronLeft size={16} />
           마이페이지
         </Link>
-        <span className="text-gray-300">/</span>
-        <span className="text-sm font-semibold text-[#111111]">채널 수정</span>
+        <span className="text-gray-300 dark:text-gray-600">/</span>
+        <span className="text-sm font-semibold text-[#111111] dark:text-gray-200">채널 수정</span>
       </div>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[#111111]">{platformLabel} 수정</h1>
-        <p className="text-sm text-gray-500 mt-1">등록된 정보를 수정합니다</p>
+        <h1 className="text-2xl font-bold text-[#111111] dark:text-gray-200">{platformLabel} 수정</h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">등록된 정보를 수정합니다</p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+      <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm p-6 sm:p-8">
         <ChannelEditForm channel={channel as ChannelData} userId={user.id} />
       </div>
     </div>
