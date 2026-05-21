@@ -49,7 +49,7 @@ export default async function ChannelNewPage() {
         </p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+      <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
         <ChannelNewForm userId={user.id} userRole={userRole} />
       </div>
     </div>
