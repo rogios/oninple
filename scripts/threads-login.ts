@@ -44,7 +44,10 @@ async function main() {
   });
   const page = await context.newPage();
 
-  await page.goto("https://www.threads.net/login", { waitUntil: "domcontentloaded" });
+  // Threads가 자동화 브라우저에 4xx를 반환할 수 있으므로 에러를 무시하고 브라우저만 열어둠
+  await page.goto("https://www.threads.com/", { waitUntil: "commit", timeout: 30000 }).catch(() => {});
+
+  console.log("   👉 브라우저에 페이지가 안 열리면 주소창에 직접 입력: https://www.threads.com/");
 
   await waitForEnter();
 

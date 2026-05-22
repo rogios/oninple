@@ -51,12 +51,12 @@ async function postToThreads(content: string): Promise<void> {
   const page = await context.newPage();
 
   try {
-    await page.goto("https://www.threads.net/", {
+    await page.goto("https://www.threads.com/", {
       waitUntil: "domcontentloaded",
       timeout: 30000,
     });
 
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(3000);
 
     // 로그인 여부 확인
     if (page.url().includes("login")) {
@@ -65,13 +65,14 @@ async function postToThreads(content: string): Promise<void> {
       );
     }
 
-    // 작성 영역 클릭 (Threads 웹 UI 셀렉터 우선순위 순)
+    // 작성 영역 클릭 (사이드바 "새로운 스레드" 링크 우선)
     const composeSelectors = [
-      '[aria-label="New thread"]',
+      'text="새로운 스레드"',
+      'text="New thread"',
+      '[role="button"][aria-label*="텍스트 필드"]',
+      '[role="button"][aria-label*="text field"]',
       'a[href="/compose/post/"]',
-      'span:has-text("Start a thread")',
-      'span:has-text("스레드를 시작하세요")',
-      '[placeholder*="thread"]',
+      '[aria-label="New thread"]',
     ];
 
     let opened = false;
@@ -86,26 +87,21 @@ async function postToThreads(content: string): Promise<void> {
     }
 
     if (!opened) {
-      // 단축키 시도 (일부 버전에서 Ctrl+N 또는 C키)
-      await page.keyboard.press("c");
-      await page.waitForTimeout(1000);
-      const editable = page.locator('[contenteditable="true"], [data-lexical-editor="true"]').first();
-      opened = await editable.isVisible({ timeout: 3000 }).catch(() => false);
-    }
-
-    if (!opened) {
       throw new Error(
         "작성 영역을 찾을 수 없습니다. Threads UI가 변경됐을 수 있습니다."
       );
     }
 
+    // 다이얼로그(모달) 열릴 때까지 대기
+    await page.waitForSelector('[role="dialog"]', { timeout: 8000 }).catch(() => {});
     await page.waitForTimeout(1000);
 
-    // 텍스트 입력
+    // 텍스트 입력 (Lexical 에디터)
     const editorSelectors = [
-      '[contenteditable="true"]',
       '[data-lexical-editor="true"]',
-      'textarea',
+      '[role="dialog"] [contenteditable="true"]',
+      '[contenteditable="true"][role="textbox"]',
+      '[contenteditable="true"]',
     ];
 
     let typed = false;
@@ -127,19 +123,20 @@ async function postToThreads(content: string): Promise<void> {
 
     await page.waitForTimeout(1500);
 
-    // 게시 버튼 클릭
+    // 게시 버튼 클릭 (div[role="button"] 형태 — Threads UI는 <button>이 아닌 div 사용)
     const postSelectors = [
-      'button:has-text("Post")',
-      'button:has-text("게시")',
+      '[role="dialog"] [role="button"]:has-text("게시")',
+      '[role="dialog"] [role="button"]:has-text("Post")',
+      '[role="button"]:has-text("게시")',
+      '[role="button"]:has-text("Post")',
       '[data-testid="thread-post-button"]',
-      'div[role="button"]:has-text("Post")',
     ];
 
     let posted = false;
     for (const sel of postSelectors) {
       try {
         const btn = page.locator(sel).first();
-        if (await btn.isEnabled({ timeout: 3000 })) {
+        if (await btn.isVisible({ timeout: 3000 })) {
           await btn.click();
           posted = true;
           break;
