@@ -123,7 +123,9 @@ export default function CreatorModal({ creator, onClose }: Props) {
                   <div className="text-lg font-black text-[#111111]">
                     {formatCount(creator.avgViews)}
                   </div>
-                  <div className="text-[10px] text-gray-400 mt-0.5">평균 조회수</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">
+                    {creator.platform === "tiktok" ? "누적 좋아요" : "평균 조회수"}
+                  </div>
                 </div>
                 <div className="bg-gray-50 rounded-xl p-3 text-center">
                   <div className="text-lg font-black text-[#111111]">

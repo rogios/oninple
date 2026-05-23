@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
-import { Search, X, Users, Eye, BadgeCheck, Clock, Film, ChevronDown } from "lucide-react";
+import { Search, X, Users, Eye, Heart, BadgeCheck, Clock, Film, ChevronDown } from "lucide-react";
 import CTASection from "./CTASection";
 import ProfileModal from "./ProfileModal";
 
@@ -279,8 +279,12 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
             </p>
             {ch.avg_views != null && (
               <p className="flex items-center gap-1 text-xs text-gray-700 dark:text-[#9CA3AF]">
-                <Eye size={11} className="text-gray-400 dark:text-[#6B7280] shrink-0" />
-                <span className="hidden sm:inline">평균 조회수</span>
+                {ch.platform === "tiktok"
+                  ? <Heart size={11} className="text-gray-400 dark:text-[#6B7280] shrink-0" />
+                  : <Eye size={11} className="text-gray-400 dark:text-[#6B7280] shrink-0" />}
+                <span className="hidden sm:inline">
+                  {ch.platform === "tiktok" ? "누적 좋아요" : "평균 조회수"}
+                </span>
                 <span className="font-semibold text-red-500">{formatCount(ch.avg_views)}</span>
               </p>
             )}

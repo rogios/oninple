@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Pencil, Trash2, Users, Eye, BadgeCheck, CheckCircle2 } from "lucide-react";
+import { Pencil, Trash2, Users, Eye, Heart, BadgeCheck, CheckCircle2 } from "lucide-react";
 import { deleteChannel } from "@/app/actions/channel";
 
 // ─── 상수 ────────────────────────────────────────────────────────────────────
@@ -148,8 +148,12 @@ export default function ChannelCard({ channel }: { channel: ChannelCardData }) {
           )}
           {channel.avg_views != null && (
             <p className="flex items-center gap-1 text-xs text-gray-700 dark:text-[#9CA3AF]">
-              <Eye size={11} className="text-gray-400 shrink-0" />
-              <span className="hidden sm:inline">평균 조회수</span>
+              {channel.platform === "tiktok"
+                ? <Heart size={11} className="text-gray-400 shrink-0" />
+                : <Eye size={11} className="text-gray-400 shrink-0" />}
+              <span className="hidden sm:inline">
+                {channel.platform === "tiktok" ? "누적 좋아요" : "평균 조회수"}
+              </span>
               <span className="font-semibold text-red-500">
                 {formatCount(channel.avg_views)}
               </span>

@@ -647,7 +647,7 @@ export default function ChannelEditForm({
                 />
               )}
             </Field>
-            <Field label="평균 조회수" required error={fieldErrors.avg_views}>
+            <Field label={platform === "tiktok" ? "누적 좋아요 수" : "평균 조회수"} required error={fieldErrors.avg_views}>
               <Input
                 hasError={!!fieldErrors.avg_views}
                 type="number"
