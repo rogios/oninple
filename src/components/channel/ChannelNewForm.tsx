@@ -367,7 +367,7 @@ export default function ChannelNewForm({
       }
       if (!form.avg_views) errors.avg_views = "필수 항목입니다.";
       if (!form.upload_frequency) errors.upload_frequency = "업로드 주기를 선택해주세요.";
-      if (!form.content_format) errors.content_format = "콘텐츠 형식을 선택해주세요.";
+      if (platform !== "tiktok" && !form.content_format) errors.content_format = "콘텐츠 형식을 선택해주세요.";
       if (form.categories.length === 0) errors.categories = "최소 1개 이상 선택해주세요.";
     } else {
       if (form.work_fields.length === 0) errors.work_fields = "최소 1개 이상 선택해주세요.";
@@ -433,7 +433,7 @@ export default function ChannelNewForm({
       kakao_open_chat: form.kakao_open_chat.trim(),
       avg_views: isEditor ? null : (parseInt(form.avg_views) || null),
       upload_frequency: isEditor ? "" : form.upload_frequency,
-      content_format: isEditor ? "" : form.content_format,
+      content_format: (isEditor || platform === "tiktok") ? "" : form.content_format,
       can_collaborate: form.can_collaborate,
       audience_age: isEditor ? [] : form.audience_age,
       audience_gender: isEditor ? "" : form.audience_gender,
@@ -672,7 +672,7 @@ export default function ChannelNewForm({
                 />
               )}
             </Field>
-            <Field label="평균 조회수" required error={fieldErrors.avg_views}>
+            <Field label={platform === "tiktok" ? "누적 좋아요 수" : "평균 조회수"} required error={fieldErrors.avg_views}>
               <Input
                 hasError={!!fieldErrors.avg_views}
                 type="number"
@@ -694,7 +694,7 @@ export default function ChannelNewForm({
           </Field>
 
           {/* 6. 업로드 주기 / 콘텐츠 형식 */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className={platform === "tiktok" ? "" : "grid grid-cols-2 gap-4"}>
             <Field label="업로드 주기" required error={fieldErrors.upload_frequency}>
               <RadioGroup
                 options={UPLOAD_CYCLES.map((c) => ({ value: c, label: c }))}
@@ -702,13 +702,15 @@ export default function ChannelNewForm({
                 onChange={(v) => set("upload_frequency", v)}
               />
             </Field>
-            <Field label="콘텐츠 형식" required error={fieldErrors.content_format}>
-              <RadioGroup
-                options={(CONTENT_FORMATS[platform] ?? []).map((c) => ({ value: c, label: c }))}
-                value={form.content_format}
-                onChange={(v) => set("content_format", v)}
-              />
-            </Field>
+            {platform !== "tiktok" && (
+              <Field label="콘텐츠 형식" required error={fieldErrors.content_format}>
+                <RadioGroup
+                  options={(CONTENT_FORMATS[platform] ?? []).map((c) => ({ value: c, label: c }))}
+                  value={form.content_format}
+                  onChange={(v) => set("content_format", v)}
+                />
+              </Field>
+            )}
           </div>
 
           {/* 7. 자기소개 */}

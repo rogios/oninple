@@ -79,7 +79,9 @@ export default function CreatorCard({ creator, onClick }: Props) {
           </div>
           <div className="bg-gray-50 rounded-lg p-2 text-center">
             <div className="text-sm font-black text-[#111111]">{formatCount(creator.avgViews)}</div>
-            <div className="text-[10px] text-gray-400">평균 조회수</div>
+            <div className="text-[10px] text-gray-400">
+              {creator.platform === "tiktok" ? "🤍 누적 좋아요" : "👁 평균 조회수"}
+            </div>
           </div>
         </div>
       ) : (
