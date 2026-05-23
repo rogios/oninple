@@ -146,7 +146,7 @@ export default function ProfileModal({
             <div className="grid grid-cols-3 gap-2 mb-5">
               {[
                 { value: formatCount(channel.follower_count), label: channel.platform === "youtube" ? "구독자" : "팔로워", red: true },
-                { value: formatCount(channel.avg_views), label: "평균조회수", red: false },
+                { value: formatCount(channel.avg_views), label: channel.platform === "tiktok" ? "누적좋아요" : "평균조회수", red: false },
                 { value: channel.upload_frequency ?? "-", label: "업로드주기", red: false },
               ].map(({ value, label, red }) => (
                 <div key={label} className="bg-gray-50 dark:bg-[#374151] rounded-xl p-3 text-center">
