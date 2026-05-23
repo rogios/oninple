@@ -3,6 +3,8 @@ import { createServiceClient } from "@/lib/supabase/service";
 import HomeClient from "@/components/home/HomeClient";
 import type { DirectoryChannel } from "@/components/home/ChannelDirectory";
 
+export const dynamic = "force-dynamic";
+
 const SITE_URL = "https://oninple.com";
 
 export const metadata: Metadata = {
