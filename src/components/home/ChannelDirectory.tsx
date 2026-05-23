@@ -439,24 +439,8 @@ function PlatformSection({
           <span className="text-sm text-gray-400 dark:text-[#6B7280]">({channels.length}명 등록)</span>
         </div>
 
-        {/* Category tabs + Tier dropdown */}
+        {/* Tier dropdown + Category tabs */}
         <div className="flex items-center gap-2">
-          <div className="flex gap-2 overflow-x-auto pb-1 min-w-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {CATEGORY_TABS.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setF((s) => ({ ...s, category: tab.key }))}
-                className={`shrink-0 text-xs font-semibold px-3.5 py-1.5 rounded-full transition-colors ${
-                  f.category === tab.key
-                    ? "bg-[#111111] dark:bg-[#F9FAFB] text-white dark:text-[#111111]"
-                    : "bg-gray-100 dark:bg-[#374151] text-gray-700 dark:text-[#9CA3AF] hover:bg-gray-200 dark:hover:bg-[#4B5563]"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
           {!isEditor && (
             <div className="relative shrink-0" ref={dropdownRef}>
               <button
@@ -471,7 +455,7 @@ function PlatformSection({
                 <ChevronDown size={12} className={`transition-transform ${tierOpen ? "rotate-180" : ""}`} />
               </button>
               {tierOpen && (
-                <div className="absolute right-0 top-full mt-1.5 bg-white dark:bg-[#1F2937] border border-gray-200 dark:border-[#374151] rounded-xl shadow-lg z-20 min-w-[160px] py-1 overflow-hidden">
+                <div className="absolute left-0 top-full mt-1.5 bg-white dark:bg-[#1F2937] border border-gray-200 dark:border-[#374151] rounded-xl shadow-lg z-20 min-w-[160px] py-1 overflow-hidden">
                   {TIER_TABS.map((tab) => (
                     <button
                       key={tab.key}
@@ -489,6 +473,22 @@ function PlatformSection({
               )}
             </div>
           )}
+
+          <div className="flex gap-2 overflow-x-auto pb-1 min-w-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {CATEGORY_TABS.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setF((s) => ({ ...s, category: tab.key }))}
+                className={`shrink-0 text-xs font-semibold px-3.5 py-1.5 rounded-full transition-colors ${
+                  f.category === tab.key
+                    ? "bg-[#111111] dark:bg-[#F9FAFB] text-white dark:text-[#111111]"
+                    : "bg-gray-100 dark:bg-[#374151] text-gray-700 dark:text-[#9CA3AF] hover:bg-gray-200 dark:hover:bg-[#4B5563]"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Cards */}
