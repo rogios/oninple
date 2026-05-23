@@ -5,7 +5,7 @@ import AdminDashboard from "@/components/admin/AdminDashboard";
 import type { DashboardStats, MemberRow, AdminChannelRow } from "@/components/admin/AdminDashboard";
 import type { NoticeRow } from "@/components/admin/NoticesTab";
 import type { PostRow } from "@/components/admin/BlogTab";
-import type { AnalyticsData } from "@/components/admin/AnalyticsTab";
+import type { AnalyticsData, RawPageView } from "@/components/admin/AnalyticsTab";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -109,7 +109,6 @@ export default async function AdminPage() {
   const pageMap    = new Map<string, number>();
   const deviceMap  = new Map<string, number>();
 
-  type RawPageView = { created_at: string; referrer?: string | null; page_path?: string | null; page?: string | null; device_type?: string | null };
   for (const row of (analyticsRaw ?? []) as RawPageView[]) {
     const kst = new Date(new Date(row.created_at).getTime() + KST_OFFSET);
     const dayKey   = `${String(kst.getUTCMonth() + 1).padStart(2, "0")}/${String(kst.getUTCDate()).padStart(2, "0")}`;
@@ -130,6 +129,7 @@ export default async function AdminPage() {
     topReferrers:    Array.from(referrerMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([referrer, count]) => ({ referrer, count })),
     topPages:        Array.from(pageMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([page, count]) => ({ page, count })),
     deviceBreakdown: Array.from(deviceMap.entries()).map(([device, count]) => ({ device, count })).sort((a, b) => b.count - a.count),
+    rawRows:         (analyticsRaw ?? []) as RawPageView[],
   };
 
   const stats: DashboardStats = {

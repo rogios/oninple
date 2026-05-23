@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -13,12 +13,21 @@ import {
   Cell,
 } from "recharts";
 
+export type RawPageView = {
+  created_at: string;
+  referrer?: string | null;
+  page_path?: string | null;
+  page?: string | null;
+  device_type?: string | null;
+};
+
 export type AnalyticsData = {
   dailyViews:      { date: string; count: number }[];
   monthlyViews:    { month: string; count: number }[];
   topReferrers:    { referrer: string; count: number }[];
   topPages:        { page: string; count: number }[];
   deviceBreakdown: { device: string; count: number }[];
+  rawRows:         RawPageView[];
 };
 
 const DEVICE_COLORS: Record<string, string> = {
@@ -32,15 +41,70 @@ const DEVICE_LABELS: Record<string, string> = {
   tablet:  "태블릿",
 };
 
+type StatPeriod = "today" | "month" | "all";
+
+const STAT_PERIOD_LABELS: Record<StatPeriod, string> = {
+  today: "오늘",
+  month: "한달",
+  all: "전체",
+};
+
+const STAT_PERIOD_DESC: Record<StatPeriod, string> = {
+  today: "오늘 (KST 기준)",
+  month: "최근 30일",
+  all: "전체 기간",
+};
+
 export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
   const [period, setPeriod] = useState<"daily" | "monthly">("daily");
+  const [statPeriod, setStatPeriod] = useState<StatPeriod>("today");
 
   const chartData =
     period === "daily"
       ? data.dailyViews.map((d) => ({ label: d.date, count: d.count }))
       : data.monthlyViews.map((d) => ({ label: d.month, count: d.count }));
 
-  const totalDevices = data.deviceBreakdown.reduce((s, d) => s + d.count, 0);
+  const { filteredReferrers, filteredPages, filteredDevices } = useMemo(() => {
+    const KST_OFFSET = 9 * 60 * 60 * 1000;
+    const nowKST = new Date(Date.now() + KST_OFFSET);
+    const todayStart = new Date(
+      Date.UTC(nowKST.getUTCFullYear(), nowKST.getUTCMonth(), nowKST.getUTCDate()) - KST_OFFSET
+    );
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+    const rows = data.rawRows.filter((row) => {
+      if (statPeriod === "today") return row.created_at >= todayStart.toISOString();
+      if (statPeriod === "month") return row.created_at >= thirtyDaysAgo.toISOString();
+      return true;
+    });
+
+    const referrerMap = new Map<string, number>();
+    const pageMap     = new Map<string, number>();
+    const deviceMap   = new Map<string, number>();
+
+    for (const row of rows) {
+      const ref = row.referrer ?? "";
+      referrerMap.set(ref, (referrerMap.get(ref) ?? 0) + 1);
+      const pg = (row.page_path && row.page_path !== "") ? row.page_path : (row.page ?? "/");
+      pageMap.set(pg, (pageMap.get(pg) ?? 0) + 1);
+      const dev = row.device_type ?? "desktop";
+      deviceMap.set(dev, (deviceMap.get(dev) ?? 0) + 1);
+    }
+
+    return {
+      filteredReferrers: Array.from(referrerMap.entries())
+        .sort((a, b) => b[1] - a[1]).slice(0, 5)
+        .map(([referrer, count]) => ({ referrer, count })),
+      filteredPages: Array.from(pageMap.entries())
+        .sort((a, b) => b[1] - a[1]).slice(0, 5)
+        .map(([page, count]) => ({ page, count })),
+      filteredDevices: Array.from(deviceMap.entries())
+        .map(([device, count]) => ({ device, count }))
+        .sort((a, b) => b.count - a.count),
+    };
+  }, [data.rawRows, statPeriod]);
+
+  const filteredTotalDevices = filteredDevices.reduce((s, d) => s + d.count, 0);
 
   return (
     <div className="space-y-8">
@@ -100,18 +164,36 @@ export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
         </ResponsiveContainer>
       </section>
 
+      {/* 기간 필터 */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-gray-400 dark:text-[#6B7280] mr-1">기간</span>
+        {(["today", "month", "all"] as StatPeriod[]).map((p) => (
+          <button
+            key={p}
+            onClick={() => setStatPeriod(p)}
+            className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors ${
+              statPeriod === p
+                ? "bg-[#E8292E] text-white"
+                : "bg-gray-100 dark:bg-[#374151] text-gray-600 dark:text-[#9CA3AF] hover:bg-gray-200 dark:hover:bg-[#4B5563]"
+            }`}
+          >
+            {STAT_PERIOD_LABELS[p]}
+          </button>
+        ))}
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* 유입 경로 TOP 5 */}
         <section className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100 dark:border-[#374151]">
             <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">유입 경로 TOP 5</p>
-            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">referrer 기준 · 전체 기간</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">referrer 기준 · {STAT_PERIOD_DESC[statPeriod]}</p>
           </div>
           <div className="divide-y divide-gray-50 dark:divide-[#374151]">
-            {data.topReferrers.length === 0 ? (
+            {filteredReferrers.length === 0 ? (
               <p className="px-5 py-6 text-xs text-gray-400 dark:text-[#6B7280] text-center">데이터 없음</p>
             ) : (
-              data.topReferrers.map((r, i) => (
+              filteredReferrers.map((r, i) => (
                 <div key={i} className="px-5 py-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="text-xs font-bold text-gray-400 w-4 shrink-0">{i + 1}</span>
@@ -130,13 +212,13 @@ export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
         <section className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100 dark:border-[#374151]">
             <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB]">페이지별 조회수 TOP 5</p>
-            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">전체 기간</p>
+            <p className="text-xs text-gray-400 dark:text-[#6B7280] mt-0.5">{STAT_PERIOD_DESC[statPeriod]}</p>
           </div>
           <div className="divide-y divide-gray-50 dark:divide-[#374151]">
-            {data.topPages.length === 0 ? (
+            {filteredPages.length === 0 ? (
               <p className="px-5 py-6 text-xs text-gray-400 dark:text-[#6B7280] text-center">데이터 없음</p>
             ) : (
-              data.topPages.map((p, i) => (
+              filteredPages.map((p, i) => (
                 <div key={i} className="px-5 py-3 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="text-xs font-bold text-gray-400 w-4 shrink-0">{i + 1}</span>
@@ -152,15 +234,15 @@ export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
         {/* 디바이스 비율 */}
         <section className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 dark:border-[#374151] shadow-sm p-5">
           <p className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB] mb-1">디바이스 비율</p>
-          <p className="text-xs text-gray-400 dark:text-[#6B7280] mb-4">전체 기간</p>
-          {data.deviceBreakdown.length === 0 ? (
+          <p className="text-xs text-gray-400 dark:text-[#6B7280] mb-4">{STAT_PERIOD_DESC[statPeriod]}</p>
+          {filteredDevices.length === 0 ? (
             <p className="text-xs text-gray-400 dark:text-[#6B7280] text-center py-10">데이터 없음</p>
           ) : (
             <>
               <ResponsiveContainer width="100%" height={140}>
                 <PieChart>
                   <Pie
-                    data={data.deviceBreakdown}
+                    data={filteredDevices}
                     dataKey="count"
                     nameKey="device"
                     cx="50%"
@@ -168,7 +250,7 @@ export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
                     outerRadius={60}
                     innerRadius={36}
                   >
-                    {data.deviceBreakdown.map((d, i) => (
+                    {filteredDevices.map((d, i) => (
                       <Cell key={i} fill={DEVICE_COLORS[d.device] ?? "#6B7280"} />
                     ))}
                   </Pie>
@@ -187,9 +269,9 @@ export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
                 </PieChart>
               </ResponsiveContainer>
               <div className="space-y-2 mt-3">
-                {data.deviceBreakdown.map((d) => {
-                  const pct = totalDevices
-                    ? Math.round((d.count / totalDevices) * 100)
+                {filteredDevices.map((d) => {
+                  const pct = filteredTotalDevices
+                    ? Math.round((d.count / filteredTotalDevices) * 100)
                     : 0;
                   return (
                     <div key={d.device} className="flex items-center gap-2">
