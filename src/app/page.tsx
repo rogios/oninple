@@ -51,7 +51,8 @@ export default async function HomePage() {
   const { data: d1, error } = await supabase
     .from("channels")
     .select(`${BASE_SELECT}, is_verified`)
-    .order("follower_count", { ascending: false });
+    .order("follower_count", { ascending: false, nullsFirst: false })
+    .order("created_at",      { ascending: true });
 
   if (!error && d1) {
     channels = d1 as DirectoryChannel[];
@@ -59,7 +60,8 @@ export default async function HomePage() {
     const { data: d2 } = await supabase
       .from("channels")
       .select(BASE_SELECT)
-      .order("follower_count", { ascending: false });
+      .order("follower_count", { ascending: false, nullsFirst: false })
+      .order("created_at",      { ascending: true });
     channels = (d2 as DirectoryChannel[]) ?? [];
   }
 
