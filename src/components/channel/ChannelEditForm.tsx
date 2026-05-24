@@ -523,10 +523,10 @@ export default function ChannelEditForm({
       {/* 편집프로듀서 전용 필드 */}
       {isEditor ? (
         <>
-          <Field label="닉네임" required error={fieldErrors.channel_name}>
+          <Field label="브랜드 네임" required error={fieldErrors.channel_name}>
             <Input
               hasError={!!fieldErrors.channel_name}
-              placeholder="편집자 닉네임을 입력하세요"
+              placeholder="브랜드 네임을 입력하세요"
               value={form.channel_name}
               onChange={(e) => set("channel_name", e.target.value)}
             />
