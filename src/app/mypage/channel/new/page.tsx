@@ -16,13 +16,19 @@ export default async function ChannelNewPage() {
 
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .single();
+  const [{ data: profile }, { data: editorChannel }] = await Promise.all([
+    supabase.from("profiles").select("role").eq("id", user.id).single(),
+    supabase
+      .from("channels")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("platform", "editor")
+      .limit(1)
+      .maybeSingle(),
+  ]);
 
   const userRole = (profile?.role ?? "influencer") as string;
+  const hasEditorChannel = !!editorChannel;
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
@@ -50,7 +56,7 @@ export default async function ChannelNewPage() {
       </div>
 
       <div className="bg-white dark:bg-[#1F2937] rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
-        <ChannelNewForm userId={user.id} userRole={userRole} />
+        <ChannelNewForm userId={user.id} userRole={userRole} hasEditorChannel={hasEditorChannel} />
       </div>
     </div>
   );

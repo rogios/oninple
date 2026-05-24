@@ -206,16 +206,18 @@ function RadioGroup({
 export default function ChannelNewForm({
   userId,
   userRole,
+  hasEditorChannel,
 }: {
   userId: string;
   userRole: string;
+  hasEditorChannel: boolean;
 }) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const feedThumb1Ref = useRef<HTMLInputElement>(null);
   const feedThumb2Ref = useRef<HTMLInputElement>(null);
 
-  const initialPlatform: Platform = userRole === "editor" ? "editor" : "youtube";
+  const initialPlatform: Platform = userRole === "editor" && !hasEditorChannel ? "editor" : "youtube";
   const [platform, setPlatform] = useState<Platform>(initialPlatform);
   const [form, setForm] = useState<FormState>(INITIAL);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -466,26 +468,24 @@ export default function ChannelNewForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* 플랫폼 탭 — editor 역할은 탭 없이 바로 폼 표시 */}
-      {userRole !== "editor" && (
-        <div className="flex gap-1 bg-gray-100 dark:bg-[#374151] p-1 rounded-xl">
-          {PLATFORMS.filter((p) => p.value !== "editor").map((p) => (
-            <button
-              key={p.value}
-              type="button"
-              onClick={() => { setPlatform(p.value as Platform); setForm(INITIAL); setFieldErrors({}); setFetchedProfileUrl(null); setImagePreview(null); setImageFile(null); setFeedThumb1(null); setFeedThumb2(null); setYtAutoFilled(false); setYtError(null); setYtDisplayFollowers(""); }}
-              className={[
-                "flex-1 py-2 text-sm font-semibold rounded-lg transition-colors",
-                platform === p.value
-                  ? "bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB] shadow-sm"
-                  : "text-gray-700 dark:text-[#9CA3AF] hover:text-gray-700 dark:hover:text-[#F9FAFB]",
-              ].join(" ")}
-            >
-              {p.label}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* 플랫폼 탭 — editor 채널이 이미 등록된 경우 editor 탭만 숨김 */}
+      <div className="flex gap-1 bg-gray-100 dark:bg-[#374151] p-1 rounded-xl">
+        {PLATFORMS.filter((p) => !(p.value === "editor" && hasEditorChannel)).map((p) => (
+          <button
+            key={p.value}
+            type="button"
+            onClick={() => { setPlatform(p.value as Platform); setForm(INITIAL); setFieldErrors({}); setFetchedProfileUrl(null); setImagePreview(null); setImageFile(null); setFeedThumb1(null); setFeedThumb2(null); setYtAutoFilled(false); setYtError(null); setYtDisplayFollowers(""); }}
+            className={[
+              "flex-1 py-2 text-sm font-semibold rounded-lg transition-colors",
+              platform === p.value
+                ? "bg-white dark:bg-[#1F2937] text-[#111111] dark:text-[#F9FAFB] shadow-sm"
+                : "text-gray-700 dark:text-[#9CA3AF] hover:text-gray-700 dark:hover:text-[#F9FAFB]",
+            ].join(" ")}
+          >
+            {p.label}
+          </button>
+        ))}
+      </div>
 
       {/* 프로필 이미지 */}
       <div>
