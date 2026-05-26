@@ -134,38 +134,42 @@ function buildImagePrompt(title: string, category: string): string {
   );
 }
 
-async function generateThumbnail(apiKey: string, prompt: string): Promise<Buffer> {
+async function generateThumbnail(apiKey: string, prompt: string): Promise<ArrayBuffer> {
   const endpoint =
-    `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${apiKey}`;
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`;
 
   const res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      instances: [{ prompt }],
-      parameters: { sampleCount: 1 },
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: { responseModalities: ["IMAGE"] },
     }),
   });
 
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`Imagen API 오류 (${res.status}): ${err}`);
+    throw new Error(`이미지 생성 API 오류 (${res.status}): ${err}`);
   }
 
   const json = await res.json() as {
-    predictions: { bytesBase64Encoded: string; mimeType: string }[];
+    candidates: {
+      content: { parts: { inlineData?: { data: string; mimeType: string } }[] };
+    }[];
   };
 
-  const b64 = json.predictions?.[0]?.bytesBase64Encoded;
-  if (!b64) throw new Error("Imagen 응답에 이미지 데이터가 없습니다");
+  const inlineData = json.candidates?.[0]?.content?.parts
+    ?.find(p => p.inlineData)?.inlineData;
+  if (!inlineData) throw new Error("이미지 응답에 데이터가 없습니다");
 
-  return Buffer.from(b64, "base64");
+  const buf = Buffer.from(inlineData.data, "base64");
+  return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer;
 }
 
 async function uploadThumbnail(
   supabaseUrl: string,
   supabaseKey: string,
-  imageBuffer: Buffer,
+  imageBuffer: ArrayBuffer,
   slug: string
 ): Promise<string> {
   const filename = `${slug}.png`;
@@ -342,7 +346,7 @@ async function main() {
     try {
       news = await fetchNaverNews(naverClientId, naverClientSecret, keyword);
       console.log(`   ${news.length}개 뉴스 수집 완료`);
-      news.forEach((n, i) => console.log(`   [${i + 1}] ${n.title}`));
+      news.forEach((n, i) => console.log(`   [${i + 1}] ${n.title}\n        ${n.link}`));
     } catch (err) {
       console.warn(`⚠️  네이버 뉴스 API 실패 (뉴스 없이 진행): ${err}`);
     }
@@ -411,6 +415,34 @@ async function main() {
   console.log(`\n✅ 발행 완료!`);
   console.log(`   ID  : ${data.id}`);
   console.log(`   URL : https://oninple.com/blog/${slug}`);
+
+  // reference_news 저장 (컬럼이 없으면 경고만 출력)
+  if (news.length > 0) {
+    const referenceNews = news.map(n => ({ title: n.title, url: n.link }));
+    console.log(`\n📰 참고 뉴스 저장 중...`);
+    referenceNews.forEach((n, i) => console.log(`   [${i + 1}] ${n.title}\n        ${n.url}`));
+
+    const patchRes = await fetch(
+      `${supabaseUrl}/rest/v1/posts?id=eq.${data.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": supabaseKey,
+          "Authorization": `Bearer ${supabaseKey}`,
+        },
+        body: JSON.stringify({ reference_news: referenceNews }),
+      }
+    );
+
+    if (!patchRes.ok) {
+      const err = await patchRes.text();
+      console.warn(`⚠️  reference_news 저장 실패 (${patchRes.status}): ${err}`);
+      console.warn(`   → Supabase posts 테이블에 reference_news jsonb 컬럼을 추가해주세요.`);
+    } else {
+      console.log(`   ✅ reference_news 저장 완료`);
+    }
+  }
 
   // 다음 실행을 위한 state 업데이트
   const newTopicIndices = [...topicIndices];
