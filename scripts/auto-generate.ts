@@ -336,34 +336,6 @@ async function main() {
   console.log(`   ID  : ${data.id}`);
   console.log(`   URL : https://oninple.com/blog/${slug}`);
 
-  // reference_news 저장 (컬럼이 없으면 경고만 출력)
-  if (news.length > 0) {
-    const referenceNews = news.map(n => ({ title: n.title, url: n.link }));
-    console.log(`\n📰 참고 뉴스 저장 중...`);
-    referenceNews.forEach((n, i) => console.log(`   [${i + 1}] ${n.title}\n        ${n.url}`));
-
-    const patchRes = await fetch(
-      `${supabaseUrl}/rest/v1/posts?id=eq.${data.id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": supabaseKey,
-          "Authorization": `Bearer ${supabaseKey}`,
-        },
-        body: JSON.stringify({ reference_news: referenceNews }),
-      }
-    );
-
-    if (!patchRes.ok) {
-      const err = await patchRes.text();
-      console.warn(`⚠️  reference_news 저장 실패 (${patchRes.status}): ${err}`);
-      console.warn(`   → Supabase posts 테이블에 reference_news jsonb 컬럼을 추가해주세요.`);
-    } else {
-      console.log(`   ✅ reference_news 저장 완료`);
-    }
-  }
-
   // 다음 실행을 위한 state 업데이트
   const newTopicIndices = [...topicIndices];
   newTopicIndices[categoryIndex] = (topicIndex + 1) % category.topics.length;
