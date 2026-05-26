@@ -136,7 +136,7 @@ function buildImagePrompt(title: string, category: string): string {
 
 async function generateThumbnail(apiKey: string, prompt: string): Promise<ArrayBuffer> {
   const endpoint =
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${apiKey}`;
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`;
 
   const res = await fetch(endpoint, {
     method: "POST",
