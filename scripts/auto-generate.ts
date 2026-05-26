@@ -5,6 +5,8 @@
  *   GOOGLE_GEMINI_API_KEY
  *   SUPABASE_URL
  *   SUPABASE_SERVICE_ROLE_KEY
+ *   NAVER_CLIENT_ID
+ *   NAVER_CLIENT_SECRET
  *
  * 실행:
  *   npx ts-node --project scripts/tsconfig.json scripts/auto-generate.ts
@@ -27,10 +29,53 @@ interface State {
   topicIndices: number[];
 }
 
+interface NewsItem {
+  title: string;
+  description: string;
+  pubDate: string;
+  link: string;
+}
+
 interface GeneratedPost {
   title: string;
   summary: string;
   content: string;
+}
+
+const CATEGORY_KEYWORDS: Record<string, string> = {
+  "크리에이터": "유튜브 크리에이터",
+  "인플루언서 마케팅": "인플루언서 마케팅",
+  "AI": "AI 영상 편집",
+  "플랫폼 소식": "유튜브 인스타그램 틱톡",
+};
+
+async function fetchNaverNews(
+  clientId: string,
+  clientSecret: string,
+  keyword: string
+): Promise<NewsItem[]> {
+  const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(keyword)}&display=3&sort=date`;
+
+  const res = await fetch(url, {
+    headers: {
+      "X-Naver-Client-Id": clientId,
+      "X-Naver-Client-Secret": clientSecret,
+    },
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`네이버 뉴스 API 오류 (${res.status}): ${err}`);
+  }
+
+  const json = await res.json() as { items: { title: string; description: string; pubDate: string; link: string }[] };
+
+  return json.items.map(item => ({
+    title: item.title.replace(/<[^>]+>/g, ""),
+    description: item.description.replace(/<[^>]+>/g, ""),
+    pubDate: item.pubDate,
+    link: item.link,
+  }));
 }
 
 function buildSlug(postNumber: number): string {
@@ -46,11 +91,16 @@ function buildSlug(postNumber: number): string {
 async function generatePost(
   apiKey: string,
   category: string,
-  topic: string
+  topic: string,
+  news: NewsItem[]
 ): Promise<GeneratedPost> {
+  const newsSection = news.length > 0
+    ? `\n아래는 "${category}" 카테고리와 관련된 최신 뉴스 3개입니다. 글 작성 시 이 뉴스의 내용과 트렌드를 자연스럽게 반영해주세요.\n\n${news.map((n, i) => `[뉴스 ${i + 1}] ${n.title}\n${n.description}\n(${n.pubDate})`).join("\n\n")}\n`
+    : "";
+
   const prompt = `당신은 크리에이터 이코노미·인플루언서 마케팅 전문 블로그 에디터입니다.
 온인플(Oninple) 플랫폼 블로그에 게재할 글을 작성해주세요.
-
+${newsSection}
 카테고리: ${category}
 주제: ${topic}
 
@@ -117,6 +167,8 @@ async function main() {
   const geminiKey = process.env.GOOGLE_GEMINI_API_KEY;
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const naverClientId = process.env.NAVER_CLIENT_ID;
+  const naverClientSecret = process.env.NAVER_CLIENT_SECRET;
 
   if (!geminiKey || !supabaseUrl || !supabaseKey) {
     console.error(
@@ -140,12 +192,29 @@ async function main() {
   console.log(`\n📅 실행 시각: ${new Date().toISOString()}`);
   console.log(`🎯 카테고리: ${category.name} (index ${categoryIndex})`);
   console.log(`📌 주제: ${topic} (index ${topicIndex})`);
+
+  let news: NewsItem[] = [];
+  if (naverClientId && naverClientSecret) {
+    const keyword = CATEGORY_KEYWORDS[category.name] ?? category.name;
+    console.log(`\n📰 네이버 뉴스 검색 중: "${keyword}"`);
+    try {
+      news = await fetchNaverNews(naverClientId, naverClientSecret, keyword);
+      console.log(`   ${news.length}개 뉴스 수집 완료`);
+      news.forEach((n, i) => console.log(`   [${i + 1}] ${n.title}`));
+    } catch (err) {
+      console.warn(`⚠️  네이버 뉴스 API 실패 (뉴스 없이 진행): ${err}`);
+    }
+  } else {
+    console.warn("⚠️  NAVER_CLIENT_ID / NAVER_CLIENT_SECRET 없음 — 뉴스 없이 진행");
+  }
+
   console.log(`\n🤖 Gemini로 글 생성 중...`);
 
   const { title, summary, content } = await generatePost(
     geminiKey,
     category.name,
-    topic
+    topic,
+    news
   );
 
   const postNumber = Date.now();
