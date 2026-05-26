@@ -64,7 +64,7 @@ export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
       ? data.dailyViews.map((d) => ({ label: d.date, count: d.count }))
       : data.monthlyViews.map((d) => ({ label: d.month, count: d.count }));
 
-  const { filteredReferrers, filteredPages, filteredDevices } = useMemo(() => {
+  const { filteredReferrers, filteredPages, filteredDevices, filteredCount } = useMemo(() => {
     const KST_OFFSET = 9 * 60 * 60 * 1000;
     const nowKST = new Date(Date.now() + KST_OFFSET);
     const todayStart = new Date(
@@ -92,6 +92,7 @@ export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
     }
 
     return {
+      filteredCount: rows.length,
       filteredReferrers: Array.from(referrerMap.entries())
         .sort((a, b) => b[1] - a[1]).slice(0, 5)
         .map(([referrer, count]) => ({ referrer, count })),
@@ -165,7 +166,7 @@ export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
       </section>
 
       {/* 기간 필터 */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         <span className="text-xs text-gray-400 dark:text-[#6B7280] mr-1">기간</span>
         {(["today", "month", "all"] as StatPeriod[]).map((p) => (
           <button
@@ -180,6 +181,12 @@ export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
             {STAT_PERIOD_LABELS[p]}
           </button>
         ))}
+        {statPeriod === "today" && (
+          <span className="ml-1 text-xs text-gray-500 dark:text-[#9CA3AF]">
+            오늘 총 방문자{" "}
+            <span className="font-bold text-[#E8292E]">{filteredCount.toLocaleString()}회</span>
+          </span>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
