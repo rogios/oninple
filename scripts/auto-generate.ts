@@ -15,6 +15,24 @@
 import * as fs from "fs";
 import * as path from "path";
 
+function loadEnv(): void {
+  const envPath = path.join(__dirname, "..", ".env.local");
+  if (!fs.existsSync(envPath)) return;
+  for (const line of fs.readFileSync(envPath, "utf-8").split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const idx = trimmed.indexOf("=");
+    if (idx === -1) continue;
+    const key = trimmed.slice(0, idx).trim();
+    const val = trimmed.slice(idx + 1).trim().replace(/^["']|["']$/g, "");
+    if (!process.env[key]) process.env[key] = val;
+  }
+  // SUPABASE_URL 폴백: 로컬 .env.local은 NEXT_PUBLIC_SUPABASE_URL을 사용
+  if (!process.env.SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    process.env.SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  }
+}
+
 interface Topic {
   title: string;
   thumbnail: string;
@@ -164,6 +182,8 @@ ${newsSection}
 }
 
 async function main() {
+  loadEnv();
+
   const geminiKey = process.env.GOOGLE_GEMINI_API_KEY;
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
