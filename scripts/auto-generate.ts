@@ -67,6 +67,128 @@ const CATEGORY_KEYWORDS: Record<string, string> = {
   "플랫폼 소식": "유튜브 인스타그램 틱톡",
 };
 
+// 이미지 프롬프트 랜덤 요소 풀
+const IMAGE_COLORS = [
+  "warm coral and cream white",
+  "deep navy blue and gold",
+  "forest green and soft white",
+  "vibrant purple and silver",
+  "burnt orange and beige",
+  "teal and dusty rose",
+  "crimson red and charcoal",
+  "sky blue and sandy beige",
+  "olive green and terracotta",
+  "midnight blue and neon yellow",
+];
+
+const IMAGE_COMPOSITIONS = [
+  "centered symmetrical composition",
+  "dynamic diagonal lines",
+  "rule of thirds asymmetric layout",
+  "overhead flat lay perspective",
+  "close-up macro detail shot",
+  "wide panoramic landscape view",
+  "split-screen diptych layout",
+  "layered depth with blurred background",
+];
+
+const IMAGE_STYLES = [
+  "minimalist clean design",
+  "bold editorial magazine style",
+  "tech-forward futuristic aesthetic",
+  "warm lifestyle photography",
+  "abstract geometric art",
+  "isometric 3D illustration",
+  "cinematic documentary style",
+  "vibrant pop art illustration",
+  "soft watercolor texture",
+  "sharp corporate infographic style",
+];
+
+const CATEGORY_IMAGE_THEMES: Record<string, string> = {
+  "크리에이터": "content creator working on video production, camera and editing setup, creative workspace",
+  "인플루언서 마케팅": "social media marketing strategy, brand collaboration, influencer partnership meeting",
+  "AI": "artificial intelligence technology, digital innovation, machine learning data visualization",
+  "플랫폼 소식": "social media platforms ecosystem, connected apps and services, digital communication",
+};
+
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function buildImagePrompt(title: string, category: string): string {
+  const theme = CATEGORY_IMAGE_THEMES[category] ?? category;
+  const color = pick(IMAGE_COLORS);
+  const composition = pick(IMAGE_COMPOSITIONS);
+  const style = pick(IMAGE_STYLES);
+
+  return (
+    `A professional blog thumbnail image for an article titled "${title}". ` +
+    `Theme: ${theme}. ` +
+    `Color palette: ${color}. ` +
+    `Composition: ${composition}. ` +
+    `Visual style: ${style}. ` +
+    `Korean digital marketing context. ` +
+    `No text, no typography, no watermarks. ` +
+    `High quality, suitable for a professional blog. 16:9 aspect ratio.`
+  );
+}
+
+async function generateThumbnail(apiKey: string, prompt: string): Promise<Buffer> {
+  const endpoint =
+    `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${apiKey}`;
+
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      instances: [{ prompt }],
+      parameters: { sampleCount: 1 },
+    }),
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Imagen API 오류 (${res.status}): ${err}`);
+  }
+
+  const json = await res.json() as {
+    predictions: { bytesBase64Encoded: string; mimeType: string }[];
+  };
+
+  const b64 = json.predictions?.[0]?.bytesBase64Encoded;
+  if (!b64) throw new Error("Imagen 응답에 이미지 데이터가 없습니다");
+
+  return Buffer.from(b64, "base64");
+}
+
+async function uploadThumbnail(
+  supabaseUrl: string,
+  supabaseKey: string,
+  imageBuffer: Buffer,
+  slug: string
+): Promise<string> {
+  const filename = `${slug}.png`;
+  const uploadUrl = `${supabaseUrl}/storage/v1/object/thumbnails/${filename}`;
+
+  const res = await fetch(uploadUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "image/png",
+      "apikey": supabaseKey,
+      "Authorization": `Bearer ${supabaseKey}`,
+    },
+    body: imageBuffer,
+  });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Supabase Storage 업로드 실패 (${res.status}): ${err}`);
+  }
+
+  return `${supabaseUrl}/storage/v1/object/public/thumbnails/${filename}`;
+}
+
 async function fetchNaverNews(
   clientId: string,
   clientSecret: string,
@@ -243,6 +365,20 @@ async function main() {
   console.log(`\n📝 제목: ${title}`);
   console.log(`📄 요약: ${summary}`);
   console.log(`🔗 슬러그: ${slug}`);
+
+  // 이미지 생성 및 업로드
+  let thumbnail: string | null = topicItem.thumbnail || null;
+  const imagePrompt = buildImagePrompt(title, category.name);
+  console.log(`\n🎨 이미지 생성 중...`);
+  console.log(`   프롬프트: ${imagePrompt.slice(0, 120)}...`);
+  try {
+    const imageBuffer = await generateThumbnail(geminiKey, imagePrompt);
+    thumbnail = await uploadThumbnail(supabaseUrl, supabaseKey, imageBuffer, slug);
+    console.log(`   ✅ 이미지 업로드 완료: ${thumbnail}`);
+  } catch (err) {
+    console.warn(`⚠️  이미지 생성 실패 (기본 썸네일 사용): ${err}`);
+  }
+
   console.log(`\n💾 Supabase에 저장 중...`);
 
   const res = await fetch(`${supabaseUrl}/rest/v1/posts`, {
@@ -259,7 +395,7 @@ async function main() {
       summary,
       category: category.name,
       slug,
-      thumbnail: topicItem.thumbnail || null,
+      thumbnail,
       published: true,
     }),
   });
