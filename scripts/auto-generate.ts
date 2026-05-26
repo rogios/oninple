@@ -7,6 +7,7 @@
  *   SUPABASE_SERVICE_ROLE_KEY
  *   NAVER_CLIENT_ID
  *   NAVER_CLIENT_SECRET
+ *   UNSPLASH_ACCESS_KEY
  *
  * 실행:
  *   npx ts-node --project scripts/tsconfig.json scripts/auto-generate.ts
@@ -67,130 +68,47 @@ const CATEGORY_KEYWORDS: Record<string, string> = {
   "플랫폼 소식": "유튜브 인스타그램 틱톡",
 };
 
-// 이미지 프롬프트 랜덤 요소 풀
-const IMAGE_COLORS = [
-  "warm coral and cream white",
-  "deep navy blue and gold",
-  "forest green and soft white",
-  "vibrant purple and silver",
-  "burnt orange and beige",
-  "teal and dusty rose",
-  "crimson red and charcoal",
-  "sky blue and sandy beige",
-  "olive green and terracotta",
-  "midnight blue and neon yellow",
-];
-
-const IMAGE_COMPOSITIONS = [
-  "centered symmetrical composition",
-  "dynamic diagonal lines",
-  "rule of thirds asymmetric layout",
-  "overhead flat lay perspective",
-  "close-up macro detail shot",
-  "wide panoramic landscape view",
-  "split-screen diptych layout",
-  "layered depth with blurred background",
-];
-
-const IMAGE_STYLES = [
-  "minimalist clean design",
-  "bold editorial magazine style",
-  "tech-forward futuristic aesthetic",
-  "warm lifestyle photography",
-  "abstract geometric art",
-  "isometric 3D illustration",
-  "cinematic documentary style",
-  "vibrant pop art illustration",
-  "soft watercolor texture",
-  "sharp corporate infographic style",
-];
-
-const CATEGORY_IMAGE_THEMES: Record<string, string> = {
-  "크리에이터": "content creator working on video production, camera and editing setup, creative workspace",
-  "인플루언서 마케팅": "social media marketing strategy, brand collaboration, influencer partnership meeting",
-  "AI": "artificial intelligence technology, digital innovation, machine learning data visualization",
-  "플랫폼 소식": "social media platforms ecosystem, connected apps and services, digital communication",
+const CATEGORY_UNSPLASH_KEYWORDS: Record<string, string> = {
+  "크리에이터": "content creator youtube",
+  "인플루언서 마케팅": "influencer marketing social media",
+  "AI": "artificial intelligence technology",
+  "플랫폼 소식": "social media platform digital",
 };
 
-function pick<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
+async function fetchUnsplashImage(
+  accessKey: string,
+  title: string,
+  category: string
+): Promise<string> {
+  const categoryKeyword = CATEGORY_UNSPLASH_KEYWORDS[category] ?? category;
+  // 제목에서 앞 3개 단어 추출 (특수문자 제거)
+  const titleKeyword = title.replace(/[:\-·「」『』【】]/g, " ").split(/\s+/).slice(0, 3).join(" ");
+  const query = `${categoryKeyword} ${titleKeyword}`;
 
-function buildImagePrompt(title: string, category: string): string {
-  const theme = CATEGORY_IMAGE_THEMES[category] ?? category;
-  const color = pick(IMAGE_COLORS);
-  const composition = pick(IMAGE_COMPOSITIONS);
-  const style = pick(IMAGE_STYLES);
+  const url =
+    `https://api.unsplash.com/search/photos` +
+    `?query=${encodeURIComponent(query)}&per_page=10&orientation=landscape`;
 
-  return (
-    `A professional blog thumbnail image for an article titled "${title}". ` +
-    `Theme: ${theme}. ` +
-    `Color palette: ${color}. ` +
-    `Composition: ${composition}. ` +
-    `Visual style: ${style}. ` +
-    `Korean digital marketing context. ` +
-    `No text, no typography, no watermarks. ` +
-    `High quality, suitable for a professional blog. 16:9 aspect ratio.`
-  );
-}
-
-async function generateThumbnail(apiKey: string, prompt: string): Promise<ArrayBuffer> {
-  const endpoint =
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`;
-
-  const res = await fetch(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { responseModalities: ["IMAGE"] },
-    }),
+  const res = await fetch(url, {
+    headers: { "Authorization": `Client-ID ${accessKey}` },
   });
 
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(`이미지 생성 API 오류 (${res.status}): ${err}`);
+    throw new Error(`Unsplash API 오류 (${res.status}): ${err}`);
   }
 
   const json = await res.json() as {
-    candidates: {
-      content: { parts: { inlineData?: { data: string; mimeType: string } }[] };
-    }[];
+    results: { urls: { regular: string }; user: { name: string } }[];
   };
 
-  const inlineData = json.candidates?.[0]?.content?.parts
-    ?.find(p => p.inlineData)?.inlineData;
-  if (!inlineData) throw new Error("이미지 응답에 데이터가 없습니다");
+  if (!json.results?.length) throw new Error("Unsplash 검색 결과 없음");
 
-  const buf = Buffer.from(inlineData.data, "base64");
-  return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength) as ArrayBuffer;
-}
+  // 상위 5개 중 랜덤 선택으로 중복 방지
+  const pool = json.results.slice(0, Math.min(5, json.results.length));
+  const picked = pool[Math.floor(Math.random() * pool.length)];
 
-async function uploadThumbnail(
-  supabaseUrl: string,
-  supabaseKey: string,
-  imageBuffer: ArrayBuffer,
-  slug: string
-): Promise<string> {
-  const filename = `${slug}.png`;
-  const uploadUrl = `${supabaseUrl}/storage/v1/object/thumbnails/${filename}`;
-
-  const res = await fetch(uploadUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "image/png",
-      "apikey": supabaseKey,
-      "Authorization": `Bearer ${supabaseKey}`,
-    },
-    body: imageBuffer,
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Supabase Storage 업로드 실패 (${res.status}): ${err}`);
-  }
-
-  return `${supabaseUrl}/storage/v1/object/public/thumbnails/${filename}`;
+  return picked.urls.regular;
 }
 
 async function fetchNaverNews(
@@ -315,6 +233,7 @@ async function main() {
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const naverClientId = process.env.NAVER_CLIENT_ID;
   const naverClientSecret = process.env.NAVER_CLIENT_SECRET;
+  const unsplashAccessKey = process.env.UNSPLASH_ACCESS_KEY;
 
   if (!geminiKey || !supabaseUrl || !supabaseKey) {
     console.error(
@@ -370,17 +289,18 @@ async function main() {
   console.log(`📄 요약: ${summary}`);
   console.log(`🔗 슬러그: ${slug}`);
 
-  // 이미지 생성 및 업로드
+  // Unsplash 이미지 검색
   let thumbnail: string | null = topicItem.thumbnail || null;
-  const imagePrompt = buildImagePrompt(title, category.name);
-  console.log(`\n🎨 이미지 생성 중...`);
-  console.log(`   프롬프트: ${imagePrompt.slice(0, 120)}...`);
-  try {
-    const imageBuffer = await generateThumbnail(geminiKey, imagePrompt);
-    thumbnail = await uploadThumbnail(supabaseUrl, supabaseKey, imageBuffer, slug);
-    console.log(`   ✅ 이미지 업로드 완료: ${thumbnail}`);
-  } catch (err) {
-    console.warn(`⚠️  이미지 생성 실패 (기본 썸네일 사용): ${err}`);
+  if (unsplashAccessKey) {
+    console.log(`\n🖼️  Unsplash 이미지 검색 중...`);
+    try {
+      thumbnail = await fetchUnsplashImage(unsplashAccessKey, title, category.name);
+      console.log(`   ✅ 썸네일: ${thumbnail}`);
+    } catch (err) {
+      console.warn(`⚠️  Unsplash 실패 (기본 썸네일 사용): ${err}`);
+    }
+  } else {
+    console.warn("⚠️  UNSPLASH_ACCESS_KEY 없음 — 기본 썸네일 사용");
   }
 
   console.log(`\n💾 Supabase에 저장 중...`);
