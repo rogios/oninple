@@ -4,19 +4,13 @@ import { useEffect, useState } from "react";
 import { X, ExternalLink, MessageCircle, Flag, BadgeCheck } from "lucide-react";
 import type { DirectoryChannel } from "./ChannelDirectory";
 import { formatCount, getTierKey, TIER_STYLES, TIER_LABELS } from "./ChannelDirectory";
+import { CATEGORY_ALL_LABELS } from "@/lib/categories";
 
 const PLATFORM_INFO: Record<string, { label: string; style: string }> = {
   youtube: { label: "YouTube", style: "bg-[#FF0000] text-white" },
   instagram: { label: "Instagram", style: "bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white" },
   tiktok: { label: "TikTok", style: "bg-[#010101] text-white" },
   editor: { label: "편집프로듀서", style: "bg-[#6C5CE7] text-white" },
-};
-
-const CATEGORY_LABELS: Record<string, string> = {
-  beauty: "뷰티/패션", food: "음식/요리", travel: "여행", gaming: "게임",
-  tech: "IT/테크", education: "교육", sports: "스포츠/피트니스",
-  entertainment: "엔터테인먼트", lifestyle: "라이프스타일", business: "비즈니스",
-  parenting: "육아", other: "기타",
 };
 
 const AVATAR_COLORS: Record<string, string> = {
@@ -130,7 +124,7 @@ export default function ProfileModal({
               </span>
               {channel.categories?.map((cat) => (
                 <span key={cat} className="text-xs text-gray-700 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2.5 py-0.5 rounded-full">
-                  {CATEGORY_LABELS[cat] ?? cat}
+                  {CATEGORY_ALL_LABELS[cat] ?? cat}
                 </span>
               ))}
               {channel.can_collaborate ? (

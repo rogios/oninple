@@ -7,23 +7,10 @@ import { X, Plus, ToggleLeft, ToggleRight, Upload } from "lucide-react";
 import { updateChannel, type ChannelInput } from "@/app/actions/channel";
 import { createClient } from "@/lib/supabase/client";
 import { formatSubscribers, type YoutubeChannelInfo } from "@/lib/youtube";
+import { CATEGORY_TREE } from "@/lib/categories";
 
 // ─── 상수 ────────────────────────────────────────────────────────────────────
 
-const CATEGORIES = [
-  { value: "beauty", label: "뷰티/패션" },
-  { value: "food", label: "음식/요리" },
-  { value: "travel", label: "여행" },
-  { value: "gaming", label: "게임" },
-  { value: "tech", label: "IT/테크" },
-  { value: "education", label: "교육" },
-  { value: "sports", label: "스포츠/피트니스" },
-  { value: "entertainment", label: "엔터테인먼트" },
-  { value: "lifestyle", label: "라이프스타일" },
-  { value: "business", label: "비즈니스" },
-  { value: "parenting", label: "육아" },
-  { value: "other", label: "기타" },
-];
 
 const UPLOAD_CYCLES = ["주 3회 이상", "주 1~2회", "월 1~2회", "비정기"];
 
@@ -162,6 +149,53 @@ function MultiChip({
           {o.label}
         </button>
       ))}
+    </div>
+  );
+}
+
+/** 1차/2차 계층 카테고리 피커 */
+function CategoryPicker({
+  selected,
+  onChange,
+}: {
+  selected: string[];
+  onChange: (next: string[]) => void;
+}) {
+  const toggle = (v: string) =>
+    onChange(selected.includes(v) ? selected.filter((x) => x !== v) : [...selected, v]);
+
+  return (
+    <div className="space-y-4">
+      {CATEGORY_TREE.map((parent) => {
+        const selectedCount = parent.sub.filter((s) => selected.includes(s.key)).length;
+        return (
+          <div key={parent.key}>
+            <p className="text-[11px] font-semibold text-gray-400 dark:text-[#6B7280] mb-2 flex items-center gap-1.5">
+              {parent.label}
+              {selectedCount > 0 && (
+                <span className="text-[#E8292E] font-bold">{selectedCount}</span>
+              )}
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {parent.sub.map((sub) => (
+                <button
+                  key={sub.key}
+                  type="button"
+                  onClick={() => toggle(sub.key)}
+                  className={[
+                    "px-2.5 py-1 rounded-full text-xs font-medium border transition-colors",
+                    selected.includes(sub.key)
+                      ? "border-[#E8292E] bg-[#E8292E] text-white"
+                      : "border-gray-200 dark:border-[#374151] text-gray-600 dark:text-[#9CA3AF] hover:border-gray-300 dark:hover:border-[#4B5563]",
+                  ].join(" ")}
+                >
+                  {sub.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -661,7 +695,10 @@ export default function ChannelEditForm({
 
           {/* 5. 콘텐츠 분야 */}
           <Field label="콘텐츠 분야" required error={fieldErrors.categories}>
-            <MultiChip options={CATEGORIES} selected={form.categories} onChange={(v) => set("categories", v)} />
+            <CategoryPicker
+              selected={form.categories}
+              onChange={(v) => set("categories", v)}
+            />
           </Field>
 
           {/* 6. 업로드 주기 / 콘텐츠 형식 */}
