@@ -7,6 +7,29 @@ import type { NoticeRow } from "@/components/admin/NoticesTab";
 import type { PostRow } from "@/components/admin/BlogTab";
 import type { AnalyticsData, RawPageView } from "@/components/admin/AnalyticsTab";
 
+// PostgREST 서버 max_rows=1000 한도를 페이지네이션으로 우회
+async function fetchAllPageViews(
+  service: ReturnType<typeof createServiceClient>,
+  since: string
+): Promise<RawPageView[]> {
+  const PAGE = 1000;
+  const all: RawPageView[] = [];
+  let from = 0;
+  while (true) {
+    const { data, error } = await service
+      .from("page_views")
+      .select("created_at, referrer, page, page_path, device_type")
+      .gte("created_at", since)
+      .order("created_at", { ascending: true })
+      .range(from, from + PAGE - 1);
+    if (error || !data || data.length === 0) break;
+    all.push(...(data as RawPageView[]));
+    if (data.length < PAGE) break;  // 마지막 페이지
+    from += PAGE;
+  }
+  return all;
+}
+
 export default async function AdminPage() {
   const supabase = await createClient();
 
@@ -46,7 +69,7 @@ export default async function AdminPage() {
     { data: allMembers },
     { data: allNotices },
     { data: allPosts },
-    { data: analyticsRaw },
+    analyticsRaw,
   ] = await Promise.all([
     service.from("profiles").select("*", { count: "exact", head: true }),
     service.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", todayISO),
@@ -59,12 +82,8 @@ export default async function AdminPage() {
     service.from("profiles").select("id, email, name, role, created_at, warning_count").order("created_at", { ascending: false }),
     service.from("notices").select("id, title, content, is_pinned, created_at").order("created_at", { ascending: false }),
     service.from("posts").select("id, title, content, thumbnail, summary, category, slug, published, created_at").order("created_at", { ascending: false }),
-    service
-      .from("page_views")
-      .select("created_at, referrer, page, page_path, device_type")
-      .gte("created_at", twelveMonthsAgo.toISOString())
-      .order("created_at", { ascending: true })
-      .limit(10000),
+    // PostgREST max_rows=1000 우회: 1000건씩 페이지네이션
+    fetchAllPageViews(service, twelveMonthsAgo.toISOString()),
   ]);
 
   // allChannels: is_verified 컬럼 없을 경우 fallback
@@ -114,7 +133,11 @@ export default async function AdminPage() {
   const pageMap    = new Map<string, number>();
   const deviceMap  = new Map<string, number>();
 
-  for (const row of (analyticsRaw ?? []) as RawPageView[]) {
+  // [DEBUG] analyticsRaw 쿼리 결과 확인 — 로컬 npm run dev 콘솔에서 확인
+  console.log("[analyticsRaw] 총 건수:", analyticsRaw.length);
+  console.log("[analyticsRaw] 마지막 row created_at:", analyticsRaw[analyticsRaw.length - 1]?.created_at ?? "(없음)");
+
+  for (const row of analyticsRaw) {
     const kst = new Date(new Date(row.created_at).getTime() + KST_OFFSET);
     const dayKey   = `${String(kst.getUTCMonth() + 1).padStart(2, "0")}/${String(kst.getUTCDate()).padStart(2, "0")}`;
     const monthKey = `${kst.getUTCMonth() + 1}월`;
@@ -134,7 +157,7 @@ export default async function AdminPage() {
     topReferrers:    Array.from(referrerMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([referrer, count]) => ({ referrer, count })),
     topPages:        Array.from(pageMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([page, count]) => ({ page, count })),
     deviceBreakdown: Array.from(deviceMap.entries()).map(([device, count]) => ({ device, count })).sort((a, b) => b.count - a.count),
-    rawRows:         (analyticsRaw ?? []) as RawPageView[],
+    rawRows:         analyticsRaw,
   };
 
   const stats: DashboardStats = {
