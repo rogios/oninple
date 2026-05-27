@@ -10,8 +10,7 @@ import { useTheme } from "@/components/ThemeProvider";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const navLinks = [
-  { label: "소개", href: "/about" },
-  { label: "문의", href: "/contact" },
+  { label: "트렌드", href: "/trending" },
   { label: "공지사항", href: "/notices" },
 ];
 
