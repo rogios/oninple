@@ -16,7 +16,7 @@ const CATEGORY_FALLBACK: { category: string; labelEn: string; emoji: string }[] 
   { category: "엔터테인먼트",   labelEn: "Entertainment",       emoji: "🎭" },
   { category: "IT/테크",         labelEn: "IT & Tech",          emoji: "💻" },
   { category: "라이프스타일",   labelEn: "Lifestyle",           emoji: "🌿" },
-  { category: "교육",             labelEn: "Education",          emoji: "📚" },
+  { category: "AI/교육",           labelEn: "AI & Education",     emoji: "📚" },
   { category: "비즈니스/재테크", labelEn: "Business & Finance", emoji: "📈" },
 ];
 

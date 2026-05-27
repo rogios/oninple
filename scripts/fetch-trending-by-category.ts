@@ -64,7 +64,7 @@ const CATEGORIES: Category[] = [
   { label: "엔터테인먼트",   labelEn: "Entertainment",       emoji: "🎭", query: "브이로그 예능 음악" },
   { label: "IT/테크",         labelEn: "IT & Tech",          emoji: "💻", query: "IT 테크 리뷰" },
   { label: "라이프스타일",   labelEn: "Lifestyle",           emoji: "🌿", query: "일상 브이로그 라이프" },
-  { label: "교육",             labelEn: "Education",          emoji: "📚", query: "공부 강의 교육" },
+  { label: "AI/교육",          labelEn: "AI & Education",     emoji: "📚", query: "AI 인공지능 챗GPT 클로드 미드저니 교육 강의" },
   { label: "비즈니스/재테크", labelEn: "Business & Finance", emoji: "📈", query: "재테크 투자 창업" },
 ];
 
