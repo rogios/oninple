@@ -764,9 +764,17 @@ export default function ChannelNewForm({
 
           {/* 인스타그램/틱톡: 피드 (채널 URL은 이미 위에 있음) */}
           {(platform === "instagram" || platform === "tiktok") && (<>
+            <div>
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-0.5">
+                대표 피드{" "}
+                <span className="text-xs font-normal text-gray-400 dark:text-[#6B7280]">— 선택사항</span>
+              </p>
+              <p className="text-xs text-gray-400 dark:text-[#6B7280] mb-3">
+                썸네일 이미지는 선택사항입니다. URL만 입력해도 됩니다.
+              </p>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>대표 피드 1</Label>
                 <div
                   onClick={() => feedThumb1Ref.current?.click()}
                   className="aspect-video rounded-xl border-2 border-dashed border-gray-200 dark:border-[#374151] flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#E8292E]/40 transition-colors bg-gray-50 dark:bg-[#374151]"
@@ -778,7 +786,8 @@ export default function ChannelNewForm({
                   ) : (
                     <div className="flex flex-col items-center gap-1 px-2 text-center">
                       <Upload size={16} className="text-gray-300" />
-                      <span className="text-[10px] text-gray-600 dark:text-gray-400 leading-tight">권장 가로 500px 이하 / 최대 2MB</span>
+                      <span className="text-[10px] text-gray-400 dark:text-[#6B7280] leading-tight">썸네일 (선택사항)</span>
+                      <span className="text-[10px] text-gray-400 dark:text-[#6B7280] leading-tight">500px 이하 · 2MB</span>
                     </div>
                   )}
                 </div>
@@ -791,14 +800,13 @@ export default function ChannelNewForm({
                 />
                 <Input
                   type="url"
-                  placeholder="피드 URL"
-                  disabled={!feedThumb1 || feedThumb1Uploading}
+                  placeholder="피드 URL (선택사항)"
+                  disabled={feedThumb1Uploading}
                   value={form.feed_url_1}
                   onChange={(e) => set("feed_url_1", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label>대표 피드 2</Label>
                 <div
                   onClick={() => feedThumb2Ref.current?.click()}
                   className="aspect-video rounded-xl border-2 border-dashed border-gray-200 dark:border-[#374151] flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#E8292E]/40 transition-colors bg-gray-50 dark:bg-[#374151]"
@@ -810,7 +818,8 @@ export default function ChannelNewForm({
                   ) : (
                     <div className="flex flex-col items-center gap-1 px-2 text-center">
                       <Upload size={16} className="text-gray-300" />
-                      <span className="text-[10px] text-gray-600 dark:text-gray-400 leading-tight">권장 가로 500px 이하 / 최대 2MB</span>
+                      <span className="text-[10px] text-gray-400 dark:text-[#6B7280] leading-tight">썸네일 (선택사항)</span>
+                      <span className="text-[10px] text-gray-400 dark:text-[#6B7280] leading-tight">500px 이하 · 2MB</span>
                     </div>
                   )}
                 </div>
@@ -823,8 +832,8 @@ export default function ChannelNewForm({
                 />
                 <Input
                   type="url"
-                  placeholder="피드 URL"
-                  disabled={!feedThumb2 || feedThumb2Uploading}
+                  placeholder="피드 URL (선택사항)"
+                  disabled={feedThumb2Uploading}
                   value={form.feed_url_2}
                   onChange={(e) => set("feed_url_2", e.target.value)}
                 />
