@@ -106,7 +106,7 @@ function ExpandedCard({
   );
 }
 
-/** 기본 썸네일 카드 */
+/** 기본 썸네일 카드 — ChannelCard 스타일 적용 */
 function NormalCard({
   video,
   rank,
@@ -121,8 +121,9 @@ function NormalCard({
     "bg-black/60 text-white";
 
   return (
-    <>
-      <div className="relative aspect-video rounded-2xl overflow-hidden bg-gray-100 dark:bg-[#1F2937] mb-3 shadow-sm group-hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] rounded-2xl shadow-sm group-hover:border-[#E8292E]/30 group-hover:shadow-md transition-all overflow-hidden">
+      {/* 썸네일 */}
+      <div className="relative aspect-video bg-gray-100 dark:bg-[#374151]">
         {video.thumbnail ? (
           <Image
             src={video.thumbnail}
@@ -133,7 +134,7 @@ function NormalCard({
             unoptimized
           />
         ) : (
-          <div className="w-full h-full bg-gray-200 dark:bg-[#374151] flex items-center justify-center">
+          <div className="w-full h-full flex items-center justify-center">
             <Play size={24} className="text-gray-400" />
           </div>
         )}
@@ -164,17 +165,20 @@ function NormalCard({
         </div>
       </div>
 
-      <h3 className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB] line-clamp-2 mb-1 group-hover:text-[#E8292E] dark:group-hover:text-[#E8292E] transition-colors leading-snug">
-        {video.title}
-      </h3>
-      <div className="flex items-center justify-between gap-1 text-xs text-gray-500 dark:text-[#6B7280]">
-        <span className="truncate">{video.channelTitle}</span>
-        <span className="shrink-0 font-medium">👁 {formatViews(video.viewCount)}</span>
+      {/* 영상 정보 */}
+      <div className="p-4">
+        <h3 className="text-sm font-bold text-[#111111] dark:text-[#F9FAFB] line-clamp-2 mb-2 group-hover:text-[#E8292E] dark:group-hover:text-[#E8292E] transition-colors leading-snug">
+          {video.title}
+        </h3>
+        <div className="flex items-center justify-between gap-1 text-xs text-gray-500 dark:text-[#6B7280]">
+          <span className="truncate">{video.channelTitle}</span>
+          <span className="shrink-0 font-medium">👁 {formatViews(video.viewCount)}</span>
+        </div>
+        <div className="text-[11px] text-gray-400 dark:text-[#4B5563] mt-0.5">
+          {timeAgo(video.publishedAt)}
+        </div>
       </div>
-      <div className="text-[11px] text-gray-400 dark:text-[#4B5563] mt-0.5">
-        {timeAgo(video.publishedAt)}
-      </div>
-    </>
+    </div>
   );
 }
 
@@ -191,7 +195,7 @@ function AccordionGrid({
   showRank?: boolean;
 }) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 items-start">
       {videos.map((video, idx) => {
         const isSelected = video.id === selectedId;
         return (
@@ -228,10 +232,12 @@ function AccordionGrid({
 
 function CardSkeleton() {
   return (
-    <div className="col-span-1 animate-pulse">
-      <div className="aspect-video rounded-2xl bg-gray-200 dark:bg-[#1F2937] mb-3" />
-      <div className="h-3.5 bg-gray-200 dark:bg-[#1F2937] rounded mb-2 w-4/5" />
-      <div className="h-3 bg-gray-200 dark:bg-[#1F2937] rounded w-3/5" />
+    <div className="col-span-1 animate-pulse bg-white dark:bg-[#1F2937] border border-gray-100 dark:border-[#374151] rounded-2xl shadow-sm overflow-hidden">
+      <div className="aspect-video bg-gray-200 dark:bg-[#374151]" />
+      <div className="p-4">
+        <div className="h-3.5 bg-gray-200 dark:bg-[#374151] rounded mb-2 w-4/5" />
+        <div className="h-3 bg-gray-200 dark:bg-[#374151] rounded w-3/5" />
+      </div>
     </div>
   );
 }
@@ -320,7 +326,7 @@ export default function TrendingClient() {
       {/* ── 급상승 영상 그리드 ── */}
       <div className="max-w-6xl mx-auto px-4 pt-10 pb-6">
         {trendLoading && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 items-start">
             {Array.from({ length: 8 }).map((_, i) => <CardSkeleton key={i} />)}
           </div>
         )}
@@ -388,7 +394,7 @@ export default function TrendingClient() {
 
                   {/* 카드 영역 — 로딩 / 에러 / 데이터 없음 / 정상 */}
                   {catLoading ? (
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 items-start">
                       {Array.from({ length: 4 }).map((_, i) => (
                         <CardSkeleton key={i} />
                       ))}
