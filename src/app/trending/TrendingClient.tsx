@@ -297,7 +297,7 @@ export default function TrendingClient() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#111827]">
+    <div className="min-h-screen bg-[#F3F4F6] dark:bg-[#111827]">
 
       {/* ── 히어로 헤더 ── */}
       <div className="bg-[#111111] pt-14 pb-12 px-4">
