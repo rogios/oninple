@@ -73,8 +73,9 @@ export default function AnalyticsTab({ data }: { data: AnalyticsData }) {
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
     const rows = data.rawRows.filter((row) => {
-      if (statPeriod === "today") return row.created_at >= todayStart.toISOString();
-      if (statPeriod === "month") return row.created_at >= thirtyDaysAgo.toISOString();
+      const t = new Date(row.created_at).getTime();
+      if (statPeriod === "today") return t >= todayStart.getTime();
+      if (statPeriod === "month") return t >= thirtyDaysAgo.getTime();
       return true;
     });
 

@@ -59,7 +59,12 @@ export default async function AdminPage() {
     service.from("profiles").select("id, email, name, role, created_at, warning_count").order("created_at", { ascending: false }),
     service.from("notices").select("id, title, content, is_pinned, created_at").order("created_at", { ascending: false }),
     service.from("posts").select("id, title, content, thumbnail, summary, category, slug, published, created_at").order("created_at", { ascending: false }),
-    service.from("page_views").select("*").gte("created_at", twelveMonthsAgo.toISOString()),
+    service
+      .from("page_views")
+      .select("created_at, referrer, page, page_path, device_type")
+      .gte("created_at", twelveMonthsAgo.toISOString())
+      .order("created_at", { ascending: true })
+      .limit(10000),
   ]);
 
   // allChannels: is_verified 컬럼 없을 경우 fallback
