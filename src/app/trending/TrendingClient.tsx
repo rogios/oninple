@@ -6,6 +6,20 @@ import { Loader2, AlertCircle, Play, X } from "lucide-react";
 import type { TrendingVideo } from "@/app/api/youtube/trending/route";
 import type { CategoryResult, CategoryVideo } from "@/app/api/youtube/trending-by-category/route";
 
+// ── 카테고리 fallback (API 데이터와 무관하게 타이틀 항상 표시) ───────────────
+
+const CATEGORY_FALLBACK: { category: string; labelEn: string; emoji: string }[] = [
+  { category: "뷰티/패션",       labelEn: "Beauty & Fashion",   emoji: "💄" },
+  { category: "푸드",             labelEn: "Food & Cooking",     emoji: "🍳" },
+  { category: "여행/아웃도어",   labelEn: "Travel & Outdoor",   emoji: "✈️" },
+  { category: "스포츠/건강",     labelEn: "Sports & Health",    emoji: "💪" },
+  { category: "엔터테인먼트",   labelEn: "Entertainment",       emoji: "🎭" },
+  { category: "IT/테크",         labelEn: "IT & Tech",          emoji: "💻" },
+  { category: "라이프스타일",   labelEn: "Lifestyle",           emoji: "🌿" },
+  { category: "교육",             labelEn: "Education",          emoji: "📚" },
+  { category: "비즈니스/재테크", labelEn: "Business & Finance", emoji: "📈" },
+];
+
 // ── 유틸 ─────────────────────────────────────────────────────────────────────
 
 function formatViews(n: number): string {
@@ -222,19 +236,6 @@ function CardSkeleton() {
   );
 }
 
-function CategorySkeleton() {
-  return (
-    <div className="mb-12 animate-pulse">
-      <div className="h-6 bg-gray-200 dark:bg-[#1F2937] rounded w-40 mb-5" />
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <CardSkeleton key={i} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ── 메인 ─────────────────────────────────────────────────────────────────────
 
 export default function TrendingClient() {
@@ -362,49 +363,43 @@ export default function TrendingClient() {
             </p>
           </div>
 
-          {/* 카테고리 로딩 */}
-          {catLoading && (
-            <>
-              {Array.from({ length: 3 }).map((_, i) => (
-                <CategorySkeleton key={i} />
-              ))}
-            </>
-          )}
+          {/* 카테고리 목록 — fallback 기준으로 항상 타이틀 표시 */}
+          <div className="space-y-12">
+            {CATEGORY_FALLBACK.map((fallback) => {
+              // API 결과에서 매칭되는 카테고리 찾기 (없으면 빈 videos)
+              const cat: CategoryResult = categories.find(
+                (c) => c.category === fallback.category
+              ) ?? { ...fallback, videos: [] };
 
-          {/* 카테고리 에러 */}
-          {!catLoading && catError && (
-            <div className="flex flex-col items-center justify-center py-16 gap-4">
-              <AlertCircle size={32} className="text-red-400" />
-              <p className="text-sm text-gray-500 dark:text-[#6B7280]">{catError}</p>
-              <button type="button" onClick={fetchCategories}
-                className="text-sm font-semibold text-[#E8292E] hover:underline flex items-center gap-1.5">
-                <Loader2 size={14} /> 다시 시도
-              </button>
-            </div>
-          )}
-
-          {/* 카테고리 목록 */}
-          {!catLoading && !catError && (
-            <div className="space-y-12">
-              {categories.map((cat) => (
-                <div key={cat.category}>
+              return (
+                <div key={fallback.category}>
                   {/* 카테고리 타이틀 */}
                   <div className="flex items-center gap-3 mb-5">
                     <div className="shrink-0">
                       <h3 className="text-xl font-bold text-[#111111] dark:text-[#F9FAFB] leading-tight">
-                        {cat.category}
+                        {fallback.category}
                       </h3>
                       <p className="text-xs font-semibold text-[#E8292E] mt-0.5 tracking-wide">
-                        {cat.labelEn}
+                        {fallback.labelEn}
                       </p>
                     </div>
                     <div className="flex-1 h-px bg-gray-200 dark:bg-white/10" />
                   </div>
 
-                  {/* 카드 그리드 (아코디언) */}
-                  {cat.videos.length === 0 ? (
+                  {/* 카드 영역 — 로딩 / 에러 / 데이터 없음 / 정상 */}
+                  {catLoading ? (
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+                      {Array.from({ length: 4 }).map((_, i) => (
+                        <CardSkeleton key={i} />
+                      ))}
+                    </div>
+                  ) : catError ? (
                     <p className="text-sm text-gray-400 dark:text-[#4B5563] py-4">
-                      이번 주 영상 데이터를 불러오지 못했습니다.
+                      오늘 자정 업데이트 예정입니다.
+                    </p>
+                  ) : cat.videos.length === 0 ? (
+                    <p className="text-sm text-gray-400 dark:text-[#4B5563] py-4">
+                      오늘 자정 업데이트 예정입니다.
                     </p>
                   ) : (
                     <AccordionGrid
@@ -414,9 +409,9 @@ export default function TrendingClient() {
                     />
                   )}
                 </div>
-              ))}
-            </div>
-          )}
+              );
+            })}
+          </div>
 
         </div>
       </div>
