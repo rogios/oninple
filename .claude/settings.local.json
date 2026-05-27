@@ -14,7 +14,15 @@
       "Bash(node -e ' *)",
       "Bash(schtasks /query /fo LIST)",
       "PowerShell(Get-ScheduledTask *)",
-      "PowerShell(Disable-ScheduledTask *)"
+      "PowerShell(Disable-ScheduledTask *)",
+      "Bash(git checkout *)",
+      "PowerShell(Stop-ScheduledTask *)",
+      "Bash(curl -s 'https://gdldlvhcsmqcokfcvmre.supabase.co/rest/v1/page_views?select=id,page,device_type,created_at&created_at=gte.2026-05-26T15:00:00Z&created_at=lt.2026-05-27T15:00:00Z&order=created_at.desc&limit=10' -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkbGRsdmhjc21xY29rZmN2bXJlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODc2Nzc3NCwiZXhwIjoyMDk0MzQzNzc0fQ.-cVedeZsRPz8jAURxX7N6soOYvDUlVTaWkIHDrSeVtY' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkbGRsdmhjc21xY29rZmN2bXJlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODc2Nzc3NCwiZXhwIjoyMDk0MzQzNzc0fQ.-cVedeZsRPz8jAURxX7N6soOYvDUlVTaWkIHDrSeVtY' -H 'Range-Unit: items' -H 'Prefer: count=exact' -i)",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s https://gdldlvhcsmqcokfcvmre.supabase.co/rest/v1/page_views?select=id -H 'apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkbGRsdmhjc21xY29rZmN2bXJlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODc2Nzc3NCwiZXhwIjoyMDk0MzQzNzc0fQ.-cVedeZsRPz8jAURxX7N6soOYvDUlVTaWkIHDrSeVtY' -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkbGRsdmhjc21xY29rZmN2bXJlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODc2Nzc3NCwiZXhwIjoyMDk0MzQzNzc0fQ.-cVedeZsRPz8jAURxX7N6soOYvDUlVTaWkIHDrSeVtY' -H 'Prefer: count=exact' -H 'Range-Unit: items' -i)",
+      "PowerShell(git push *)",
+      "Bash(npm run *)",
+      "PowerShell(Get-ChildItem \"D:\\\\oninple-us\" -Recurse -Depth 3 -Exclude \"node_modules\" | Where-Object { $_.FullName -notmatch \"node_modules\" } | Select-Object FullName)"
     ]
   }
 }

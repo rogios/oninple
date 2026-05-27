@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect, useRef } from "react";
 import { Search, X, Users, Eye, Heart, BadgeCheck, Clock, Film, ChevronDown } from "lucide-react";
 import CTASection from "./CTASection";
 import ProfileModal from "./ProfileModal";
+import { CATEGORY_TREE, CATEGORY_ALL_LABELS, getParentKey } from "@/lib/categories";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -53,21 +54,6 @@ export const TIER_LABELS: Record<string, string> = {
   blue: "블루", green: "그린", orange: "오렌지", white: "화이트",
 };
 
-const CATEGORY_TABS = [
-  { key: "all", label: "전체" },
-  { key: "beauty", label: "뷰티/패션" },
-  { key: "food", label: "음식/요리" },
-  { key: "travel", label: "여행" },
-  { key: "gaming", label: "게임" },
-  { key: "tech", label: "IT/테크" },
-  { key: "education", label: "교육" },
-  { key: "sports", label: "스포츠/피트니스" },
-  { key: "entertainment", label: "엔터테인먼트" },
-  { key: "lifestyle", label: "라이프스타일" },
-  { key: "business", label: "비즈니스" },
-  { key: "parenting", label: "육아" },
-  { key: "other", label: "기타" },
-];
 
 const TIER_TABS: { key: string; label: string; min?: number }[] = [
   { key: "all", label: "전체" },
@@ -80,12 +66,6 @@ const TIER_TABS: { key: string; label: string; min?: number }[] = [
   { key: "white", label: "화이트(1천미만)" },
 ];
 
-const CATEGORY_LABELS: Record<string, string> = {
-  beauty: "뷰티/패션", food: "음식/요리", travel: "여행", gaming: "게임",
-  tech: "IT/테크", education: "교육", sports: "스포츠/피트니스",
-  entertainment: "엔터테인먼트", lifestyle: "라이프스타일", business: "비즈니스",
-  parenting: "육아", other: "기타",
-};
 
 const AVATAR_COLORS: Record<string, string> = {
   youtube: "#FF0000", instagram: "#E1306C", tiktok: "#010101", editor: "#6C5CE7",
@@ -128,8 +108,24 @@ function matchesSearch(ch: DirectoryChannel, q: string): boolean {
     (ch.channel_name ?? "").toLowerCase().includes(s) ||
     (ch.bio?.toLowerCase().includes(s) ?? false) ||
     (ch.content_keywords?.some((k) => k.toLowerCase().includes(s)) ?? false) ||
-    (ch.categories?.some((c) => (CATEGORY_LABELS[c] ?? c).toLowerCase().includes(s)) ?? false)
+    (ch.categories?.some((c) => (CATEGORY_ALL_LABELS[c] ?? c).toLowerCase().includes(s)) ?? false)
   );
+}
+
+/** 1차 or 2차 카테고리 key로 채널 필터링 */
+function matchesCategory(ch: DirectoryChannel, key: string): boolean {
+  if (key === "all") return true;
+  const cats = ch.categories ?? [];
+  if (cats.includes(key)) return true;
+  // key가 1차 카테고리이면 → 해당 2차 서브 or 레거시 key 포함 여부 확인
+  const parent = CATEGORY_TREE.find((p) => p.key === key);
+  if (parent) {
+    return (
+      parent.sub.some((s) => cats.includes(s.key)) ||
+      (parent.legacyKeys ?? []).some((lk) => cats.includes(lk))
+    );
+  }
+  return false;
 }
 
 // ─── Platform Logos ───────────────────────────────────────────────────────────
@@ -303,7 +299,7 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
           <div className="flex gap-1 flex-wrap">
             {ch.categories.slice(0, 2).map((cat) => (
               <span key={cat} className="text-[10px] text-gray-700 dark:text-[#9CA3AF] bg-gray-100 dark:bg-[#374151] px-2 py-0.5 rounded-full">
-                {CATEGORY_LABELS[cat] ?? cat}
+                {CATEGORY_ALL_LABELS[cat] ?? cat}
               </span>
             ))}
           </div>
@@ -397,9 +393,71 @@ function PlatformSection({
   const perPage = cols * 3;
   const [visibleCount, setVisibleCount] = useState(perPage);
 
+  // ─ 2차 카테고리 드롭다운
+  const isMobile = cols < 5;
+  const [hoveredParent, setHoveredParent] = useState<string | null>(null);
+  const [expandedParent, setExpandedParent] = useState<string | null>(null);
+  const [dropdownLeft, setDropdownLeft] = useState(0);
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const filterRef = useRef<HTMLDivElement>(null);
+
+  // 드롭다운 left 위치 계산 — 버튼 기준, 화면 밖 나가지 않도록 클램프
+  const DROPDOWN_WIDTH = 300;
+  function calcLeft(e: React.MouseEvent<HTMLButtonElement>): number {
+    if (!filterRef.current) return 0;
+    const btnRect = e.currentTarget.getBoundingClientRect();
+    const contRect = filterRef.current.getBoundingClientRect();
+    const raw = btnRect.left - contRect.left;
+    const max = contRect.width - DROPDOWN_WIDTH;
+    return Math.min(Math.max(0, raw), Math.max(0, max));
+  }
+
+  // PC hover: 탭 → 드롭다운으로 마우스 이동 시 닫히지 않도록 딜레이
+  function onParentMouseEnter(key: string, e: React.MouseEvent<HTMLButtonElement>) {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    setDropdownLeft(calcLeft(e));
+    setHoveredParent(key);
+  }
+  function onParentMouseLeave() {
+    hoverTimerRef.current = setTimeout(() => setHoveredParent(null), 120);
+  }
+  function onSubPanelMouseEnter() {
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+  }
+  function onSubPanelMouseLeave() {
+    hoverTimerRef.current = setTimeout(() => setHoveredParent(null), 120);
+  }
+
+  // 어떤 부모 카테고리의 드롭다운을 표시할지
+  const activeSubParent = isMobile ? expandedParent : hoveredParent;
+
+  // 현재 선택된 카테고리 key가 어느 1차에 속하는지
+  const activePrimaryKey = getParentKey(f.category);
+
+  function handleParentTabClick(key: string, e: React.MouseEvent<HTMLButtonElement>) {
+    setF((s) => ({ ...s, category: key }));
+    if (isMobile) {
+      const willExpand = expandedParent !== key;
+      if (willExpand) setDropdownLeft(calcLeft(e));
+      setExpandedParent(willExpand ? key : null);
+    }
+  }
+
+  function handleSubClick(key: string) {
+    setF((s) => ({ ...s, category: key }));
+    if (isMobile) setExpandedParent(null);
+    else setHoveredParent(null);
+  }
+
   useEffect(() => {
     setVisibleCount(cols * 3);
   }, [cols, f]);
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (!tierOpen) return;
@@ -417,7 +475,7 @@ function PlatformSection({
       channels.filter(
         (ch) =>
           (isEditor || matchesTier(ch, f.tier)) &&
-          (f.category === "all" || ch.categories?.includes(f.category))
+          matchesCategory(ch, f.category)
       ),
     [channels, f, isEditor]
   );
@@ -439,56 +497,109 @@ function PlatformSection({
           <span className="text-sm text-gray-400 dark:text-[#6B7280]">({channels.length}명 등록)</span>
         </div>
 
-        {/* Tier dropdown + Category tabs */}
-        <div className="flex items-center gap-2">
-          {!isEditor && (
-            <div className="relative shrink-0" ref={dropdownRef}>
-              <button
-                onClick={() => setTierOpen((v) => !v)}
-                className={`flex items-center gap-1 text-xs font-semibold px-3.5 py-1.5 rounded-full border transition-colors ${
-                  f.tier !== "all"
-                    ? "bg-[#E8292E] text-white border-[#E8292E]"
-                    : "bg-[#111111] dark:bg-[#374151] text-white border-[#111111] dark:border-[#374151] hover:bg-[#333333] dark:hover:bg-[#4B5563] hover:border-[#333333] dark:hover:border-[#4B5563]"
-                }`}
-              >
-                {f.tier === "all" ? "등급" : TIER_TABS.find((t) => t.key === f.tier)?.label.split("(")[0]}
-                <ChevronDown size={12} className={`transition-transform ${tierOpen ? "rotate-180" : ""}`} />
-              </button>
-              {tierOpen && (
-                <div className="absolute left-0 top-full mt-1.5 bg-white dark:bg-[#1F2937] border border-gray-200 dark:border-[#374151] rounded-xl shadow-lg z-20 min-w-[160px] py-1 overflow-hidden">
-                  {TIER_TABS.map((tab) => (
-                    <button
-                      key={tab.key}
-                      onClick={() => { setF((s) => ({ ...s, tier: tab.key })); setTierOpen(false); }}
-                      className={`w-full text-left text-xs font-semibold px-4 py-2 transition-colors ${
-                        f.tier === tab.key
-                          ? "bg-[#E8292E]/10 text-[#E8292E]"
-                          : "text-gray-700 dark:text-[#F9FAFB] hover:bg-gray-50 dark:hover:bg-[#374151]"
-                      }`}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+        {/* Tier dropdown + 1차 카테고리 탭 */}
+        <div className="relative" ref={filterRef}>
+          <div className="flex items-center gap-2">
+            {!isEditor && (
+              <div className="relative shrink-0" ref={dropdownRef}>
+                <button
+                  onClick={() => setTierOpen((v) => !v)}
+                  className={`flex items-center gap-1 text-xs font-semibold px-3.5 py-1.5 rounded-full border transition-colors ${
+                    f.tier !== "all"
+                      ? "bg-[#E8292E] text-white border-[#E8292E]"
+                      : "bg-[#111111] dark:bg-[#374151] text-white border-[#111111] dark:border-[#374151] hover:bg-[#333333] dark:hover:bg-[#4B5563] hover:border-[#333333] dark:hover:border-[#4B5563]"
+                  }`}
+                >
+                  {f.tier === "all" ? "등급" : TIER_TABS.find((t) => t.key === f.tier)?.label.split("(")[0]}
+                  <ChevronDown size={12} className={`transition-transform ${tierOpen ? "rotate-180" : ""}`} />
+                </button>
+                {tierOpen && (
+                  <div className="absolute left-0 top-full mt-1.5 bg-white dark:bg-[#1F2937] border border-gray-200 dark:border-[#374151] rounded-xl shadow-lg z-20 min-w-[160px] py-1 overflow-hidden">
+                    {TIER_TABS.map((tab) => (
+                      <button
+                        key={tab.key}
+                        onClick={() => { setF((s) => ({ ...s, tier: tab.key })); setTierOpen(false); }}
+                        className={`w-full text-left text-xs font-semibold px-4 py-2 transition-colors ${
+                          f.tier === tab.key
+                            ? "bg-[#E8292E]/10 text-[#E8292E]"
+                            : "text-gray-700 dark:text-[#F9FAFB] hover:bg-gray-50 dark:hover:bg-[#374151]"
+                        }`}
+                      >
+                        {tab.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
-          <div className="flex gap-2 overflow-x-auto pb-1 min-w-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {CATEGORY_TABS.map((tab) => (
+            {/* 1차 카테고리 탭 (스크롤) */}
+            <div className="flex gap-1.5 overflow-x-auto pb-1 min-w-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {/* 전체 */}
               <button
-                key={tab.key}
-                onClick={() => setF((s) => ({ ...s, category: tab.key }))}
+                onClick={() => { setF((s) => ({ ...s, category: "all" })); setExpandedParent(null); }}
                 className={`shrink-0 text-xs font-semibold px-3.5 py-1.5 rounded-full transition-colors ${
-                  f.category === tab.key
+                  f.category === "all"
                     ? "bg-[#111111] dark:bg-[#F9FAFB] text-white dark:text-[#111111]"
                     : "bg-gray-100 dark:bg-[#374151] text-gray-700 dark:text-[#9CA3AF] hover:bg-gray-200 dark:hover:bg-[#4B5563]"
                 }`}
               >
-                {tab.label}
+                전체
               </button>
-            ))}
+
+              {/* 1차 카테고리 */}
+              {CATEGORY_TREE.map((parent) => {
+                const isActive = activePrimaryKey === parent.key;
+                return (
+                  <button
+                    key={parent.key}
+                    onClick={(e) => handleParentTabClick(parent.key, e)}
+                    onMouseEnter={(e) => !isMobile && onParentMouseEnter(parent.key, e)}
+                    onMouseLeave={() => !isMobile && onParentMouseLeave()}
+                    className={`shrink-0 flex items-center gap-0.5 text-xs font-semibold px-3.5 py-1.5 rounded-full transition-colors ${
+                      isActive
+                        ? "bg-[#111111] dark:bg-[#F9FAFB] text-white dark:text-[#111111]"
+                        : "bg-gray-100 dark:bg-[#374151] text-gray-700 dark:text-[#9CA3AF] hover:bg-gray-200 dark:hover:bg-[#4B5563]"
+                    }`}
+                  >
+                    {parent.label}
+                    <ChevronDown
+                      size={10}
+                      className={`transition-transform duration-150 ${
+                        isMobile && expandedParent === parent.key ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                );
+              })}
+            </div>
           </div>
+
+          {/* 2차 카테고리 드롭다운 — absolute, 탭 버튼 바로 아래 */}
+          {activeSubParent && (
+            <div
+              style={{ left: dropdownLeft, width: DROPDOWN_WIDTH }}
+              className="absolute top-[calc(100%+6px)] z-30 bg-white dark:bg-[#1e2130] border border-gray-200 dark:border-white/10 rounded-xl shadow-xl p-3"
+              onMouseEnter={() => !isMobile && onSubPanelMouseEnter()}
+              onMouseLeave={() => !isMobile && onSubPanelMouseLeave()}
+            >
+              <div className="flex flex-wrap gap-1.5">
+                {CATEGORY_TREE.find((p) => p.key === activeSubParent)?.sub.map((sub) => (
+                  <button
+                    key={sub.key}
+                    onClick={() => handleSubClick(sub.key)}
+                    className={`text-[11px] font-medium px-3 py-1.5 rounded-xl border transition-colors ${
+                      f.category === sub.key
+                        ? "bg-[#111111] dark:bg-white/15 text-white dark:text-white border-transparent"
+                        : "bg-white dark:bg-transparent border-gray-200 dark:border-white/10 text-gray-600 dark:text-[#9CA3AF] hover:bg-gray-50 dark:hover:bg-white/10 hover:border-gray-300 dark:hover:border-transparent hover:text-gray-800 dark:hover:text-white"
+                    }`}
+                  >
+                    {sub.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Cards */}
@@ -561,7 +672,7 @@ export default function ChannelDirectory({
       (ch.channel_name ?? "").toLowerCase().includes(q) ||
       (ch.bio ?? "").toLowerCase().includes(q) ||
       (ch.content_keywords ?? []).some((k) => k.toLowerCase().includes(q)) ||
-      (ch.categories ?? []).some((c) => (CATEGORY_LABELS[c] ?? c).toLowerCase().includes(q))
+      (ch.categories ?? []).some((c) => (CATEGORY_ALL_LABELS[c] ?? c).toLowerCase().includes(q))
     );
     console.log(`[검색] "${search}" → ${result.length}/${channels.length}개 매칭`);
     return result;
