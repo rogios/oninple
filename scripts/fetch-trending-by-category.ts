@@ -13,7 +13,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import { createClient } from "@supabase/supabase-js";
-import ws from "ws";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const ws = require('ws');
 
 // ── 환경변수 로드 (.env.local 지원) ──────────────────────────────────────────
 
