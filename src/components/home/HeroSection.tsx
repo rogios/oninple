@@ -25,23 +25,8 @@ const heroTabs = [
   { label: "편집자", platform: "editor" },
 ];
 
-const SLIDE0_TABS = [
-  { label: "전체",   key: "전체" },
-  { label: "뷰티",   key: "뷰티/패션" },
-  { label: "푸드",   key: "푸드" },
-  { label: "여행",   key: "여행/아웃도어" },
-  { label: "스포츠", key: "스포츠/건강" },
-  { label: "IT",     key: "IT/테크" },
-  { label: "엔터",   key: "엔터테인먼트" },
-];
-
-const RANK_COLORS     = ["#E8292E", "#FF6B35", "#FFB800"];
-const MOCK_RISES      = ["7", "12", "3"];
-const THUMB_GRADIENTS = [
-  "linear-gradient(135deg, #E8292E 0%, #5c0810 100%)",
-  "linear-gradient(135deg, #FF6B35 0%, #6b2c10 100%)",
-  "linear-gradient(135deg, #FFB800 0%, #6b4a00 100%)",
-];
+const RANK_COLORS = ["#E8292E", "#FF6B35", "#FFB800"];
+const CAT_TABS    = ["전체", "뷰티", "푸드", "여행", "스포츠", "IT", "엔터"];
 
 const MOCK_VIDEOS: TrendingVideo[] = [
   { title: "이번 주 가장 핫한 뷰티 트렌드 TOP 10", channelTitle: "뷰티나나",  viewCount: 120000 },
@@ -58,7 +43,6 @@ function formatViews(n?: number): string {
 // ── 오른쪽 슬라이드 0: 급상승 트렌드 ───────────────────────────────────────
 function Slide0() {
   const [allCategories, setAllCategories] = useState<Array<{ category: string; videos: TrendingVideo[] }>>([]);
-  const [activeTab, setActiveTab] = useState("전체");
 
   useEffect(() => {
     fetch("/api/youtube/trending-by-category")
@@ -75,124 +59,140 @@ function Slide0() {
 
   const displayVideos: TrendingVideo[] = (() => {
     if (allCategories.length === 0) return MOCK_VIDEOS;
-    if (activeTab === "전체") {
-      const out: TrendingVideo[] = [];
-      for (const cat of allCategories) {
-        if (cat.videos.length > 0) { out.push(cat.videos[0]); }
-        if (out.length >= 3) break;
-      }
-      return out.length >= 3 ? out : MOCK_VIDEOS;
+    const out: TrendingVideo[] = [];
+    for (const cat of allCategories) {
+      if (cat.videos.length > 0) out.push(cat.videos[0]);
+      if (out.length >= 3) break;
     }
-    const tabKey = SLIDE0_TABS.find((t) => t.label === activeTab)?.key;
-    const cat    = allCategories.find((c) => c.category === tabKey);
-    const vids   = cat?.videos.slice(0, 3) ?? [];
-    return vids.length >= 3 ? vids : MOCK_VIDEOS;
+    return out.length >= 3 ? out : MOCK_VIDEOS;
   })();
 
-  return (
-    <div className="bg-[#0d1117] rounded-3xl shadow-xl border border-[#1e2530] w-full h-full overflow-hidden flex flex-col">
+  const now   = new Date();
+  const dateLabel = `${String(now.getMonth() + 1).padStart(2, "0")}.${String(now.getDate()).padStart(2, "0")}`;
 
+  return (
+    <div
+      className="w-full h-full flex flex-col overflow-hidden shadow-xl"
+      style={{ background: "#1a1f2e", borderRadius: 16, padding: 20 }}
+    >
       {/* ── 상단 헤더 ── */}
-      <div className="px-5 pt-5 pb-3 flex items-start justify-between gap-3">
-        <div className="flex items-baseline gap-3 min-w-0">
-          <span className="text-5xl font-black text-[#E8292E] leading-none shrink-0">32</span>
-          <div className="min-w-0">
-            <div className="text-sm font-bold text-white leading-tight">이번 주 급상승 영상</div>
-            <div className="text-[10px] text-gray-500 mt-0.5">9개 카테고리별 인기영상 · 매일 업데이트</div>
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-start gap-3">
+          {/* 아이콘 박스 + 날짜 */}
+          <div className="flex flex-col items-center gap-1">
+            <div
+              className="flex items-center justify-center"
+              style={{ background: "#252d3d", borderRadius: 8, width: 36, height: 36 }}
+            >
+              <span style={{ fontSize: 16, lineHeight: 1 }}>📅</span>
+            </div>
+            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>{dateLabel}</span>
           </div>
-        </div>
-        {/* 다크 원형 + 빨간 상승 화살표 아이콘 */}
-        <div className="w-10 h-10 rounded-full bg-[#161b22] border border-white/10 flex items-center justify-center shrink-0">
-          <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="#E8292E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-            <polyline points="16 7 22 7 22 13" />
-          </svg>
+          {/* 타이틀 */}
+          <div>
+            <div style={{ color: "white", fontSize: 18, fontWeight: 500, lineHeight: 1.3 }}>
+              이번 주 급상승 영상
+            </div>
+            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 11, marginTop: 3 }}>
+              매일 업데이트
+            </div>
+          </div>
         </div>
       </div>
 
       {/* ── 카테고리 탭 ── */}
       <div
-        className="px-5 pb-3 flex gap-2 overflow-x-auto"
+        className="flex gap-1.5 mb-4 overflow-x-auto"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
       >
-        {SLIDE0_TABS.map((tab) => (
-          <button
-            key={tab.label}
-            type="button"
-            onClick={() => setActiveTab(tab.label)}
-            className={`text-xs font-bold px-3 py-1.5 rounded-full whitespace-nowrap shrink-0 transition-colors ${
-              activeTab === tab.label
-                ? "bg-[#E8292E] text-white"
-                : "bg-[#1a1f2e] text-gray-400 hover:text-gray-200"
-            }`}
+        {CAT_TABS.map((tab) => (
+          <span
+            key={tab}
+            className="shrink-0"
+            style={{
+              fontSize: 12,
+              padding: "4px 12px",
+              borderRadius: 20,
+              border: tab === "전체"
+                ? "1px solid #E8292E"
+                : "1px solid rgba(255,255,255,0.15)",
+              color: tab === "전체" ? "#E8292E" : "white",
+              whiteSpace: "nowrap",
+              cursor: "default",
+            }}
           >
-            {tab.label}
-          </button>
+            {tab}
+          </span>
         ))}
       </div>
 
-      {/* ── 구분선 ── */}
-      <div className="mx-5 h-px bg-white/6 mb-3" />
-
       {/* ── 랭킹 리스트 ── */}
-      <div className="flex-1 flex flex-col gap-2.5 px-5 overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden">
         {displayVideos.slice(0, 3).map((v, i) => (
-          <div key={i} className="flex items-center gap-3.5 bg-[#1a1f2e] rounded-xl px-4 py-3.5 border border-white/5">
-            {/* 순위 + 상승폭 */}
-            <div className="flex flex-col items-center shrink-0 w-6">
-              <span className="text-xl font-black leading-none" style={{ color: RANK_COLORS[i] }}>{i + 1}</span>
-              <div className="flex items-center gap-0.5 mt-1">
-                <span className="text-[9px] font-black leading-none" style={{ color: RANK_COLORS[i] }}>↑</span>
-                <span className="text-[9px] font-black leading-none" style={{ color: RANK_COLORS[i] }}>{MOCK_RISES[i]}</span>
-              </div>
-            </div>
-            {/* 썸네일 */}
-            {v.thumbnail ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={v.thumbnail} alt="" className="w-16 h-11 rounded-lg object-cover shrink-0" />
-            ) : (
-              <div
-                className="w-16 h-11 rounded-lg shrink-0 flex items-center justify-center"
-                style={{ background: THUMB_GRADIENTS[i] }}
+          <div key={i}>
+            {i > 0 && (
+              <div style={{ height: 1, background: "rgba(255,255,255,0.06)" }} />
+            )}
+            <div className="flex items-center gap-3" style={{ padding: "11px 0" }}>
+              {/* 순위 */}
+              <span
+                className="shrink-0 text-center"
+                style={{ color: RANK_COLORS[i], fontSize: 20, fontWeight: 700, lineHeight: 1, width: 20 }}
               >
-                <svg viewBox="0 0 24 24" fill="white" className="w-4 h-4 opacity-50">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
-            )}
-            {/* 텍스트 */}
-            <div className="min-w-0 flex-1">
-              <div className="text-[11px] font-semibold text-white truncate leading-tight mb-1">{v.title}</div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[9px] text-gray-500 truncate">{v.channelTitle}</span>
-                {v.viewCount ? (
-                  <span className="text-[9px] text-gray-600 shrink-0">· {formatViews(v.viewCount)}</span>
-                ) : null}
+                {i + 1}
+              </span>
+              {/* 썸네일 */}
+              {v.thumbnail ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={v.thumbnail}
+                  alt=""
+                  className="shrink-0 object-cover"
+                  style={{ width: 48, height: 36, borderRadius: 8 }}
+                />
+              ) : (
+                <div
+                  className="shrink-0 flex items-center justify-center"
+                  style={{ width: 48, height: 36, borderRadius: 8, background: "#252d3d" }}
+                >
+                  <svg viewBox="0 0 24 24" fill="white" style={{ width: 14, height: 14, opacity: 0.45 }}>
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              )}
+              {/* 텍스트 */}
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div
+                  className="truncate"
+                  style={{ color: "white", fontSize: 13, fontWeight: 500, lineHeight: 1.3, marginBottom: 3 }}
+                >
+                  {v.title}
+                </div>
+                <div style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>
+                  {v.channelTitle}{v.viewCount ? ` · ${formatViews(v.viewCount)}` : ""}
+                </div>
               </div>
             </div>
-            {/* 급상승 뱃지 (우측) */}
-            {i === 0 && (
-              <div className="shrink-0">
-                <span className="flex flex-col items-center text-[8px] font-bold text-[#E8292E] bg-[#E8292E]/12 border border-[#E8292E]/20 px-1.5 py-1.5 rounded-lg whitespace-nowrap leading-tight text-center gap-0.5">
-                  <span>🔥</span>
-                  <span>급상승</span>
-                </span>
-              </div>
-            )}
           </div>
         ))}
       </div>
 
-      {/* ── 최하단 버튼 ── */}
-      <div className="px-5 py-4">
-        <Link
-          href="/trending"
-          className="w-full flex items-center justify-center gap-1 text-xs font-semibold text-gray-300 border border-white/15 rounded-xl py-3 hover:border-[#E8292E]/40 hover:text-white transition-colors"
-        >
-          모든 트렌드 보기
-          <span className="text-[#E8292E] text-sm">›</span>
-        </Link>
-      </div>
+      {/* ── 하단 버튼 ── */}
+      <Link
+        href="/trending"
+        className="flex items-center justify-center transition-colors hover:bg-white/5"
+        style={{
+          color: "white",
+          fontSize: 13,
+          border: "1px solid rgba(255,255,255,0.15)",
+          borderRadius: 8,
+          padding: "10px 0",
+          marginTop: 12,
+          textDecoration: "none",
+        }}
+      >
+        모든 트렌드 보기 ›
+      </Link>
     </div>
   );
 }
