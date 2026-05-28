@@ -78,26 +78,18 @@ function Slide0() {
       style={{ background: "#1a1f2e", borderRadius: 16, padding: 20 }}
     >
       {/* ── 상단 헤더 ── */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-start gap-3">
-          {/* 아이콘 박스 + 날짜 */}
-          <div className="flex flex-col items-center gap-1">
-            <div
-              className="flex items-center justify-center"
-              style={{ background: "#252d3d", borderRadius: 8, width: 36, height: 36 }}
-            >
-              <span style={{ fontSize: 16, lineHeight: 1 }}>📅</span>
-            </div>
-            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>{dateLabel}</span>
+      <div className="flex items-center gap-4 mb-4">
+        {/* 날짜: 시각적 포인트 */}
+        <div style={{ color: "white", fontSize: 36, fontWeight: 700, lineHeight: 1, letterSpacing: "-0.5px", flexShrink: 0 }}>
+          {dateLabel}
+        </div>
+        {/* 타이틀 + 서브텍스트 */}
+        <div>
+          <div style={{ color: "white", fontSize: 15, fontWeight: 500, lineHeight: 1.3 }}>
+            이번 주 급상승 영상
           </div>
-          {/* 타이틀 */}
-          <div>
-            <div style={{ color: "white", fontSize: 18, fontWeight: 500, lineHeight: 1.3 }}>
-              이번 주 급상승 영상
-            </div>
-            <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 11, marginTop: 3 }}>
-              매일 업데이트
-            </div>
+          <div style={{ color: "rgba(255,255,255,0.35)", fontSize: 11, marginTop: 3 }}>
+            매일 업데이트
           </div>
         </div>
       </div>
