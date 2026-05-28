@@ -1,8 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+
+type TrendingVideo = {
+  title: string;
+  channelTitle: string;
+  thumbnail?: string;
+  viewCount?: number;
+};
 
 const checklist = [
   "수수료 없이 카카오·DM으로 직접 컨택",
@@ -18,89 +25,146 @@ const heroTabs = [
   { label: "편집자", platform: "editor" },
 ];
 
+const SLIDE0_TABS = [
+  { label: "전체",   key: "전체" },
+  { label: "뷰티",   key: "뷰티/패션" },
+  { label: "푸드",   key: "푸드" },
+  { label: "여행",   key: "여행/아웃도어" },
+  { label: "스포츠", key: "스포츠/건강" },
+  { label: "IT",     key: "IT/테크" },
+  { label: "엔터",   key: "엔터테인먼트" },
+];
+
+const RANK_COLORS = ["#E8292E", "#FF6B35", "#FFB800"];
+const MOCK_RISES  = ["+7", "+12", "+3"];
+
+const MOCK_VIDEOS: TrendingVideo[] = [
+  { title: "이번 주 가장 핫한 뷰티 트렌드 TOP 10", channelTitle: "뷰티나나",  viewCount: 120000 },
+  { title: "서울 숨은 맛집 총정리 먹방 브이로그",   channelTitle: "먹방대왕",  viewCount: 87000  },
+  { title: "ChatGPT로 여행 일정 짜는 방법 가이드",  channelTitle: "AI여행러", viewCount: 65000  },
+];
+
+function formatViews(n?: number): string {
+  if (!n) return "";
+  if (n >= 10000) return `${(n / 10000).toFixed(1)}만`;
+  return n.toLocaleString();
+}
+
 // ── 오른쪽 슬라이드 0: 급상승 트렌드 ───────────────────────────────────────
 function Slide0() {
-  const [videos, setVideos] = useState<Array<{ title: string; channelTitle: string; thumbnail?: string }>>([]);
+  const [allCategories, setAllCategories] = useState<Array<{ category: string; videos: TrendingVideo[] }>>([]);
+  const [activeTab, setActiveTab] = useState("전체");
 
   useEffect(() => {
     fetch("/api/youtube/trending-by-category")
       .then((r) => r.json())
       .then((data) => {
-        const out: Array<{ title: string; channelTitle: string; thumbnail?: string }> = [];
-        for (const cat of data.categories ?? []) {
-          for (const v of cat.videos ?? []) {
-            out.push({ title: v.title, channelTitle: v.channelTitle, thumbnail: v.thumbnail });
-            if (out.length >= 3) break;
-          }
-          if (out.length >= 3) break;
-        }
-        if (out.length > 0) setVideos(out);
+        const cats = (data.categories ?? []).map((c: { category: string; videos: TrendingVideo[] }) => ({
+          category: c.category,
+          videos: c.videos ?? [],
+        }));
+        if (cats.length > 0) setAllCategories(cats);
       })
       .catch(() => {});
   }, []);
 
-  const mock: Array<{ title: string; channelTitle: string; thumbnail?: string }> = [
-    { title: "이번 주 가장 핫한 뷰티 트렌드 TOP 10", channelTitle: "뷰티나나" },
-    { title: "서울 숨은 맛집 총정리 먹방 브이로그", channelTitle: "먹방대왕" },
-    { title: "ChatGPT로 여행 일정 짜는 방법 완벽 가이드", channelTitle: "AI여행러" },
-  ];
-  const display = videos.length >= 3 ? videos : mock;
-  const thumbColors = ["#c9191e", "#a01218", "#7d0d12"];
+  const displayVideos: TrendingVideo[] = (() => {
+    if (allCategories.length === 0) return MOCK_VIDEOS;
+    if (activeTab === "전체") {
+      const out: TrendingVideo[] = [];
+      for (const cat of allCategories) {
+        if (cat.videos.length > 0) { out.push(cat.videos[0]); }
+        if (out.length >= 3) break;
+      }
+      return out.length >= 3 ? out : MOCK_VIDEOS;
+    }
+    const tabKey = SLIDE0_TABS.find((t) => t.label === activeTab)?.key;
+    const cat    = allCategories.find((c) => c.category === tabKey);
+    const vids   = cat?.videos.slice(0, 3) ?? [];
+    return vids.length >= 3 ? vids : MOCK_VIDEOS;
+  })();
 
   return (
-    <div className="bg-[#1a1f2e] rounded-3xl shadow-xl border border-[#2a3040] w-full h-full overflow-hidden flex flex-col p-6">
-      {/* 상단: 숫자 + 레이블 */}
-      <div className="flex items-center gap-3 mb-3">
-        <div className="flex items-baseline gap-2">
-          <span className="text-5xl font-black text-[#E8292E] leading-none">32</span>
-          <span className="text-base font-bold text-white leading-tight">이번 주<br />급상승</span>
-        </div>
-        <div className="ml-auto text-right shrink-0">
-          <div className="text-[10px] text-gray-400 leading-relaxed">9개 카테고리</div>
-          <div className="text-[10px] text-gray-400">매일 업데이트</div>
-        </div>
-      </div>
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-[10px] font-bold text-[#E8292E] bg-[#E8292E]/15 px-2.5 py-1 rounded-full">🔥 실시간 급상승</span>
-        <span className="text-[10px] text-gray-500">뷰티 · 푸드 · IT · 여행</span>
-      </div>
-      <div className="h-px bg-white/8 mb-4" />
+    <div className="bg-[#0d1117] rounded-3xl shadow-xl border border-[#1e2530] w-full h-full overflow-hidden flex flex-col">
 
-      {/* 하단: 영상 카드 3개 살짝 겹쳐서 */}
-      <div className="flex-1 flex flex-col justify-center">
-        {display.slice(0, 3).map((v, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-3 bg-[#242937] border border-white/10 rounded-2xl px-3 py-3"
-            style={{
-              marginTop: i > 0 ? -10 : 0,
-              position: "relative",
-              zIndex: 3 - i,
-              boxShadow: "0 6px 20px rgba(0,0,0,0.45)",
-            }}
+      {/* ── 상단 헤더 ── */}
+      <div className="px-5 pt-5 pb-3 flex items-start justify-between gap-3">
+        <div className="flex items-baseline gap-2.5 min-w-0">
+          <span className="text-4xl font-black text-[#E8292E] leading-none shrink-0">32</span>
+          <div className="min-w-0">
+            <div className="text-sm font-bold text-white leading-tight">이번 주 급상승 영상</div>
+            <div className="text-[10px] text-gray-500 mt-0.5">9개 카테고리별 인기영상 · 매일 업데이트</div>
+          </div>
+        </div>
+        <div className="w-9 h-9 rounded-full bg-[#E8292E]/15 border border-[#E8292E]/30 flex items-center justify-center shrink-0">
+          <span className="text-base leading-none">🔥</span>
+        </div>
+      </div>
+
+      {/* ── 카테고리 탭 ── */}
+      <div
+        className="px-5 pb-3 flex gap-1.5 overflow-x-auto"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
+      >
+        {SLIDE0_TABS.map((tab) => (
+          <button
+            key={tab.label}
+            type="button"
+            onClick={() => setActiveTab(tab.label)}
+            className={`text-[10px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap shrink-0 transition-colors ${
+              activeTab === tab.label
+                ? "bg-[#E8292E] text-white"
+                : "bg-[#1a1f2e] text-gray-400 hover:text-gray-200"
+            }`}
           >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── 구분선 ── */}
+      <div className="mx-5 h-px bg-white/6 mb-3" />
+
+      {/* ── 랭킹 리스트 ── */}
+      <div className="flex-1 flex flex-col gap-2 px-5 overflow-hidden">
+        {displayVideos.slice(0, 3).map((v, i) => (
+          <div key={i} className="flex items-center gap-3 bg-[#1a1f2e] rounded-xl px-3 py-2.5 border border-white/5">
+            {/* 순위 + 상승폭 */}
+            <div className="flex flex-col items-center shrink-0 w-5">
+              <span className="text-base font-black leading-none" style={{ color: RANK_COLORS[i] }}>{i + 1}</span>
+              <span className="text-[8px] font-bold mt-0.5" style={{ color: RANK_COLORS[i] }}>↑{MOCK_RISES[i]}</span>
+            </div>
+            {/* 썸네일 */}
             {v.thumbnail ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={v.thumbnail} alt="" className="w-14 h-10 rounded-lg object-cover shrink-0" />
             ) : (
-              <div className="w-14 h-10 rounded-lg shrink-0" style={{ background: thumbColors[i] }} />
+              <div className="w-14 h-10 rounded-lg shrink-0 bg-[#2a3040]" />
             )}
+            {/* 텍스트 */}
             <div className="min-w-0 flex-1">
-              <div className="text-[11px] font-semibold text-white truncate leading-tight">{v.title}</div>
-              <div className="text-[10px] text-gray-400 mt-0.5 truncate">{v.channelTitle}</div>
-            </div>
-            <div className="w-6 h-6 rounded-full bg-[#E8292E] flex items-center justify-center shrink-0">
-              <span className="text-[9px] font-black text-white">{i + 1}</span>
+              <div className="text-[11px] font-semibold text-white truncate leading-tight mb-0.5">{v.title}</div>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[9px] text-gray-500 truncate max-w-[70px]">{v.channelTitle}</span>
+                {v.viewCount ? (
+                  <span className="text-[9px] text-gray-600">· {formatViews(v.viewCount)}</span>
+                ) : null}
+                {i === 0 && (
+                  <span className="text-[8px] font-bold text-[#E8292E] bg-[#E8292E]/10 px-1.5 py-0.5 rounded-full whitespace-nowrap">🔥 급상승</span>
+                )}
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* 하단 푸터 */}
-      <div className="mt-4 pt-3 border-t border-white/8 flex items-center justify-between">
-        <span className="text-[10px] text-gray-500">매일 자정 자동 업데이트</span>
-        <Link href="/trending" className="text-[10px] font-bold text-[#E8292E] hover:underline">
-          전체 보기 →
+      {/* ── 최하단 버튼 ── */}
+      <div className="px-5 py-4">
+        <Link
+          href="/trending"
+          className="w-full flex items-center justify-center text-xs font-semibold text-gray-400 border border-white/12 rounded-xl py-2.5 hover:border-white/25 hover:text-white transition-colors"
+        >
+          모든 트렌드 보기 ›
         </Link>
       </div>
     </div>
