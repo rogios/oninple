@@ -18,6 +18,89 @@ const heroTabs = [
   { label: "편집자", platform: "editor" },
 ];
 
+// ── 오른쪽 슬라이드 0: 급상승 트렌드 ───────────────────────────────────────
+function Slide0() {
+  const [videos, setVideos] = useState<Array<{ title: string; channelTitle: string }>>([]);
+
+  useEffect(() => {
+    fetch("/api/youtube/trending-by-category")
+      .then((r) => r.json())
+      .then((data) => {
+        const out: Array<{ title: string; channelTitle: string }> = [];
+        for (const cat of data.categories ?? []) {
+          for (const v of cat.videos ?? []) {
+            out.push({ title: v.title, channelTitle: v.channelTitle });
+            if (out.length >= 3) break;
+          }
+          if (out.length >= 3) break;
+        }
+        if (out.length > 0) setVideos(out);
+      })
+      .catch(() => {});
+  }, []);
+
+  const mock = [
+    { title: "이번 주 가장 핫한 뷰티 트렌드 TOP 10", channelTitle: "뷰티나나" },
+    { title: "서울 숨은 맛집 총정리 먹방 브이로그", channelTitle: "먹방대왕" },
+    { title: "ChatGPT로 여행 일정 짜는 방법 완벽 가이드", channelTitle: "AI여행러" },
+  ];
+  const display = videos.length >= 3 ? videos : mock;
+
+  return (
+    <div className="bg-white dark:bg-[#1F2937] rounded-3xl shadow-xl border border-gray-100 dark:border-[#374151] w-full h-full overflow-hidden">
+      <div className="grid grid-cols-1 sm:grid-cols-2 h-full">
+        {/* 왼쪽: 통계 */}
+        <div className="p-6 flex flex-col justify-center">
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#E8292E] bg-[#E8292E]/8 px-3 py-1.5 rounded-full w-fit mb-4">
+            🔥 급상승 트렌드
+          </span>
+          <div className="flex items-baseline gap-2 mb-1">
+            <span className="text-6xl font-black text-[#E8292E] leading-none">32</span>
+            <span className="text-base font-bold text-[#111111] dark:text-[#F9FAFB]">이번 주 급상승</span>
+          </div>
+          <p className="text-xs text-gray-500 dark:text-[#6B7280] mb-4">9개 카테고리 · 매일 업데이트</p>
+          <p className="text-xs text-gray-700 dark:text-[#9CA3AF] leading-relaxed mb-4">
+            뷰티·푸드·여행·IT 등 9개 카테고리에서<br />
+            매일 자정 급상승 영상을 자동 수집합니다
+          </p>
+          <Link
+            href="/trending"
+            className="inline-flex items-center gap-1 text-xs font-bold text-[#E8292E] hover:underline w-fit"
+          >
+            지금 보러가기 →
+          </Link>
+        </div>
+        {/* 오른쪽: 영상 카드 3개 (살짝 겹쳐서) */}
+        <div className="bg-[#1a1f2e] sm:rounded-r-3xl p-5 flex flex-col justify-center">
+          <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Top Videos</div>
+          <div className="flex flex-col">
+            {display.slice(0, 3).map((v, i) => (
+              <div
+                key={i}
+                className="relative bg-[#242937] border border-white/10 rounded-xl px-3 py-2.5 flex items-center gap-3"
+                style={{
+                  marginTop: i > 0 ? -8 : 0,
+                  zIndex: 3 - i,
+                  boxShadow: "0 4px 14px rgba(0,0,0,0.35)",
+                }}
+              >
+                <div className="w-6 h-6 rounded-full bg-[#E8292E] flex items-center justify-center shrink-0">
+                  <span className="text-[10px] font-black text-white">#{i + 1}</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-[11px] font-semibold text-white truncate leading-tight">{v.title}</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">{v.channelTitle}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 text-center text-[10px] text-gray-500">매일 자정 자동 업데이트</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── 오른쪽 슬라이드 1: 모두 무료 ────────────────────────────────────────────
 function Slide1() {
   return (
@@ -214,7 +297,7 @@ function Slide3() {
 }
 
 // ── 메인 ─────────────────────────────────────────────────────────────────────
-const SLIDES = [Slide1, Slide2, Slide3];
+const SLIDES = [Slide0, Slide1, Slide2, Slide3];
 
 export default function HeroSection({
   activePlatforms,
@@ -346,12 +429,12 @@ export default function HeroSection({
               >
                 무료로 시작하기
               </Link>
-              <a
-                href="#youtube-section"
+              <Link
+                href="/trending"
                 className="inline-flex items-center justify-center border border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] text-[#111111] dark:text-[#F9FAFB] font-medium px-6 py-3 rounded-full text-sm transition-colors"
               >
-                인플루언서 탐색 →
-              </a>
+                🔥 급상승 영상 보기 →
+              </Link>
             </div>
           </div>
 
