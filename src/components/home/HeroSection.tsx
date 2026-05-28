@@ -20,16 +20,16 @@ const heroTabs = [
 
 // ── 오른쪽 슬라이드 0: 급상승 트렌드 ───────────────────────────────────────
 function Slide0() {
-  const [videos, setVideos] = useState<Array<{ title: string; channelTitle: string }>>([]);
+  const [videos, setVideos] = useState<Array<{ title: string; channelTitle: string; thumbnail?: string }>>([]);
 
   useEffect(() => {
     fetch("/api/youtube/trending-by-category")
       .then((r) => r.json())
       .then((data) => {
-        const out: Array<{ title: string; channelTitle: string }> = [];
+        const out: Array<{ title: string; channelTitle: string; thumbnail?: string }> = [];
         for (const cat of data.categories ?? []) {
           for (const v of cat.videos ?? []) {
-            out.push({ title: v.title, channelTitle: v.channelTitle });
+            out.push({ title: v.title, channelTitle: v.channelTitle, thumbnail: v.thumbnail });
             if (out.length >= 3) break;
           }
           if (out.length >= 3) break;
@@ -45,57 +45,63 @@ function Slide0() {
     { title: "ChatGPT로 여행 일정 짜는 방법 완벽 가이드", channelTitle: "AI여행러" },
   ];
   const display = videos.length >= 3 ? videos : mock;
+  const thumbColors = ["#c9191e", "#a01218", "#7d0d12"];
 
   return (
-    <div className="bg-white dark:bg-[#1F2937] rounded-3xl shadow-xl border border-gray-100 dark:border-[#374151] w-full h-full overflow-hidden">
-      <div className="grid grid-cols-1 sm:grid-cols-2 h-full">
-        {/* 왼쪽: 통계 */}
-        <div className="p-6 flex flex-col justify-center">
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#E8292E] bg-[#E8292E]/8 px-3 py-1.5 rounded-full w-fit mb-4">
-            🔥 급상승 트렌드
-          </span>
-          <div className="flex items-baseline gap-2 mb-1">
-            <span className="text-6xl font-black text-[#E8292E] leading-none">32</span>
-            <span className="text-base font-bold text-[#111111] dark:text-[#F9FAFB]">이번 주 급상승</span>
-          </div>
-          <p className="text-xs text-gray-500 dark:text-[#6B7280] mb-4">9개 카테고리 · 매일 업데이트</p>
-          <p className="text-xs text-gray-700 dark:text-[#9CA3AF] leading-relaxed mb-4">
-            뷰티·푸드·여행·IT 등 9개 카테고리에서<br />
-            매일 자정 급상승 영상을 자동 수집합니다
-          </p>
-          <Link
-            href="/trending"
-            className="inline-flex items-center gap-1 text-xs font-bold text-[#E8292E] hover:underline w-fit"
+    <div className="bg-[#1a1f2e] rounded-3xl shadow-xl border border-[#2a3040] w-full h-full overflow-hidden flex flex-col p-6">
+      {/* 상단: 숫자 + 레이블 */}
+      <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-baseline gap-2">
+          <span className="text-5xl font-black text-[#E8292E] leading-none">32</span>
+          <span className="text-base font-bold text-white leading-tight">이번 주<br />급상승</span>
+        </div>
+        <div className="ml-auto text-right shrink-0">
+          <div className="text-[10px] text-gray-400 leading-relaxed">9개 카테고리</div>
+          <div className="text-[10px] text-gray-400">매일 업데이트</div>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-[10px] font-bold text-[#E8292E] bg-[#E8292E]/15 px-2.5 py-1 rounded-full">🔥 실시간 급상승</span>
+        <span className="text-[10px] text-gray-500">뷰티 · 푸드 · IT · 여행</span>
+      </div>
+      <div className="h-px bg-white/8 mb-4" />
+
+      {/* 하단: 영상 카드 3개 살짝 겹쳐서 */}
+      <div className="flex-1 flex flex-col justify-center">
+        {display.slice(0, 3).map((v, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-3 bg-[#242937] border border-white/10 rounded-2xl px-3 py-3"
+            style={{
+              marginTop: i > 0 ? -10 : 0,
+              position: "relative",
+              zIndex: 3 - i,
+              boxShadow: "0 6px 20px rgba(0,0,0,0.45)",
+            }}
           >
-            지금 보러가기 →
-          </Link>
-        </div>
-        {/* 오른쪽: 영상 카드 3개 (살짝 겹쳐서) */}
-        <div className="bg-[#1a1f2e] sm:rounded-r-3xl p-5 flex flex-col justify-center">
-          <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Top Videos</div>
-          <div className="flex flex-col">
-            {display.slice(0, 3).map((v, i) => (
-              <div
-                key={i}
-                className="relative bg-[#242937] border border-white/10 rounded-xl px-3 py-2.5 flex items-center gap-3"
-                style={{
-                  marginTop: i > 0 ? -8 : 0,
-                  zIndex: 3 - i,
-                  boxShadow: "0 4px 14px rgba(0,0,0,0.35)",
-                }}
-              >
-                <div className="w-6 h-6 rounded-full bg-[#E8292E] flex items-center justify-center shrink-0">
-                  <span className="text-[10px] font-black text-white">#{i + 1}</span>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-[11px] font-semibold text-white truncate leading-tight">{v.title}</div>
-                  <div className="text-[10px] text-gray-400 mt-0.5">{v.channelTitle}</div>
-                </div>
-              </div>
-            ))}
+            {v.thumbnail ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={v.thumbnail} alt="" className="w-14 h-10 rounded-lg object-cover shrink-0" />
+            ) : (
+              <div className="w-14 h-10 rounded-lg shrink-0" style={{ background: thumbColors[i] }} />
+            )}
+            <div className="min-w-0 flex-1">
+              <div className="text-[11px] font-semibold text-white truncate leading-tight">{v.title}</div>
+              <div className="text-[10px] text-gray-400 mt-0.5 truncate">{v.channelTitle}</div>
+            </div>
+            <div className="w-6 h-6 rounded-full bg-[#E8292E] flex items-center justify-center shrink-0">
+              <span className="text-[9px] font-black text-white">{i + 1}</span>
+            </div>
           </div>
-          <div className="mt-5 text-center text-[10px] text-gray-500">매일 자정 자동 업데이트</div>
-        </div>
+        ))}
+      </div>
+
+      {/* 하단 푸터 */}
+      <div className="mt-4 pt-3 border-t border-white/8 flex items-center justify-between">
+        <span className="text-[10px] text-gray-500">매일 자정 자동 업데이트</span>
+        <Link href="/trending" className="text-[10px] font-bold text-[#E8292E] hover:underline">
+          전체 보기 →
+        </Link>
       </div>
     </div>
   );
@@ -443,7 +449,29 @@ export default function HeroSection({
             <div className="absolute -inset-6 bg-gradient-to-br from-[#E8292E]/6 via-transparent to-[#111111]/4 rounded-3xl -z-10" />
 
             {/* 슬라이드 스택 (CSS grid overlap으로 높이 고정) */}
-            <div className="flex-1 grid">
+            <div className="flex-1 grid relative">
+              {/* 왼쪽 화살표 */}
+              <button
+                type="button"
+                aria-label="이전 슬라이드"
+                onClick={() => setIdx((i) => (i - 1 + SLIDES.length) % SLIDES.length)}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center text-gray-700 dark:text-white opacity-30 hover:opacity-70 transition-opacity"
+              >
+                <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+              {/* 오른쪽 화살표 */}
+              <button
+                type="button"
+                aria-label="다음 슬라이드"
+                onClick={() => setIdx((i) => (i + 1) % SLIDES.length)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 flex items-center justify-center text-gray-700 dark:text-white opacity-30 hover:opacity-70 transition-opacity"
+              >
+                <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
               {SLIDES.map((SlideComp, i) => (
                 <div
                   key={i}
