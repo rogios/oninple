@@ -13,6 +13,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { createClient } from "@supabase/supabase-js";
+import ws from "ws";
 
 // ── 환경변수 로드 (.env.local 지원) ──────────────────────────────────────────
 
@@ -213,7 +214,9 @@ async function main(): Promise<void> {
   if (!supabaseUrl) throw new Error("SUPABASE_URL이 설정되지 않았습니다.");
   if (!supabaseKey) throw new Error("SUPABASE_SERVICE_ROLE_KEY가 설정되지 않았습니다.");
 
-  const supabase = createClient(supabaseUrl, supabaseKey);
+  const supabase = createClient(supabaseUrl, supabaseKey, {
+    realtime: { transport: ws },
+  });
   const weekAgo = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
 
   console.log(`\n[fetch-trending-by-category] 시작 — ${new Date().toISOString()}`);

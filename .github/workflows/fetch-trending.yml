@@ -25,6 +25,9 @@ jobs:
       - name: Install ts-node
         run: npm install --no-save ts-node
 
+      - name: Install ws
+        run: npm install ws
+
       - name: Fetch and upsert trending videos
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
