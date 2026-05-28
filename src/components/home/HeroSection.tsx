@@ -35,8 +35,13 @@ const SLIDE0_TABS = [
   { label: "엔터",   key: "엔터테인먼트" },
 ];
 
-const RANK_COLORS = ["#E8292E", "#FF6B35", "#FFB800"];
-const MOCK_RISES  = ["+7", "+12", "+3"];
+const RANK_COLORS     = ["#E8292E", "#FF6B35", "#FFB800"];
+const MOCK_RISES      = ["7", "12", "3"];
+const THUMB_GRADIENTS = [
+  "linear-gradient(135deg, #E8292E 0%, #5c0810 100%)",
+  "linear-gradient(135deg, #FF6B35 0%, #6b2c10 100%)",
+  "linear-gradient(135deg, #FFB800 0%, #6b4a00 100%)",
+];
 
 const MOCK_VIDEOS: TrendingVideo[] = [
   { title: "이번 주 가장 핫한 뷰티 트렌드 TOP 10", channelTitle: "뷰티나나",  viewCount: 120000 },
@@ -89,21 +94,25 @@ function Slide0() {
 
       {/* ── 상단 헤더 ── */}
       <div className="px-5 pt-5 pb-3 flex items-start justify-between gap-3">
-        <div className="flex items-baseline gap-2.5 min-w-0">
-          <span className="text-4xl font-black text-[#E8292E] leading-none shrink-0">32</span>
+        <div className="flex items-baseline gap-3 min-w-0">
+          <span className="text-5xl font-black text-[#E8292E] leading-none shrink-0">32</span>
           <div className="min-w-0">
             <div className="text-sm font-bold text-white leading-tight">이번 주 급상승 영상</div>
             <div className="text-[10px] text-gray-500 mt-0.5">9개 카테고리별 인기영상 · 매일 업데이트</div>
           </div>
         </div>
-        <div className="w-9 h-9 rounded-full bg-[#E8292E]/15 border border-[#E8292E]/30 flex items-center justify-center shrink-0">
-          <span className="text-base leading-none">🔥</span>
+        {/* 다크 원형 + 빨간 상승 화살표 아이콘 */}
+        <div className="w-10 h-10 rounded-full bg-[#161b22] border border-white/10 flex items-center justify-center shrink-0">
+          <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="#E8292E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+            <polyline points="16 7 22 7 22 13" />
+          </svg>
         </div>
       </div>
 
       {/* ── 카테고리 탭 ── */}
       <div
-        className="px-5 pb-3 flex gap-1.5 overflow-x-auto"
+        className="px-5 pb-3 flex gap-2 overflow-x-auto"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
       >
         {SLIDE0_TABS.map((tab) => (
@@ -111,7 +120,7 @@ function Slide0() {
             key={tab.label}
             type="button"
             onClick={() => setActiveTab(tab.label)}
-            className={`text-[10px] font-bold px-2.5 py-1 rounded-full whitespace-nowrap shrink-0 transition-colors ${
+            className={`text-xs font-bold px-3 py-1.5 rounded-full whitespace-nowrap shrink-0 transition-colors ${
               activeTab === tab.label
                 ? "bg-[#E8292E] text-white"
                 : "bg-[#1a1f2e] text-gray-400 hover:text-gray-200"
@@ -126,34 +135,50 @@ function Slide0() {
       <div className="mx-5 h-px bg-white/6 mb-3" />
 
       {/* ── 랭킹 리스트 ── */}
-      <div className="flex-1 flex flex-col gap-2 px-5 overflow-hidden">
+      <div className="flex-1 flex flex-col gap-2.5 px-5 overflow-hidden">
         {displayVideos.slice(0, 3).map((v, i) => (
-          <div key={i} className="flex items-center gap-3 bg-[#1a1f2e] rounded-xl px-3 py-2.5 border border-white/5">
+          <div key={i} className="flex items-center gap-3.5 bg-[#1a1f2e] rounded-xl px-4 py-3.5 border border-white/5">
             {/* 순위 + 상승폭 */}
-            <div className="flex flex-col items-center shrink-0 w-5">
-              <span className="text-base font-black leading-none" style={{ color: RANK_COLORS[i] }}>{i + 1}</span>
-              <span className="text-[8px] font-bold mt-0.5" style={{ color: RANK_COLORS[i] }}>↑{MOCK_RISES[i]}</span>
+            <div className="flex flex-col items-center shrink-0 w-6">
+              <span className="text-xl font-black leading-none" style={{ color: RANK_COLORS[i] }}>{i + 1}</span>
+              <div className="flex items-center gap-0.5 mt-1">
+                <span className="text-[9px] font-black leading-none" style={{ color: RANK_COLORS[i] }}>↑</span>
+                <span className="text-[9px] font-black leading-none" style={{ color: RANK_COLORS[i] }}>{MOCK_RISES[i]}</span>
+              </div>
             </div>
             {/* 썸네일 */}
             {v.thumbnail ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={v.thumbnail} alt="" className="w-14 h-10 rounded-lg object-cover shrink-0" />
+              <img src={v.thumbnail} alt="" className="w-16 h-11 rounded-lg object-cover shrink-0" />
             ) : (
-              <div className="w-14 h-10 rounded-lg shrink-0 bg-[#2a3040]" />
+              <div
+                className="w-16 h-11 rounded-lg shrink-0 flex items-center justify-center"
+                style={{ background: THUMB_GRADIENTS[i] }}
+              >
+                <svg viewBox="0 0 24 24" fill="white" className="w-4 h-4 opacity-50">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
             )}
             {/* 텍스트 */}
             <div className="min-w-0 flex-1">
-              <div className="text-[11px] font-semibold text-white truncate leading-tight mb-0.5">{v.title}</div>
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[9px] text-gray-500 truncate max-w-[70px]">{v.channelTitle}</span>
+              <div className="text-[11px] font-semibold text-white truncate leading-tight mb-1">{v.title}</div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[9px] text-gray-500 truncate">{v.channelTitle}</span>
                 {v.viewCount ? (
-                  <span className="text-[9px] text-gray-600">· {formatViews(v.viewCount)}</span>
+                  <span className="text-[9px] text-gray-600 shrink-0">· {formatViews(v.viewCount)}</span>
                 ) : null}
-                {i === 0 && (
-                  <span className="text-[8px] font-bold text-[#E8292E] bg-[#E8292E]/10 px-1.5 py-0.5 rounded-full whitespace-nowrap">🔥 급상승</span>
-                )}
               </div>
             </div>
+            {/* 급상승 뱃지 (우측) */}
+            {i === 0 && (
+              <div className="shrink-0">
+                <span className="flex flex-col items-center text-[8px] font-bold text-[#E8292E] bg-[#E8292E]/12 border border-[#E8292E]/20 px-1.5 py-1.5 rounded-lg whitespace-nowrap leading-tight text-center gap-0.5">
+                  <span>🔥</span>
+                  <span>급상승</span>
+                </span>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -162,9 +187,10 @@ function Slide0() {
       <div className="px-5 py-4">
         <Link
           href="/trending"
-          className="w-full flex items-center justify-center text-xs font-semibold text-gray-400 border border-white/12 rounded-xl py-2.5 hover:border-white/25 hover:text-white transition-colors"
+          className="w-full flex items-center justify-center gap-1 text-xs font-semibold text-gray-300 border border-white/15 rounded-xl py-3 hover:border-[#E8292E]/40 hover:text-white transition-colors"
         >
-          모든 트렌드 보기 ›
+          모든 트렌드 보기
+          <span className="text-[#E8292E] text-sm">›</span>
         </Link>
       </div>
     </div>
