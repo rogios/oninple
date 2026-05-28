@@ -39,7 +39,7 @@ function Slide0() {
       .catch(() => {});
   }, []);
 
-  const mock = [
+  const mock: Array<{ title: string; channelTitle: string; thumbnail?: string }> = [
     { title: "이번 주 가장 핫한 뷰티 트렌드 TOP 10", channelTitle: "뷰티나나" },
     { title: "서울 숨은 맛집 총정리 먹방 브이로그", channelTitle: "먹방대왕" },
     { title: "ChatGPT로 여행 일정 짜는 방법 완벽 가이드", channelTitle: "AI여행러" },
