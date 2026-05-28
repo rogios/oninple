@@ -38,7 +38,7 @@ const CATEGORY_ORDER = [
 // ── 핸들러 ───────────────────────────────────────────────────────────────────
 
 // GitHub Actions가 매일 갱신 → 1시간 캐시로 불필요한 DB 조회 최소화
-export const revalidate = 3600;
+export const revalidate = 0;
 
 export async function GET() {
   const supabase = createServiceClient();
