@@ -25,13 +25,15 @@ const heroTabs = [
   { label: "편집자", platform: "editor" },
 ];
 
-const RANK_COLORS = ["#E8292E", "#FF6B35", "#FFB800"];
+const RANK_COLORS = ["#E8292E", "#FF6B35", "#FFB800", "#aaaaaa", "#aaaaaa"];
 const CAT_TABS    = ["전체", "뷰티", "푸드", "여행", "스포츠", "IT", "엔터"];
 
 const MOCK_VIDEOS: TrendingVideo[] = [
-  { title: "이번 주 가장 핫한 뷰티 트렌드 TOP 10", channelTitle: "뷰티나나",  viewCount: 120000 },
-  { title: "서울 숨은 맛집 총정리 먹방 브이로그",   channelTitle: "먹방대왕",  viewCount: 87000  },
-  { title: "ChatGPT로 여행 일정 짜는 방법 가이드",  channelTitle: "AI여행러", viewCount: 65000  },
+  { title: "이번 주 가장 핫한 뷰티 트렌드 TOP 10",  channelTitle: "뷰티나나",  viewCount: 120000 },
+  { title: "서울 숨은 맛집 총정리 먹방 브이로그",    channelTitle: "먹방대왕",  viewCount: 87000  },
+  { title: "ChatGPT로 여행 일정 짜는 방법 가이드",   channelTitle: "AI여행러", viewCount: 65000  },
+  { title: "요즘 핫한 스포츠 브랜드 착용 하울",      channelTitle: "패션인싸",  viewCount: 48000  },
+  { title: "2025 재테크 전략 총정리 주식 ETF 추천",  channelTitle: "머니클래스", viewCount: 39000 },
 ];
 
 function formatViews(n?: number): string {
@@ -62,9 +64,9 @@ function Slide0() {
     const out: TrendingVideo[] = [];
     for (const cat of allCategories) {
       if (cat.videos.length > 0) out.push(cat.videos[0]);
-      if (out.length >= 3) break;
+      if (out.length >= 5) break;
     }
-    return out.length >= 3 ? out : MOCK_VIDEOS;
+    return out.length >= 5 ? out : MOCK_VIDEOS;
   })();
 
   const now   = new Date();
@@ -128,7 +130,7 @@ function Slide0() {
 
       {/* ── 랭킹 리스트 ── */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {displayVideos.slice(0, 3).map((v, i) => (
+        {displayVideos.slice(0, 5).map((v, i) => (
           <div key={i}>
             {i > 0 && (
               <div style={{ height: 1, background: "rgba(255,255,255,0.06)" }} />
@@ -403,11 +405,13 @@ export default function HeroSection({
   onTogglePlatform: (platform: string) => void;
 }) {
   const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
+    if (paused) return;
     const t = setInterval(() => setIdx((i) => (i + 1) % SLIDES.length), 5000);
     return () => clearInterval(t);
-  }, []);
+  }, [paused]);
 
   return (
     <section
@@ -535,7 +539,11 @@ export default function HeroSection({
           </div>
 
           {/* ── 오른쪽 컬럼 (슬라이드 교체) ── */}
-          <div className="hidden sm:flex relative flex-col">
+          <div
+            className="hidden sm:flex relative flex-col"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
             <div className="absolute -inset-6 bg-gradient-to-br from-[#E8292E]/6 via-transparent to-[#111111]/4 rounded-3xl -z-10" />
 
             {/* 슬라이드 스택 (CSS grid overlap으로 높이 고정) */}
