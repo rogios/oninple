@@ -80,7 +80,7 @@ function Slide0() {
       {/* ── 상단 헤더 ── */}
       <div className="flex items-center gap-4 mb-4">
         {/* 날짜: 시각적 포인트 */}
-        <div style={{ color: "white", fontSize: 36, fontWeight: 700, lineHeight: 1, letterSpacing: "-0.5px", flexShrink: 0 }}>
+        <div style={{ color: "#ef4444", fontSize: 36, fontWeight: 700, lineHeight: 1, letterSpacing: "-0.5px", flexShrink: 0 }}>
           {dateLabel}
         </div>
         {/* 타이틀 + 서브텍스트 */}
