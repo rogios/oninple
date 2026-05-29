@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { CheckCircle2 } from "lucide-react";
 
 type TrendingVideo = {
@@ -44,6 +45,7 @@ function formatViews(n?: number): string {
 
 // ── 오른쪽 슬라이드 0: 급상승 트렌드 ───────────────────────────────────────
 function Slide0() {
+  const router = useRouter();
   const [allCategories, setAllCategories] = useState<Array<{ category: string; videos: TrendingVideo[] }>>([]);
 
   useEffect(() => {
@@ -74,8 +76,12 @@ function Slide0() {
 
   return (
     <div
+      role="link"
+      tabIndex={0}
+      onClick={() => router.push("/trending")}
+      onKeyDown={(e) => e.key === "Enter" && router.push("/trending")}
       className="w-full h-full flex flex-col overflow-hidden shadow-xl"
-      style={{ background: "#1a1f2e", borderRadius: 16, padding: 20 }}
+      style={{ background: "#1a1f2e", borderRadius: 16, padding: 20, cursor: "pointer" }}
     >
       {/* ── 상단 헤더 ── */}
       <div className="flex items-center gap-4 mb-4">
@@ -98,6 +104,7 @@ function Slide0() {
       <div
         className="flex gap-1.5 mb-4 overflow-x-auto"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
+        onClick={(e) => e.stopPropagation()}
       >
         {CAT_TABS.map((tab) => (
           <span
@@ -174,6 +181,7 @@ function Slide0() {
       {/* ── 하단 버튼 ── */}
       <Link
         href="/trending"
+        onClick={(e) => e.stopPropagation()}
         className="flex items-center justify-center transition-colors hover:bg-white/5"
         style={{
           color: "white",
