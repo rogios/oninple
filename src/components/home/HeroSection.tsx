@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, TrendingUp } from "lucide-react";
 
 type TrendingVideo = {
   title: string;
@@ -531,9 +531,10 @@ export default function HeroSection({
               </Link>
               <Link
                 href="/trending"
-                className="inline-flex items-center justify-center border border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] text-[#111111] dark:text-[#F9FAFB] font-medium px-6 py-3 rounded-full text-sm transition-colors"
+                className="inline-flex items-center gap-1.5 justify-center border border-gray-200 dark:border-[#374151] hover:border-gray-300 dark:hover:border-[#4B5563] text-red-500 font-medium px-6 py-3 rounded-full text-sm transition-colors"
               >
-                🔥 급상승 영상 보기 →
+                <TrendingUp size={15} />
+                급상승 영상 보기 →
               </Link>
             </div>
           </div>
