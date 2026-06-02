@@ -66,7 +66,7 @@ const CATEGORIES: Category[] = [
   { label: "엔터테인먼트",   labelEn: "Entertainment",       emoji: "🎭", query: "브이로그 예능 음악" },
   { label: "IT/테크",         labelEn: "IT & Tech",          emoji: "💻", query: "IT 테크 리뷰" },
   { label: "라이프스타일",   labelEn: "Lifestyle",           emoji: "🌿", query: "일상 브이로그 라이프" },
-  { label: "AI/교육",          labelEn: "AI & Education",     emoji: "📚", query: "AI 인공지능 챗GPT 클로드 미드저니 교육 강의" },
+  { label: "AI/교육",          labelEn: "AI & Education",     emoji: "📚", query: "AI 인공지능 교육 강의" },
   { label: "비즈니스/재테크", labelEn: "Business & Finance", emoji: "📈", query: "재테크 투자 창업" },
 ];
 
@@ -116,7 +116,7 @@ async function fetchCategoryVideos(
     type: "video",
     regionCode: "KR",
     order: "viewCount",
-    maxResults: "8",
+    maxResults: "15",
     publishedAfter: weekAgo,
     relevanceLanguage: "ko",
   });
@@ -167,24 +167,22 @@ async function fetchCategoryVideos(
     console.warn(`  [경고] ${cat.label} videos.list 실패 — 기본값 사용`);
   }
 
-  // channelId 중복 제거 후 최대 4개
+  // 채널 중복 제거: 채널당 1개 우선, 4개 미달 시 중복 채널로 보충
   const seenChannelIds = new Set<string>();
   const videos: CategoryVideo[] = [];
+  const overflow: CategoryVideo[] = [];
 
   for (const item of items) {
     if (!item.id?.videoId) continue;
 
-    const channelId = item.snippet.channelId;
-    if (seenChannelIds.has(channelId)) continue;
-    seenChannelIds.add(channelId);
-
     const videoId = item.id.videoId;
+    const channelId = item.snippet.channelId;
     const detail = detailMap.get(videoId);
     const duration = detail?.contentDetails?.duration ?? "PT0S";
     const durationSeconds = parseDuration(duration);
     const t = item.snippet.thumbnails;
 
-    videos.push({
+    const video: CategoryVideo = {
       id: videoId,
       title: item.snippet.title,
       channelTitle: item.snippet.channelTitle,
@@ -194,9 +192,20 @@ async function fetchCategoryVideos(
       durationSeconds,
       type: durationSeconds <= 180 ? "short" : "long",
       publishedAt: item.snippet.publishedAt,
-    });
+    };
 
-    if (videos.length === 4) break;
+    if (!seenChannelIds.has(channelId)) {
+      seenChannelIds.add(channelId);
+      videos.push(video);
+      if (videos.length === 4) break;
+    } else {
+      overflow.push(video);
+    }
+  }
+
+  // 4개 미달이면 중복 채널 영상으로 보충
+  if (videos.length < 4 && overflow.length > 0) {
+    videos.push(...overflow.slice(0, 4 - videos.length));
   }
 
   return videos;
