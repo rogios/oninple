@@ -164,20 +164,13 @@ function Slide0() {
               {/* 텍스트 */}
               <div style={{ minWidth: 0, flex: 1, overflow: "hidden" }}>
                 <div
-                  style={{
-                    color: "white", fontSize: 13, fontWeight: 500, lineHeight: 1.3, marginBottom: 3,
-                    overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis",
-                  }}
+                  style={{ color: "white", fontSize: 13, fontWeight: 500, lineHeight: 1.3, marginBottom: 3 }}
                 >
-                  {v.title}
+                  {v.title.length > 30 ? v.title.slice(0, 30) + "…" : v.title}
                 </div>
-                <div
-                  style={{
-                    color: "rgba(255,255,255,0.4)", fontSize: 11,
-                    overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis",
-                  }}
-                >
-                  {v.channelTitle}{v.viewCount ? ` · ${formatViews(v.viewCount)}` : ""}
+                <div style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>
+                  {v.channelTitle.length > 15 ? v.channelTitle.slice(0, 15) + "…" : v.channelTitle}
+                  {v.viewCount ? ` · ${formatViews(v.viewCount)}` : ""}
                 </div>
               </div>
             </div>
