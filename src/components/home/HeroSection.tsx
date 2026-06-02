@@ -162,14 +162,21 @@ function Slide0() {
                 </div>
               )}
               {/* 텍스트 */}
-              <div style={{ minWidth: 0, flex: 1 }}>
+              <div style={{ minWidth: 0, flex: 1, overflow: "hidden" }}>
                 <div
-                  className="truncate"
-                  style={{ color: "white", fontSize: 13, fontWeight: 500, lineHeight: 1.3, marginBottom: 3 }}
+                  style={{
+                    color: "white", fontSize: 13, fontWeight: 500, lineHeight: 1.3, marginBottom: 3,
+                    overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis",
+                  }}
                 >
                   {v.title}
                 </div>
-                <div style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>
+                <div
+                  style={{
+                    color: "rgba(255,255,255,0.4)", fontSize: 11,
+                    overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis",
+                  }}
+                >
                   {v.channelTitle}{v.viewCount ? ` · ${formatViews(v.viewCount)}` : ""}
                 </div>
               </div>
