@@ -53,6 +53,11 @@ export const metadata: Metadata = {
       "fbb8314f01cd217ffc65f78faa200d46a684a978",
     ],
   },
+  alternates: {
+    types: {
+      "application/rss+xml": "https://oninple.com/rss.xml",
+    },
+  },
 };
 
 export default async function RootLayout({
