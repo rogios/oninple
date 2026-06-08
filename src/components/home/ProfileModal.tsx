@@ -211,21 +211,13 @@ export default function ProfileModal({
                       rel="noopener noreferrer"
                       className="relative block rounded-xl overflow-hidden aspect-square bg-gray-100 hover:opacity-90 transition-opacity"
                     >
-                      <img
-                        src={thumb!}
-                        alt={`피드 ${i + 1}`}
-                        className="absolute inset-0 w-full h-full"
-                        style={{ objectFit: "cover", objectPosition: "center 70%" }}
-                      />
+                      <img src={thumb!} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover scale-110 blur-xl" />
+                      <img src={thumb!} alt={`피드 ${i + 1}`} className="relative w-full h-full object-contain z-10" />
                     </a>
                   ) : (
                     <div key={i} className="relative rounded-xl overflow-hidden aspect-square bg-gray-100">
-                      <img
-                        src={thumb!}
-                        alt={`피드 ${i + 1}`}
-                        className="absolute inset-0 w-full h-full"
-                        style={{ objectFit: "cover", objectPosition: "center 70%" }}
-                      />
+                      <img src={thumb!} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover scale-110 blur-xl" />
+                      <img src={thumb!} alt={`피드 ${i + 1}`} className="relative w-full h-full object-contain z-10" />
                     </div>
                   )
                 )}
