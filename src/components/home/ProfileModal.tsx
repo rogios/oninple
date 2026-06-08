@@ -215,7 +215,7 @@ export default function ProfileModal({
                         src={thumb!}
                         alt={`피드 ${i + 1}`}
                         className="absolute inset-0 w-full h-full"
-                        style={{ objectFit: "cover", objectPosition: "center" }}
+                        style={{ objectFit: "cover", objectPosition: "center 70%" }}
                       />
                     </a>
                   ) : (
@@ -224,7 +224,7 @@ export default function ProfileModal({
                         src={thumb!}
                         alt={`피드 ${i + 1}`}
                         className="absolute inset-0 w-full h-full"
-                        style={{ objectFit: "cover", objectPosition: "center" }}
+                        style={{ objectFit: "cover", objectPosition: "center 70%" }}
                       />
                     </div>
                   )

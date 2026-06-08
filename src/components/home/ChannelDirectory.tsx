@@ -311,7 +311,7 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
             src={thumbUrl}
             alt="대표 영상"
             className="absolute inset-0 w-full h-full"
-            style={{ objectFit: "cover", objectPosition: "center" }}
+            style={{ objectFit: "cover", objectPosition: "center 70%" }}
           />
         </div>
       )}
