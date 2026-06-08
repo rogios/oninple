@@ -306,10 +306,7 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
         )}
       </div>
       {thumbUrl && (
-        <div
-          className={`relative w-full shrink-0 overflow-hidden ${ch.platform === "instagram" || ch.platform === "tiktok" ? "aspect-square" : "aspect-video"}`}
-          style={ch.platform === "instagram" ? { border: "5px solid yellow", aspectRatio: "1/1" } : {}}
-        >
+        <div className="relative aspect-video w-full shrink-0 overflow-hidden">
           <img
             src={thumbUrl}
             alt="대표 영상"
