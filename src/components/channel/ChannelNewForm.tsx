@@ -842,11 +842,19 @@ export default function ChannelNewForm({
                 <span className="text-xs font-normal text-gray-400 dark:text-[#6B7280]">— 선택사항</span>
               </p>
               <p className="text-xs text-gray-400 dark:text-[#6B7280] mb-3">
-                썸네일 이미지는 선택사항입니다. URL만 입력해도 됩니다.
+                피드 URL을 입력하면 이미지가 자동으로 추출됩니다. 실패 시 이미지 영역을 클릭해 직접 업로드하세요.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
+                <Input
+                  type="url"
+                  placeholder="instagram.com/p/xxxxx/"
+                  disabled={feedThumb1Uploading}
+                  value={form.feed_url_1}
+                  onChange={(e) => set("feed_url_1", e.target.value)}
+                  onBlur={() => { if (form.feed_url_1.trim()) fetchFeedThumbFromUrl(form.feed_url_1.trim(), 1); }}
+                />
                 <div
                   onClick={() => feedThumb1Ref.current?.click()}
                   className="aspect-video rounded-xl border-2 border-dashed border-gray-200 dark:border-[#374151] flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#E8292E]/40 transition-colors bg-gray-50 dark:bg-[#374151]"
@@ -854,11 +862,16 @@ export default function ChannelNewForm({
                   {feedThumb1Uploading ? (
                     <div className="w-5 h-5 border-2 border-gray-300 border-t-[#E8292E] rounded-full animate-spin" />
                   ) : feedThumb1 ? (
-                    <img src={feedThumb1.preview} alt="피드 1" className="w-full h-full object-cover" />
+                    <div className="relative w-full h-full group">
+                      <img src={feedThumb1.preview} alt="피드 1" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <span className="text-white text-[10px] font-medium">클릭하여 변경</span>
+                      </div>
+                    </div>
                   ) : (
                     <div className="flex flex-col items-center gap-1 px-2 text-center">
                       <Upload size={16} className="text-gray-300" />
-                      <span className="text-[10px] text-gray-400 dark:text-[#6B7280] leading-tight">썸네일 (선택사항)</span>
+                      <span className="text-[10px] text-gray-400 dark:text-[#6B7280] leading-tight">직접 업로드</span>
                       <span className="text-[10px] text-gray-400 dark:text-[#6B7280] leading-tight">500px 이하 · 2MB</span>
                     </div>
                   )}
@@ -870,16 +883,16 @@ export default function ChannelNewForm({
                   className="hidden"
                   onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadFeedThumb(f, 1); }}
                 />
-                <Input
-                  type="url"
-                  placeholder="피드 URL (선택사항)"
-                  disabled={feedThumb1Uploading}
-                  value={form.feed_url_1}
-                  onChange={(e) => set("feed_url_1", e.target.value)}
-                  onBlur={() => { if (form.feed_url_1.trim()) fetchFeedThumbFromUrl(form.feed_url_1.trim(), 1); }}
-                />
               </div>
               <div className="space-y-2">
+                <Input
+                  type="url"
+                  placeholder="instagram.com/p/xxxxx/"
+                  disabled={feedThumb2Uploading}
+                  value={form.feed_url_2}
+                  onChange={(e) => set("feed_url_2", e.target.value)}
+                  onBlur={() => { if (form.feed_url_2.trim()) fetchFeedThumbFromUrl(form.feed_url_2.trim(), 2); }}
+                />
                 <div
                   onClick={() => feedThumb2Ref.current?.click()}
                   className="aspect-video rounded-xl border-2 border-dashed border-gray-200 dark:border-[#374151] flex items-center justify-center overflow-hidden cursor-pointer hover:border-[#E8292E]/40 transition-colors bg-gray-50 dark:bg-[#374151]"
@@ -887,11 +900,16 @@ export default function ChannelNewForm({
                   {feedThumb2Uploading ? (
                     <div className="w-5 h-5 border-2 border-gray-300 border-t-[#E8292E] rounded-full animate-spin" />
                   ) : feedThumb2 ? (
-                    <img src={feedThumb2.preview} alt="피드 2" className="w-full h-full object-cover" />
+                    <div className="relative w-full h-full group">
+                      <img src={feedThumb2.preview} alt="피드 2" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                        <span className="text-white text-[10px] font-medium">클릭하여 변경</span>
+                      </div>
+                    </div>
                   ) : (
                     <div className="flex flex-col items-center gap-1 px-2 text-center">
                       <Upload size={16} className="text-gray-300" />
-                      <span className="text-[10px] text-gray-400 dark:text-[#6B7280] leading-tight">썸네일 (선택사항)</span>
+                      <span className="text-[10px] text-gray-400 dark:text-[#6B7280] leading-tight">직접 업로드</span>
                       <span className="text-[10px] text-gray-400 dark:text-[#6B7280] leading-tight">500px 이하 · 2MB</span>
                     </div>
                   )}
@@ -902,14 +920,6 @@ export default function ChannelNewForm({
                   accept="image/*"
                   className="hidden"
                   onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadFeedThumb(f, 2); }}
-                />
-                <Input
-                  type="url"
-                  placeholder="피드 URL (선택사항)"
-                  disabled={feedThumb2Uploading}
-                  value={form.feed_url_2}
-                  onChange={(e) => set("feed_url_2", e.target.value)}
-                  onBlur={() => { if (form.feed_url_2.trim()) fetchFeedThumbFromUrl(form.feed_url_2.trim(), 2); }}
                 />
               </div>
             </div>
