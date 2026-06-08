@@ -311,7 +311,12 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
             src={thumbUrl}
             alt="대표 영상"
             className="absolute inset-0 w-full h-full"
-            style={{ objectFit: "cover", objectPosition: "center 70%" }}
+            style={{
+              objectFit: "cover",
+              objectPosition: "center 70%",
+              // 인스타그램 카드 확인용 임시 테두리 — 확인 후 제거
+              ...(ch.platform === "instagram" ? { border: "3px solid red" } : {}),
+            }}
           />
         </div>
       )}
