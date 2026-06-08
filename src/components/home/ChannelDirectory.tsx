@@ -306,8 +306,8 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
         )}
       </div>
       {thumbUrl && (
-        <div className="aspect-video w-full shrink-0">
-          <img src={thumbUrl} alt="대표 영상" className="w-full h-full object-cover" />
+        <div className="aspect-video w-full shrink-0 overflow-hidden">
+          <img src={thumbUrl} alt="대표 영상" className="w-full h-full object-cover object-center" />
         </div>
       )}
     </button>
