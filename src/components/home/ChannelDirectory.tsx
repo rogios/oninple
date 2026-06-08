@@ -306,17 +306,11 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
         )}
       </div>
       {thumbUrl && (
-        <div className="relative aspect-video w-full shrink-0 overflow-hidden">
+        <div className={`relative w-full shrink-0 overflow-hidden ${ch.platform === "instagram" || ch.platform === "tiktok" ? "aspect-square" : "aspect-video"}`}>
           <img
             src={thumbUrl}
             alt="대표 영상"
-            className="absolute inset-0 w-full h-full"
-            style={{
-              objectFit: "cover",
-              objectPosition: "center 70%",
-              // 인스타그램 카드 확인용 임시 테두리 — 확인 후 제거
-              ...(ch.platform === "instagram" ? { border: "3px solid red" } : {}),
-            }}
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
         </div>
       )}
