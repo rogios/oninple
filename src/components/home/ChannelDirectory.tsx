@@ -310,7 +310,7 @@ function InfluencerCard({ ch, onClick }: { ch: DirectoryChannel; onClick: () => 
           {(ch.platform === "instagram" || ch.platform === "tiktok") ? (
             <>
               <img src={thumbUrl} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover scale-110 blur-xl" />
-              <img src={thumbUrl} alt="대표 피드" className="relative w-full h-full object-contain z-10" />
+              <img src={thumbUrl} alt="대표 피드" style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "center center", position: "relative", zIndex: 10 }} />
             </>
           ) : (
             <img src={thumbUrl} alt="대표 영상" className="absolute inset-0 w-full h-full object-cover object-center" />
