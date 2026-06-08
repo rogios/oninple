@@ -209,13 +209,13 @@ export default function ProfileModal({
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block rounded-xl overflow-hidden aspect-square bg-gray-100 hover:opacity-90 transition-opacity"
+                      className="relative block rounded-xl overflow-hidden aspect-square bg-gray-100 hover:opacity-90 transition-opacity"
                     >
-                      <img src={thumb!} alt={`피드 ${i + 1}`} className="w-full h-full object-cover object-center" />
+                      <img src={thumb!} alt={`피드 ${i + 1}`} className="absolute inset-0 w-full h-full object-cover object-center" />
                     </a>
                   ) : (
-                    <div key={i} className="rounded-xl overflow-hidden aspect-square bg-gray-100">
-                      <img src={thumb!} alt={`피드 ${i + 1}`} className="w-full h-full object-cover object-center" />
+                    <div key={i} className="relative rounded-xl overflow-hidden aspect-square bg-gray-100">
+                      <img src={thumb!} alt={`피드 ${i + 1}`} className="absolute inset-0 w-full h-full object-cover object-center" />
                     </div>
                   )
                 )}
