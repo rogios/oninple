@@ -370,6 +370,45 @@ export default function ChannelEditForm({
     setFetchingYoutube(false);
   }
 
+  async function fetchFeedThumbFromUrl(feedUrl: string, index: 1 | 2) {
+    if (!feedUrl.trim()) return;
+    setFeedUploadError(null);
+    if (index === 1) setFeedThumb1Uploading(true);
+    else setFeedThumb2Uploading(true);
+
+    try {
+      const mlRes = await fetch(`https://api.microlink.io?url=${encodeURIComponent(feedUrl)}`);
+      if (!mlRes.ok) throw new Error("Microlink API 오류");
+      const mlData = await mlRes.json();
+      const imageUrl: string | undefined = mlData?.data?.image?.url;
+      if (!imageUrl) throw new Error("이미지를 찾을 수 없습니다. URL을 확인하거나 직접 업로드해주세요.");
+
+      const imgRes = await fetch(imageUrl);
+      if (!imgRes.ok) throw new Error("이미지 다운로드 실패");
+      const blob = await imgRes.blob();
+
+      const supabase = createClient();
+      const rawExt = imageUrl.split("?")[0].split(".").pop();
+      const ext = rawExt && rawExt.length <= 4 ? rawExt : "jpg";
+      const path = `${userId}/feed_${index}_${Date.now()}.${ext}`;
+
+      const { data: uploadData, error } = await supabase.storage
+        .from("channel-images")
+        .upload(path, blob, { upsert: true, contentType: blob.type });
+
+      if (error) throw new Error(`업로드 실패: ${error.message}`);
+
+      const { data: urlData } = supabase.storage.from("channel-images").getPublicUrl(uploadData.path);
+      if (index === 1) setFeedThumb1({ url: urlData.publicUrl, preview: imageUrl });
+      else setFeedThumb2({ url: urlData.publicUrl, preview: imageUrl });
+    } catch (err) {
+      setFeedUploadError(err instanceof Error ? err.message : "이미지 자동 추출에 실패했습니다.");
+    }
+
+    if (index === 1) setFeedThumb1Uploading(false);
+    else setFeedThumb2Uploading(false);
+  }
+
   async function uploadFeedThumb(file: File, index: 1 | 2) {
     setFeedUploadError(null);
 
@@ -795,6 +834,7 @@ export default function ChannelEditForm({
                   disabled={feedThumb1Uploading}
                   value={form.feed_url_1}
                   onChange={(e) => set("feed_url_1", e.target.value)}
+                  onBlur={() => { if (form.feed_url_1.trim()) fetchFeedThumbFromUrl(form.feed_url_1.trim(), 1); }}
                 />
               </div>
               <div className="space-y-2">
@@ -827,6 +867,7 @@ export default function ChannelEditForm({
                   disabled={feedThumb2Uploading}
                   value={form.feed_url_2}
                   onChange={(e) => set("feed_url_2", e.target.value)}
+                  onBlur={() => { if (form.feed_url_2.trim()) fetchFeedThumbFromUrl(form.feed_url_2.trim(), 2); }}
                 />
               </div>
             </div>
