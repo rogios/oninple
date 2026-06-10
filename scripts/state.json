@@ -1,9 +1,5 @@
 {
-  "categoryIndex": 1,
-  "topicIndices": [
-    8,
-    7,
-    7,
-    6
-  ]
+  "categoryIndex": 0,
+  "topicIndices": [],
+  "usedImageUrls": []
 }
