@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     title: "온인플 블로그 | ONINPLE",
     description: "인플루언서 마케팅 인사이트와 크리에이터 트렌드",
     url: "https://oninple.com/blog",
+    siteName: "온인플 (ONINPLE)",
+    locale: "ko_KR",
+    images: [{ url: "https://oninple.com/favicon.png", width: 512, height: 512 }],
   },
   alternates: { canonical: "https://oninple.com/blog" },
 };

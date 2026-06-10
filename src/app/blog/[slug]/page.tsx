@@ -46,7 +46,9 @@ export async function generateMetadata({
       url,
       type: "article",
       publishedTime: post.created_at,
-      ...(post.thumbnail ? { images: [{ url: post.thumbnail }] } : {}),
+      siteName: "온인플 (ONINPLE)",
+      locale: "ko_KR",
+      ...(post.thumbnail ? { images: [{ url: post.thumbnail, width: 1200, height: 630 }] } : {}),
     },
     twitter: {
       card: "summary_large_image",
@@ -62,20 +64,29 @@ export async function generateMetadata({
 
 function JsonLd({ post }: { post: NonNullable<Awaited<ReturnType<typeof getPost>>> }) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://oninple.com";
+  const postUrl = `${siteUrl}/blog/${post.slug}`;
   const schema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
     headline: post.title,
     description: post.summary || post.title,
     datePublished: post.created_at,
     dateModified: post.created_at,
-    url: `${siteUrl}/blog/${post.slug}`,
-    publisher: {
+    url: postUrl,
+    inLanguage: "ko-KR",
+    author: {
       "@type": "Organization",
       name: "온인플",
       url: siteUrl,
     },
-    ...(post.thumbnail ? { image: post.thumbnail } : {}),
+    publisher: {
+      "@type": "Organization",
+      name: "온인플",
+      url: siteUrl,
+      logo: { "@type": "ImageObject", url: `${siteUrl}/favicon.png` },
+    },
+    ...(post.thumbnail ? { image: { "@type": "ImageObject", url: post.thumbnail } } : {}),
   };
   return (
     <script
@@ -199,6 +210,14 @@ export default async function BlogPostPage({
                 ),
                 hr: () => (
                   <hr className="border-gray-200 dark:border-[#374151] my-8" />
+                ),
+                img: ({ src, alt }) => (
+                  <img
+                    src={src}
+                    alt={alt ?? ""}
+                    loading="lazy"
+                    className="w-full rounded-xl my-5 border border-gray-100 dark:border-[#374151]"
+                  />
                 ),
               }}
             >
