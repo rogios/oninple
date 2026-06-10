@@ -13,15 +13,14 @@ import * as path from "path";
 
 interface ThreadsPost {
   id: string;
-  type: string;
-  content: string;
+  text: string;
   status: "pending" | "posted";
   createdAt: string;
   postedAt: string | null;
 }
 
 interface ThreadsQueue {
-  posts: ThreadsPost[];
+  queue: ThreadsPost[];
   lastGenerated: string | null;
   lastPosted: string | null;
 }
@@ -159,14 +158,23 @@ async function postToThreads(content: string): Promise<void> {
 
 async function main() {
   if (!fs.existsSync(QUEUE_FILE)) {
-    console.error(
-      "❌ threads-queue.json이 없습니다. threads-generate.ts를 먼저 실행해주세요."
-    );
+    console.error("❌ threads-queue.json이 없습니다.");
     process.exit(1);
   }
 
-  const queue: ThreadsQueue = JSON.parse(fs.readFileSync(QUEUE_FILE, "utf-8"));
-  const pending = queue.posts.filter(p => p.status === "pending");
+  const data: ThreadsQueue = JSON.parse(fs.readFileSync(QUEUE_FILE, "utf-8"));
+
+  // 모두 posted 상태면 전체 pending으로 리셋해서 순환
+  const allPosted = data.queue.every(p => p.status === "posted");
+  if (allPosted && data.queue.length > 0) {
+    console.log("🔄 30개 모두 발행 완료. 처음부터 순환 시작합니다.");
+    data.queue.forEach(p => {
+      p.status = "pending";
+      p.postedAt = null;
+    });
+  }
+
+  const pending = data.queue.filter(p => p.status === "pending");
 
   if (pending.length === 0) {
     console.log("📭 발행 대기 중인 글이 없습니다.");
@@ -174,18 +182,18 @@ async function main() {
   }
 
   const post = pending[0];
-  console.log(`\n📤 포스팅 중: [${post.type}]`);
-  console.log(post.content.slice(0, 80) + (post.content.length > 80 ? "..." : ""));
+  console.log(`\n📤 포스팅 중 (${data.queue.length - pending.length + 1}/${data.queue.length})`);
+  console.log(post.text.slice(0, 80) + (post.text.length > 80 ? "..." : ""));
 
-  await postToThreads(post.content);
+  await postToThreads(post.text);
 
   // 발행 완료 표시
-  const idx = queue.posts.findIndex(p => p.id === post.id);
-  queue.posts[idx].status = "posted";
-  queue.posts[idx].postedAt = new Date().toISOString();
-  queue.lastPosted = new Date().toISOString();
+  const idx = data.queue.findIndex(p => p.id === post.id);
+  data.queue[idx].status = "posted";
+  data.queue[idx].postedAt = new Date().toISOString();
+  data.lastPosted = new Date().toISOString();
 
-  fs.writeFileSync(QUEUE_FILE, JSON.stringify(queue, null, 2) + "\n", "utf-8");
+  fs.writeFileSync(QUEUE_FILE, JSON.stringify(data, null, 2) + "\n", "utf-8");
 
   const remaining = pending.length - 1;
   console.log(`\n💾 큐 업데이트 완료. 남은 글: ${remaining}개`);
