@@ -1,3 +1,64 @@
 {
-  "categories": []
+  "categories": [
+    {
+      "name": "크리에이터",
+      "topics": [
+        { "title": "유튜브 쇼츠 vs 인스타그램 릴스: 2025년 크리에이터가 집중해야 할 플랫폼", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143028_e86d3750-0f4e-4193-ad27-00d6d43ccb67.png" },
+        { "title": "팔로워 1만 명 달성하는 현실적인 방법: 초보 크리에이터 가이드", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143028_e86d3750-0f4e-4193-ad27-00d6d43ccb67.png" },
+        { "title": "크리에이터 번아웃 극복법: 지속 가능한 콘텐츠 제작 루틴 만들기", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143028_e86d3750-0f4e-4193-ad27-00d6d43ccb67.png" },
+        { "title": "브이로그 시작하기: 장비부터 편집까지 완전 정복", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143028_e86d3750-0f4e-4193-ad27-00d6d43ccb67.png" },
+        { "title": "SNS 알고리즘을 내 편으로 만드는 콘텐츠 전략", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143028_e86d3750-0f4e-4193-ad27-00d6d43ccb67.png" },
+        { "title": "크리에이터가 반드시 알아야 할 저작권 기초 지식", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143028_e86d3750-0f4e-4193-ad27-00d6d43ccb67.png" },
+        { "title": "구독자와 팔로워를 진짜 팬으로 만드는 커뮤니티 운영법", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143028_e86d3750-0f4e-4193-ad27-00d6d43ccb67.png" },
+        { "title": "크리에이터 수익화 첫걸음: 광고 수익 외 6가지 방법", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143028_e86d3750-0f4e-4193-ad27-00d6d43ccb67.png" },
+        { "title": "롱폼 vs 숏폼: 내 채널에 맞는 콘텐츠 길이 전략", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143028_e86d3750-0f4e-4193-ad27-00d6d43ccb67.png" },
+        { "title": "개인 브랜드 구축하기: 크리에이터 정체성을 명확히 하는 법", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143028_e86d3750-0f4e-4193-ad27-00d6d43ccb67.png" }
+      ]
+    },
+    {
+      "name": "인플루언서 마케팅",
+      "topics": [
+        { "title": "마이크로 인플루언서 마케팅이 대세인 이유: ROI 비교 분석", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143242_f54284d2-e7e8-4e29-adf0-e46140e6cadd.png" },
+        { "title": "인플루언서 선정 시 팔로워 수보다 중요한 3가지 지표", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143242_f54284d2-e7e8-4e29-adf0-e46140e6cadd.png" },
+        { "title": "브랜드와 인플루언서가 윈윈하는 협찬 계약서 작성법", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143242_f54284d2-e7e8-4e29-adf0-e46140e6cadd.png" },
+        { "title": "인플루언서 마케팅 성과 측정: KPI 설정부터 리포팅까지", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143242_f54284d2-e7e8-4e29-adf0-e46140e6cadd.png" },
+        { "title": "뷰티 인플루언서 마케팅 트렌드: 2025년 캠페인 사례 분석", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143242_f54284d2-e7e8-4e29-adf0-e46140e6cadd.png" },
+        { "title": "인플루언서 사기 탐지법: 가짜 팔로워·허위 지표 걸러내기", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143242_f54284d2-e7e8-4e29-adf0-e46140e6cadd.png" },
+        { "title": "B2B 기업이 인플루언서 마케팅을 활용하는 방법", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143242_f54284d2-e7e8-4e29-adf0-e46140e6cadd.png" },
+        { "title": "시즌별 인플루언서 마케팅 캘린더 만들기", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143242_f54284d2-e7e8-4e29-adf0-e46140e6cadd.png" },
+        { "title": "글로벌 인플루언서 마케팅 진출 전략: 아시아 시장 중심", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143242_f54284d2-e7e8-4e29-adf0-e46140e6cadd.png" },
+        { "title": "인플루언서 마케팅 예산 책정 가이드: 소규모 브랜드를 위한 실전 전략", "thumbnail": "https://d8j0ntlcm91z4.cloudfront.net/user_3BpVpnx8o7pHkAg88d2HxxPte9Y/hf_20260520_143242_f54284d2-e7e8-4e29-adf0-e46140e6cadd.png" }
+      ]
+    },
+    {
+      "name": "AI",
+      "topics": [
+        { "title": "크리에이터를 위한 AI 영상 편집 툴 TOP 5", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "ChatGPT로 블로그 글쓰기 속도를 10배 높이는 방법", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "AI 이미지 생성 도구 비교: Midjourney vs DALL-E vs Stable Diffusion", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "AI로 유튜브 썸네일·제목 최적화하는 법", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "생성형 AI 시대의 콘텐츠 진정성 딜레마", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "AI 아바타·버추얼 인플루언서의 현재와 미래", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "SNS 캡션 자동화: AI로 게시물 최적화하기", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "AI 기반 트렌드 예측 도구로 콘텐츠 기획하기", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "크리에이터 이코노미에서 AI의 역할: 위협인가 기회인가", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" },
+        { "title": "크리에이터 채널 데이터 분석: AI 도구로 성장 전략 세우기", "thumbnail": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80" }
+      ]
+    },
+    {
+      "name": "플랫폼 소식",
+      "topics": [
+        { "title": "온인플(Oninple) 플랫폼 소개: 크리에이터와 브랜드를 연결하는 새로운 방식", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "인스타그램 2025년 알고리즘 업데이트 총정리", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "유튜브 파트너 프로그램 변경사항: 수익화 조건 최신 가이드", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "틱톡 Shop 국내 출시: 크리에이터 커머스 시대 개막", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "네이버 블로그 vs 브런치 vs 티스토리: 2025년 최적의 블로그 플랫폼은?", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "인스타그램 스레드(Threads)의 성장과 크리에이터 기회", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "카카오 채널 비즈니스 활용법: 인플루언서 마케팅 새로운 채널", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "유튜브 멤버십 vs 슈퍼챗: 크리에이터 수익 극대화 전략", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "글로벌 숏폼 플랫폼 경쟁: 틱톡·릴스·쇼츠의 2025년 판세", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" },
+        { "title": "SNS 플랫폼별 광고 단가 비교: 브랜드 마케터를 위한 가이드", "thumbnail": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80" }
+      ]
+    }
+  ]
 }
