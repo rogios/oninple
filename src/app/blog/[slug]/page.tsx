@@ -5,6 +5,7 @@ import { ChevronLeft, CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import BlogPostActions from "@/components/blog/BlogPostActions";
 
 export const dynamic = "force-dynamic";
 
@@ -224,6 +225,8 @@ export default async function BlogPostPage({
               {post.content}
             </ReactMarkdown>
           </div>
+
+          <BlogPostActions slug={post.slug} />
         </article>
       </div>
     </>

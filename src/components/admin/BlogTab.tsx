@@ -18,6 +18,8 @@ export type PostRow = {
   slug: string;
   published: boolean;
   created_at: string;
+  view_count?: number;
+  share_count?: number;
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -362,7 +364,7 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
             <table className="w-full text-xs">
               <thead className="bg-gray-50 dark:bg-[#374151] border-b border-gray-100 dark:border-[#4B5563]">
                 <tr>
-                  {["제목", "카테고리", "공개여부", "등록일", "관리"].map((h) => (
+                  {["제목", "카테고리", "조회", "공유", "공개여부", "등록일", "관리"].map((h) => (
                     <th key={h} className="text-left px-5 py-3 font-semibold text-gray-700 dark:text-[#9CA3AF]">{h}</th>
                   ))}
                 </tr>
@@ -381,6 +383,8 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
                         </span>
                       ) : <span className="text-gray-300 dark:text-[#4B5563]">-</span>}
                     </td>
+                    <td className="px-5 py-3 text-gray-700 dark:text-[#9CA3AF] tabular-nums">{p.view_count ?? 0}</td>
+                    <td className="px-5 py-3 text-gray-700 dark:text-[#9CA3AF] tabular-nums">{p.share_count ?? 0}</td>
                     <td className="px-5 py-3">
                       <button
                         onClick={() => handleTogglePublish(p)}
@@ -416,7 +420,7 @@ export default function BlogTab({ initialPosts }: { initialPosts: PostRow[] }) {
                 ))}
                 {posts.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="px-5 py-12 text-center text-gray-400">
+                    <td colSpan={7} className="px-5 py-12 text-center text-gray-400">
                       작성된 글이 없습니다
                     </td>
                   </tr>

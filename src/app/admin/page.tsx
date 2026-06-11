@@ -81,7 +81,7 @@ export default async function AdminPage() {
     service.from("channels").select("id, channel_name, platform, follower_count, created_at").order("created_at", { ascending: false }).limit(10),
     service.from("profiles").select("id, email, name, role, created_at, warning_count").order("created_at", { ascending: false }),
     service.from("notices").select("id, title, content, is_pinned, created_at").order("created_at", { ascending: false }),
-    service.from("posts").select("id, title, content, thumbnail, summary, category, slug, published, created_at").order("created_at", { ascending: false }),
+    service.from("posts").select("id, title, content, thumbnail, summary, category, slug, published, created_at, view_count, share_count").order("created_at", { ascending: false }),
     // PostgREST max_rows=1000 우회: 1000건씩 페이지네이션
     fetchAllPageViews(service, twelveMonthsAgo.toISOString()),
   ]);
@@ -207,6 +207,8 @@ export default async function AdminPage() {
     slug: p.slug,
     published: p.published,
     created_at: p.created_at,
+    view_count: p.view_count ?? 0,
+    share_count: p.share_count ?? 0,
   }));
 
   return (
