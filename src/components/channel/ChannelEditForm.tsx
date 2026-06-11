@@ -807,7 +807,7 @@ export default function ChannelEditForm({
               <div className="space-y-2">
                 <Input
                   type="url"
-                  placeholder="instagram.com/p/xxxxx/"
+                  placeholder={form.platform === "tiktok" ? "tiktok.com/@username/video/xxxxx" : form.platform === "youtube" ? "youtube.com/watch?v=xxxxx" : "instagram.com/p/xxxxx/"}
                   disabled={feedThumb1Uploading}
                   value={form.feed_url_1}
                   onChange={(e) => set("feed_url_1", e.target.value)}
@@ -845,7 +845,7 @@ export default function ChannelEditForm({
               <div className="space-y-2">
                 <Input
                   type="url"
-                  placeholder="instagram.com/p/xxxxx/"
+                  placeholder={form.platform === "tiktok" ? "tiktok.com/@username/video/xxxxx" : form.platform === "youtube" ? "youtube.com/watch?v=xxxxx" : "instagram.com/p/xxxxx/"}
                   disabled={feedThumb2Uploading}
                   value={form.feed_url_2}
                   onChange={(e) => set("feed_url_2", e.target.value)}
