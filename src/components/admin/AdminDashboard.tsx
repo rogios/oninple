@@ -374,23 +374,21 @@ function MembersTab({
                               </button>
                             </>
                           )}
-                          {memberChannels.length > 0 && (
-                            <button
-                              onClick={() => toggleExpand(m.id)}
-                              title="채널 인증 관리"
-                              className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50 transition-colors"
-                            >
-                              {expandedMemberId === m.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                            </button>
-                          )}
+                          <button
+                            onClick={() => toggleExpand(m.id)}
+                            title="채널 인증 관리"
+                            className="p-1.5 rounded-lg text-blue-500 hover:bg-blue-50 transition-colors"
+                          >
+                            {expandedMemberId === m.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                          </button>
                         </div>
                       </td>
                     </tr>
-                    {expandedMemberId === m.id && memberChannels.length > 0 && (
+                    {expandedMemberId === m.id && (
                       <tr className="bg-blue-50/20 dark:bg-blue-900/10">
                         <td colSpan={7} className="px-5 py-3">
                           <div className="space-y-2">
-                            {memberChannels.map((ch) => (
+                            {memberChannels.length > 0 ? memberChannels.map((ch) => (
                               <div key={ch.id} className="flex items-center justify-between gap-3 bg-white dark:bg-[#1F2937] rounded-xl px-4 py-2.5 border border-gray-100 dark:border-[#374151]">
                                 <div className="flex items-center gap-2 min-w-0">
                                   <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${PLATFORM_COLORS[ch.platform] ?? "bg-gray-100 text-gray-600"}`}>
@@ -417,7 +415,9 @@ function MembersTab({
                                   )}
                                 </button>
                               </div>
-                            ))}
+                            )) : (
+                              <p className="text-xs text-gray-400 dark:text-[#6B7280] text-center py-2">등록된 채널이 없습니다</p>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -471,19 +471,17 @@ function MembersTab({
                         </button>
                       </>
                     )}
-                    {memberChannels.length > 0 && (
-                      <button
-                        onClick={() => toggleExpand(m.id)}
-                        className="p-2 rounded-xl text-blue-500 hover:bg-blue-50 transition-colors"
-                      >
-                        {expandedMemberId === m.id ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
-                      </button>
-                    )}
+                    <button
+                      onClick={() => toggleExpand(m.id)}
+                      className="p-2 rounded-xl text-blue-500 hover:bg-blue-50 transition-colors"
+                    >
+                      {expandedMemberId === m.id ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
+                    </button>
                   </div>
                 </div>
-                {expandedMemberId === m.id && memberChannels.length > 0 && (
+                {expandedMemberId === m.id && (
                   <div className="space-y-1.5">
-                    {memberChannels.map((ch) => (
+                    {memberChannels.length > 0 ? memberChannels.map((ch) => (
                       <div key={ch.id} className="flex items-center justify-between gap-2 bg-gray-50 dark:bg-[#374151] rounded-xl px-3 py-2 border border-gray-100 dark:border-[#4B5563]">
                         <div className="flex items-center gap-1.5 min-w-0">
                           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full shrink-0 ${PLATFORM_COLORS[ch.platform] ?? "bg-gray-100 text-gray-600"}`}>
@@ -504,7 +502,9 @@ function MembersTab({
                           {ch.is_verified ? "인증취소" : "인증승인"}
                         </button>
                       </div>
-                    ))}
+                    )) : (
+                      <p className="text-xs text-gray-400 dark:text-[#6B7280] text-center py-2">등록된 채널이 없습니다</p>
+                    )}
                   </div>
                 )}
               </div>
