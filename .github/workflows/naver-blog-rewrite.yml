@@ -1,0 +1,155 @@
+name: Naver Blog Rewrite
+
+on:
+  schedule:
+    - cron: "30 0 * * *" # UTC 00:30 = KST 09:30
+  workflow_dispatch:
+
+jobs:
+  rewrite-and-send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch latest post, rewrite, and send email
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          GOOGLE_GEMINI_API_KEY: ${{ secrets.GOOGLE_GEMINI_API_KEY }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: |
+          python3 << 'PYEOF'
+          import json, os, smtplib, urllib.request, sys
+          from email.mime.text import MIMEText
+
+          SUPABASE_URL = os.environ["SUPABASE_URL"]
+          SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+          GEMINI_KEY = os.environ["GOOGLE_GEMINI_API_KEY"]
+          GMAIL_PASS = os.environ["GMAIL_APP_PASSWORD"]
+          EMAIL = "campingnlbo@gmail.com"
+          STATE_FILE = "scripts/naver-blog-state.json"
+
+          # 1. Load state
+          with open(STATE_FILE, "r", encoding="utf-8") as f:
+              state = json.load(f)
+          last_slug = state.get("lastSlug")
+
+          # 2. Fetch latest published post from Supabase
+          url = (
+              f"{SUPABASE_URL}/rest/v1/posts"
+              "?published=eq.true"
+              "&order=created_at.desc"
+              "&limit=1"
+              "&select=title,content,slug"
+          )
+          req = urllib.request.Request(url, headers={
+              "apikey": SUPABASE_KEY,
+              "Authorization": f"Bearer {SUPABASE_KEY}",
+          })
+          with urllib.request.urlopen(req) as resp:
+              posts = json.loads(resp.read().decode())
+
+          if not posts:
+              print("No published posts found.")
+              sys.exit(0)
+
+          post = posts[0]
+          slug = post["slug"]
+          title = post["title"]
+          content = post["content"]
+
+          # 3. Duplicate check
+          if slug == last_slug:
+              print(f"Already sent: {slug}. Skipping.")
+              sys.exit(0)
+
+          print(f"Processing: {title} ({slug})")
+
+          # 4. Rewrite with Gemini 2.5 Flash
+          prompt = f"""아래 블로그 글을 네이버 블로그에 맞게 리라이팅해줘.
+          원본과 중복 콘텐츠로 인식되지 않도록 말투, 문장 구조, 표현을 충분히 변형해줘.
+          하지만 핵심 정보와 내용은 유지해.
+          네이버 SEO에 최적화된 구조로 작성해줘: 제목은 검색 키워드 포함, 본문은 소제목 활용, 2-3줄마다 줄바꿈, 자연스러운 대화체 사용.
+          HTML 태그로 작성해줘 (h2, h3, p, strong, br 태그 사용).
+          글 하단에 '이 글이 도움이 되셨다면 공감과 댓글 부탁드려요 😊' 같은 네이버 블로그 스타일 마무리 멘트도 넣어줘.
+          글 마지막에 '원문 출처: https://oninple.com/blog/{slug}' 링크도 포함해줘.
+
+          응답 형식:
+          첫 줄에 리라이팅된 제목만 작성 (HTML 태그 없이 순수 텍스트)
+          둘째 줄은 빈 줄
+          셋째 줄부터 리라이팅된 본문 (HTML)
+
+          === 원본 제목 ===
+          {title}
+
+          === 원본 본문 ===
+          {content}"""
+
+          gemini_url = (
+              "https://generativelanguage.googleapis.com/v1beta/models/"
+              f"gemini-2.5-flash:generateContent?key={GEMINI_KEY}"
+          )
+          gemini_body = json.dumps({
+              "contents": [{"parts": [{"text": prompt}]}],
+              "generationConfig": {"maxOutputTokens": 8192},
+          }).encode()
+          gemini_req = urllib.request.Request(
+              gemini_url,
+              data=gemini_body,
+              headers={"Content-Type": "application/json"},
+              method="POST",
+          )
+          with urllib.request.urlopen(gemini_req, timeout=120) as resp:
+              gemini_resp = json.loads(resp.read().decode())
+
+          rewritten = gemini_resp["candidates"][0]["content"]["parts"][0]["text"]
+
+          # Parse title and body
+          lines = rewritten.split("\n", 2)
+          rewritten_title = lines[0].strip().lstrip("#").strip()
+          rewritten_body = lines[2].strip() if len(lines) > 2 else rewritten
+
+          print(f"Rewritten title: {rewritten_title}")
+
+          # 5. Send email
+          html_content = f"""<div style="font-family: sans-serif; max-width: 700px; margin: 0 auto;">
+          <p style="background: #f0f0f0; padding: 12px; border-radius: 6px; font-weight: bold;">
+          📝 아래 내용을 전체 복사하여 네이버 블로그에 붙여넣기 하세요.
+          </p>
+          <p style="font-size: 18px; font-weight: bold; color: #333;">제목: {rewritten_title}</p>
+          <hr style="border: 1px solid #ddd;">
+          {rewritten_body}
+          <hr style="border: 1px solid #ddd;">
+          <p>원본: <a href="https://oninple.com/blog/{slug}">https://oninple.com/blog/{slug}</a></p>
+          </div>"""
+
+          msg = MIMEText(html_content, "html", "utf-8")
+          msg["Subject"] = f"[네이버 블로그] 오늘의 포스팅 - {rewritten_title}"
+          msg["From"] = EMAIL
+          msg["To"] = EMAIL
+
+          with smtplib.SMTP("smtp.gmail.com", 587) as s:
+              s.starttls()
+              s.login(EMAIL, GMAIL_PASS)
+              s.send_message(msg)
+          print("Email sent.")
+
+          # 6. Update state
+          state["lastSlug"] = slug
+          from datetime import datetime, timezone
+          state["lastSentAt"] = datetime.now(timezone.utc).isoformat()
+          with open(STATE_FILE, "w", encoding="utf-8") as f:
+              json.dump(state, f, indent=2, ensure_ascii=False)
+          print("State updated.")
+          PYEOF
+
+      - name: Commit state update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet scripts/naver-blog-state.json && exit 0
+          git add scripts/naver-blog-state.json
+          git commit -m "chore: update naver-blog-state [skip ci]"
+          git push

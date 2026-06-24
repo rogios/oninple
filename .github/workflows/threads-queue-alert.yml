@@ -1,0 +1,41 @@
+name: Threads Queue Alert
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # UTC 00:00 = KST 09:00
+  workflow_dispatch:
+
+jobs:
+  check-queue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check pending count and send alert
+        env:
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: |
+          PENDING=$(jq '[.queue[] | select(.status == "pending")] | length' scripts/threads-queue.json)
+          echo "Pending posts: $PENDING"
+
+          if [ "$PENDING" -le 5 ]; then
+            echo "Sending alert email..."
+            python3 -c "
+          import smtplib
+          from email.mime.text import MIMEText
+          import os
+
+          msg = MIMEText('스레드 대본이 ${PENDING}개 남았습니다. 새 대본을 작성해주세요.', 'plain', 'utf-8')
+          msg['Subject'] = '[ONINPLE] 스레드 대본 부족 알림'
+          msg['From'] = 'campingnlbo@gmail.com'
+          msg['To'] = 'campingnlbo@gmail.com'
+
+          with smtplib.SMTP('smtp.gmail.com', 587) as s:
+              s.starttls()
+              s.login('campingnlbo@gmail.com', os.environ['GMAIL_APP_PASSWORD'])
+              s.send_message(msg)
+          print('Email sent.')
+          "
+          else
+            echo "Pending count is sufficient ($PENDING). No alert needed."
+          fi
