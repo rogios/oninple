@@ -5,6 +5,9 @@ on:
     - cron: "30 0 * * *" # UTC 00:30 = KST 09:30
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   rewrite-and-send:
     runs-on: ubuntu-latest
@@ -19,15 +22,17 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           GOOGLE_GEMINI_API_KEY: ${{ secrets.GOOGLE_GEMINI_API_KEY }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
         run: |
           python3 << 'PYEOF'
-          import json, os, smtplib, urllib.request, sys
+          import json, os, re, smtplib, urllib.request, urllib.parse, sys
           from email.mime.text import MIMEText
 
           SUPABASE_URL = os.environ["SUPABASE_URL"].strip()
           SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"].strip()
           GEMINI_KEY = os.environ["GOOGLE_GEMINI_API_KEY"].strip()
           GMAIL_PASS = os.environ["GMAIL_APP_PASSWORD"].strip()
+          UNSPLASH_KEY = os.environ.get("UNSPLASH_ACCESS_KEY", "").strip()
           EMAIL = "campingnlbo@gmail.com"
           STATE_FILE = "scripts/naver-blog-state.json"
 
@@ -67,13 +72,51 @@ jobs:
 
           print(f"Processing: {title} ({slug})")
 
+          # 3.5. Extract images from content or fetch from Unsplash
+          img_pattern = r'<img[^>]+src=["\']([^"\']+)["\']'
+          found_images = re.findall(img_pattern, content)
+          found_images = [u for u in found_images if u.startswith("http")]
+
+          if found_images:
+              images = found_images[:3]
+              print(f"Found {len(images)} image(s) from original content.")
+          else:
+              images = []
+              if UNSPLASH_KEY:
+                  try:
+                      q = urllib.parse.quote(title)
+                      unsplash_url = f"https://api.unsplash.com/search/photos?query={q}&per_page=3&orientation=landscape"
+                      unsplash_req = urllib.request.Request(unsplash_url, headers={
+                          "Authorization": f"Client-ID {UNSPLASH_KEY}",
+                      })
+                      with urllib.request.urlopen(unsplash_req, timeout=15) as resp:
+                          unsplash_data = json.loads(resp.read().decode())
+                      for item in unsplash_data.get("results", [])[:3]:
+                          images.append(item["urls"]["regular"])
+                      print(f"Fetched {len(images)} image(s) from Unsplash.")
+                  except Exception as e:
+                      print(f"Unsplash fetch failed: {e}")
+              if not images:
+                  print("No images available.")
+
+          image_instruction = ""
+          if images:
+              image_instruction = "\n본문 중간중간에 적절한 위치에 이미지를 넣을 자리를 [IMAGE_1], [IMAGE_2], [IMAGE_3]으로 표시해줘. 이미지 개수는 " + str(len(images)) + "개야."
+
           # 4. Rewrite with Gemini 2.5 Flash
           prompt = f"""아래 블로그 글을 네이버 블로그에 맞게 리라이팅해줘.
-          원본과 중복 콘텐츠로 인식되지 않도록 말투, 문장 구조, 표현을 충분히 변형해줘.
-          하지만 핵심 정보와 내용은 유지해.
-          네이버 SEO에 최적화된 구조로 작성해줘: 제목은 검색 키워드 포함, 본문은 소제목 활용, 2-3줄마다 줄바꿈, 자연스러운 대화체 사용.
-          HTML 태그로 작성해줘 (h2, h3, p, strong, br 태그 사용).
-          글 하단에 '이 글이 도움이 되셨다면 공감과 댓글 부탁드려요 😊' 같은 네이버 블로그 스타일 마무리 멘트도 넣어줘.
+
+          스타일 가이드:
+          - 30대 1인 사업자가 블로그에 자기 생각을 적는 느낌으로 써줘
+          - 의문형(~하죠? ~인데요?) 남발하지 마. 평서문 위주로
+          - 감탄사(!, 정말, 놀랍죠) 최소한으로
+          - 번호 매겨서 나열하지 말고 자연스러운 흐름으로 이어져야 해
+          - 원본과 중복 콘텐츠로 인식되지 않도록 문장 구조와 표현을 충분히 변형하되 핵심 정보는 유지
+          - 네이버 SEO: 제목에 검색 키워드 포함, h2/h3 소제목 활용, 2-3줄마다 줄바꿈
+          - HTML 태그 사용 (h2, h3, p, strong, br)
+          - 온인플 홍보 문구는 넣지 마
+          - 글 마지막에 '공감과 댓글 남겨주시면 힘이 됩니다 😊' 정도로 짧게 마무리
+          - 전체적으로 사람이 직접 쓴 블로그 글처럼 자연스러워야 해{image_instruction}
           글 마지막에 '원문 출처: https://oninple.com/blog/{slug}' 링크도 포함해줘.
 
           응답 형식:
@@ -112,6 +155,12 @@ jobs:
           rewritten_body = lines[2].strip() if len(lines) > 2 else rewritten
 
           print(f"Rewritten title: {rewritten_title}")
+
+          # 4.5. Replace [IMAGE_N] placeholders with actual img tags
+          for i, img_url in enumerate(images, 1):
+              placeholder = f"[IMAGE_{i}]"
+              img_tag = f'<img src="{img_url}" alt="{rewritten_title} 이미지 {i}" style="max-width:100%; margin:20px 0; border-radius:8px;">'
+              rewritten_body = rewritten_body.replace(placeholder, img_tag)
 
           # 5. Send email
           html_content = f"""<div style="font-family: sans-serif; max-width: 700px; margin: 0 auto;">
