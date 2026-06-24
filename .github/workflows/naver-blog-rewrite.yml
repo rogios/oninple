@@ -24,10 +24,10 @@ jobs:
           import json, os, smtplib, urllib.request, sys
           from email.mime.text import MIMEText
 
-          SUPABASE_URL = os.environ["SUPABASE_URL"]
-          SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
-          GEMINI_KEY = os.environ["GOOGLE_GEMINI_API_KEY"]
-          GMAIL_PASS = os.environ["GMAIL_APP_PASSWORD"]
+          SUPABASE_URL = os.environ["SUPABASE_URL"].strip()
+          SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"].strip()
+          GEMINI_KEY = os.environ["GOOGLE_GEMINI_API_KEY"].strip()
+          GMAIL_PASS = os.environ["GMAIL_APP_PASSWORD"].strip()
           EMAIL = "campingnlbo@gmail.com"
           STATE_FILE = "scripts/naver-blog-state.json"
 
