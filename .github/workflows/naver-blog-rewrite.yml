@@ -73,6 +73,19 @@ jobs:
           print(f"Processing: {title} ({slug})")
 
           # 3.5. Extract images from content or fetch from Unsplash
+          def call_gemini(text):
+              g_url = (
+                  "https://generativelanguage.googleapis.com/v1beta/models/"
+                  f"gemini-2.5-flash:generateContent?key={GEMINI_KEY}"
+              )
+              body = json.dumps({
+                  "contents": [{"parts": [{"text": text}]}],
+                  "generationConfig": {"maxOutputTokens": 256},
+              }).encode()
+              r = urllib.request.Request(g_url, data=body, headers={"Content-Type": "application/json"}, method="POST")
+              with urllib.request.urlopen(r, timeout=30) as resp:
+                  return json.loads(resp.read().decode())["candidates"][0]["content"]["parts"][0]["text"].strip()
+
           img_pattern = r'<img[^>]+src=["\']([^"\']+)["\']'
           found_images = re.findall(img_pattern, content)
           found_images = [u for u in found_images if u.startswith("http")]
@@ -84,24 +97,35 @@ jobs:
               images = []
               if UNSPLASH_KEY:
                   try:
-                      q = urllib.parse.quote(title)
-                      unsplash_url = f"https://api.unsplash.com/search/photos?query={q}&per_page=3&orientation=landscape"
-                      unsplash_req = urllib.request.Request(unsplash_url, headers={
-                          "Authorization": f"Client-ID {UNSPLASH_KEY}",
-                      })
-                      with urllib.request.urlopen(unsplash_req, timeout=15) as resp:
-                          unsplash_data = json.loads(resp.read().decode())
-                      for item in unsplash_data.get("results", [])[:3]:
-                          images.append(item["urls"]["regular"])
+                      kw_response = call_gemini(
+                          f"아래 블로그 글 제목을 보고 Unsplash에서 검색할 영어 키워드를 3개 추천해줘.\n"
+                          f"각 키워드는 2~3단어, 한 줄에 하나씩, 번호 없이 키워드만 출력해.\n"
+                          f"제목: {title}"
+                      )
+                      keywords = [line.strip() for line in kw_response.split("\n") if line.strip()][:3]
+                      print(f"Unsplash keywords from Gemini: {keywords}")
+
+                      for kw in keywords:
+                          if len(images) >= 3:
+                              break
+                          q = urllib.parse.quote(kw)
+                          unsplash_url = f"https://api.unsplash.com/search/photos?query={q}&per_page=1&orientation=landscape&content_filter=high"
+                          unsplash_req = urllib.request.Request(unsplash_url, headers={
+                              "Authorization": f"Client-ID {UNSPLASH_KEY}",
+                          })
+                          with urllib.request.urlopen(unsplash_req, timeout=15) as resp:
+                              unsplash_data = json.loads(resp.read().decode())
+                          for item in unsplash_data.get("results", [])[:1]:
+                              images.append(item["urls"]["regular"])
                       print(f"Fetched {len(images)} image(s) from Unsplash.")
                   except Exception as e:
                       print(f"Unsplash fetch failed: {e}")
               if not images:
-                  print("No images available.")
+                  print("No images available. Sending text only.")
 
           image_instruction = ""
           if images:
-              image_instruction = "\n본문 중간중간에 적절한 위치에 이미지를 넣을 자리를 [IMAGE_1], [IMAGE_2], [IMAGE_3]으로 표시해줘. 이미지 개수는 " + str(len(images)) + "개야."
+              image_instruction = "\n본문 중간중간에 적절한 위치에 이미지를 넣을 자리를 [IMAGE_1], [IMAGE_2], [IMAGE_3]으로 표시해줘 (텍스트 그대로, 다른 설명 붙이지 마). 이미지 개수는 " + str(len(images)) + "개야."
 
           # 4. Rewrite with Gemini 2.5 Flash
           prompt = f"""아래 블로그 글을 네이버 블로그에 맞게 리라이팅해줘.
@@ -159,8 +183,11 @@ jobs:
           # 4.5. Replace [IMAGE_N] placeholders with actual img tags
           for i, img_url in enumerate(images, 1):
               placeholder = f"[IMAGE_{i}]"
-              img_tag = f'<img src="{img_url}" alt="{rewritten_title} 이미지 {i}" style="max-width:100%; margin:20px 0; border-radius:8px;">'
+              img_tag = f'<img src="{img_url}" alt="{rewritten_title}" style="max-width:100%; border-radius:8px; margin:20px 0;">'
               rewritten_body = rewritten_body.replace(placeholder, img_tag)
+          # Clean up any leftover placeholders or "이미지 N" text artifacts
+          rewritten_body = re.sub(r'\[IMAGE_\d+\]', '', rewritten_body)
+          rewritten_body = re.sub(r'(?:<p>)?\s*이미지\s*\d+\s*(?:</p>)?', '', rewritten_body)
 
           # 5. Send email
           html_content = f"""<div style="font-family: sans-serif; max-width: 700px; margin: 0 auto;">
